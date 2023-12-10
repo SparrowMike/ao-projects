@@ -81,7 +81,6 @@
         containerOptions: {
           skew: 'a',
           shadow: true,
-          textAnimation: false,
         },
         content: [
           {
@@ -193,6 +192,10 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+  }
+
+  ul {
+    padding: 0 25px;
   }
 </style>
 
@@ -605,7 +608,7 @@
 
     </div>
     <div class="components">
-      <button class='copy'>Copy</button>
+
     </div>
   </div>
 </div>
@@ -614,6 +617,8 @@
 <!-- !---------------- APP DOM GENERATOR ------------------ -->
 <script>
   function initDOMcontentData(CONTENTDATA) {
+    const wrapper = document.querySelector('.wrapper-body');
+
     function extractTextContent(data, observe = false) {
       let INNERTEXT = '';
       data.forEach(text => {
@@ -625,7 +630,7 @@
     }
 
     function populateMediaContent(data, options) {
-      const insetShadow = options?.insetShadow
+      const insetShadow = options?.insetShadow;
       if (!data.url) return '';
       return data.type?.includes('video')
         ? `<div class="media">
@@ -640,8 +645,10 @@
     }
 
     function exctractFixedContent(data) {
+      // console.log(data)
       let CONTENT = '';
       data.content.forEach(val => {
+        // console.log(val)
         CONTENT += populateMediaContent(val.media, val.options);
         CONTENT += `<div class='text'>
                       ${extractTextContent(val.text, val.options.textAnimation)}
@@ -718,13 +725,16 @@
       }
     }
 
-    return __DOM__;
+    wrapper.insertAdjacentHTML('afterbegin', __DOM__);
   }
 
-  const wrapper = document.querySelector('.wrapper-body');
-  document.addEventListener('DOMContentLoaded', function () {
-    wrapper.insertAdjacentHTML('afterbegin', initDOMcontentData(CONTENTDATA));
+  function domInit(data) {
+    initDOMcontentData(data)
     initObserver();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    domInit(CONTENTDATA)
   })
 </script>
 
@@ -733,65 +743,53 @@
 <!-- !----------------------------------------------------- -->
 <!-- !------------------ APP SIDE PANEL ------------------- -->
 <script>
-  function initSidePanel() {
+  function updateContainerOptions(idx, elem) {
+    const element = Object.values(CONTENTDATA.find(x => Object.values(x)[0].id === idx))[0];
+     
+    $('.side-panel .components').empty();
+    $('.side-panel .layout').empty();
+    $('.wrapper-body').empty();
 
-    //------------------------------ populate the side panel
+    console.log(element)
+    if (typeof element.containerOptions[elem] === 'boolean') {
+      element.containerOptions[elem] = !element.containerOptions[elem];
+    }
+
+    initSidePanel(CONTENTDATA);
+    domInit(CONTENTDATA)
+  }
+
+  function populateSidePanelLayoutElements(key, value) {
+    function extractObject(title, data) {
+      if (!data) return ''
+
+      let content = '';
+      Object.entries(data).forEach(([_k, _v]) => {
+        content += `<li><span>${_k} :</span> <button onclick="updateContainerOptions(${value.id}, '${_k}')">${_v}</button></li>`;
+      })
+
+      return `
+            <div class="options">
+              <h4>${title}</h4>
+              <ul>${content}</ul>
+            </div>`
+    }
+
+    $('.side-panel .layout').append(`
+          <div class="element" data-element="${key}">
+            <h3>${key}</h3>
+            ${extractObject('Container Options', value.containerOptions)}
+          </div>`);
+  }
+
+  function initSidePanel(CONTENTDATA) {
     CONTENTDATA.forEach((val, idx) => {
       const [k, v] = Object.entries(val)[0];
       // $('.side-panel .layout').append(`
       //       <div class='button layout-component'>${k}</div>
       //     `);
 
-      console.log(k, v)
-      let list = ''
-      // Object.entries(v).forEach(([_k, _v]) => {
-        
-      //   let content = '';
-      //   if (_k !== 'id') {
-      //     if (Array.isArray(_v)) {
-      //       _v.forEach(content => {
-      //         // console.log(content)
-      //       })
-      //     } else {
-
-      //       Object.entries(_v).forEach(([a, b]) => {
-      //         content += `<li><span>${a} :</span> <button>${b}</button></li>`
-      //       })
-      //     }
-
-      //     list += `
-      //     <div>
-      //       <h4>${_k}</h4>
-      //       <ul>${content}</ul> 
-      //     </div>`
-      //   }
-      // })
-
-      function extractArray(data) {
-        console.log(data)
-        return ''
-      }
-
-      function extractObject(title, data) {
-        if (!data) return ''
-
-        let content = '';
-        Object.entries(data).forEach(([_k, _v]) => {
-          content += `<li><span>${_k} :</span> <button>${_v}</button></li>`;
-        })
-        return `<div class="options" element-id="${v.id}">
-            <h3>${title}</h3>
-            <ul>${content}</ul>
-          </div>`
-      }
-
-      $('.side-panel .layout').append(`
-        <div class="element" data-element="${k}">
-          <div>${k}</div>
-          ${extractObject('Container Options', v.containerOptions)}
-        </div>
-          `);
-
+      populateSidePanelLayoutElements(k, v)
 
       $('.side-panel .components').append(`
             <div class='button component'>${k}</div>
@@ -835,7 +833,7 @@
     }
   }
 
-  initSidePanel();
+  initSidePanel(CONTENTDATA);
 
   $('.copy').on('click', () => copyInnerHTMLToClipboard('wrapper'))
 </script>

@@ -2,11 +2,14 @@
   const CONTENTDATA = [
     {
       HEADER: {
-        blur: true,
-        shadow: true,
-        textAnimation: true,
+        id: 1,
         content: [
           {
+            options: {
+              blur: false,
+              shadow: true,
+              textAnimation: true,
+            },
             background: {
               type: 'video/mp4',
               url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1251532-hlNO0Z9pyk-high.mp4',
@@ -18,6 +21,12 @@
             ]
           },
           {
+            options: {
+              blur: false,
+              shadow: false,
+              textAnimation: false,
+              textContainer: true,
+            },
             background: {
               type: 'video/mp4',
               url: 'https://dsqqu7oxq6o1v.cloudfront.net/drone-video-lapland-winter-forest-1865623-high.mp4',
@@ -29,6 +38,12 @@
             ]
           },
           {
+            options: {
+              blur: false,
+              shadow: false,
+              textAnimation: false,
+              textContainer: true,
+            },
             background: {
               type: 'video/mp4',
               url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559800-Winter-Motion-Timelapse1-high.mp4',
@@ -40,6 +55,12 @@
             ]
           },
           {
+            options: {
+              blur: false,
+              shadow: false,
+              textAnimation: false,
+              textContainer: true,
+            },
             background: {
               type: 'video/mp4',
               url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559632-Aerial-Winter-Landscape12-Apple-ProRes-422-LT-high.mp4',
@@ -56,13 +77,22 @@
 
     {
       FIXED: {
-        skew: 'a',
-        shadow: false,
-        textAnimation: false,
+        id: 2,
+        containerOptions: {
+          skew: 'a',
+          shadow: true,
+          textAnimation: false,
+        },
         content: [
           {
-            type: 'image',
-            url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            options: {
+              insetShadow: true,
+              textAnimation: false,
+            },
+            media: {
+              type: 'image',
+              url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            },
             text: [
               {
                 ['primary-header-text']: 'Some header here',
@@ -74,8 +104,14 @@
             ]
           },
           {
-            type: 'image',
-            url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            options: {
+              insetShadow: true,
+              textAnimation: false,
+            },
+            media: {
+              type: 'image',
+              url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            },
             text: [
               {
                 ['primary-header-text']: 'Random header here?',
@@ -92,12 +128,19 @@
 
     {
       PARALLAX: {
-        shadow: true,
-        blur: false,
-        textAnimation: true,
-        // type: 'video/mp4',
-        // url: 'https://video-previews.elements.envatousercontent.com/files/ef9eefa7-ee14-47e7-ae57-18ff4a9a9fb6/video_preview_h264.mp4',
-        url: 'https://images.unsplash.com/photo-1682687982167-d7fb3ed8541d?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        id: 3,
+        containerOptions: {
+          textAnimation: false,
+          shadow: true,
+          blur: false,
+          textAnimation: true,
+        },
+        media: {
+          type: 'video/mp4',
+          url: 'https://video-previews.elements.envatousercontent.com/files/ef9eefa7-ee14-47e7-ae57-18ff4a9a9fb6/video_preview_h264.mp4',
+          // type: 'image',
+          // url: 'https://images.unsplash.com/photo-1682687982167-d7fb3ed8541d?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        },
         text: [
           {
             ['primary-header-text']: 'Some header here',
@@ -109,107 +152,6 @@
         ]
       },
     },
-
-    // {
-    //   FIXED: {
-    //     skew: 'b',
-    //     shadow: true,
-    //     textAnimation: false,
-    //     content: [
-    //       {
-    //         url: 'https://images.unsplash.com/photo-1566233601708-73237226554c?q=80&amp;w=2121&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    //         text: [
-    //           {
-    //             ['primary-header-text']: 'Some header here',
-    //             ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-    //           },
-    //           {
-    //             ['primary-body-text']: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sequi quisquam corporis excepturi, rem dignissimos vitae voluptatibus temporibus beatae ex ipsa animi repellat aliquam, magni magnam sunt soluta optio, maiores reiciendis!'
-    //           },
-    //         ]
-    //       }
-    //     ]
-    //   },
-    // },
-
-    // {
-    //   PARALLAX: {
-    //     shadow: true,
-    //     blur: false,
-    //     textAnimation: true,
-    //     type: 'video/mp4',
-    //     url: 'https://video-previews.elements.envatousercontent.com/files/c8a17564-6f77-4d35-b808-889b9d6b2215/video_preview_h264.mp4',
-    //     text: [
-    //       {
-    //         ['primary-header-text']: 'Some header here',
-    //         ['primary-body-text']: 'Est eligendi porro aliquid error debitis voluptas consequatur placeat voluptatem nulla fugit fuga sunt labore, facere aliquam, temporibus aspernatur assumenda eius, reiciendis perspiciatis exercitationem recusandae numquam asperiores cupiditate! A, inventore!'
-    //       }
-    //     ]
-    //   },
-    // },
-
-    // {
-    //   FIXED: {
-    //     skew: 'c',
-    //     shadow: true,
-    //     textAnimation: false,
-    //     content: [
-    //       {
-    //         url: 'https://images.unsplash.com/photo-1701689980722-71e5e89852d2?q=80&amp;w=2072&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    //         text: [
-    //           {
-    //             ['primary-header-text']: 'Some header here',
-    //             ['primary-body-text']: 'Quo fugiat nisi, nam adipisci ratione quis nihil. Velit dicta aut voluptates illum maiores non alias autem labore, vero quo, minus omnis quibusdam quis expedita unde exercitationem nihil doloremque commodi.'
-    //           },
-    //         ]
-    //       }
-    //     ]
-    //   },
-    // },
-
-    // {
-    //   PARALLAX: {
-    //     blur: true,
-    //     shadow: true,
-    //     textAnimation: true,
-    //     type: 'video/mp4',
-    //     url: 'https://video-previews.elements.envatousercontent.com/bbeb869a-4771-4c80-a0d9-80b023e944b1/watermarked_preview/watermarked_preview.mp4',
-    //     text: [
-    //       {
-    //         ['primary-header-text']: 'Some header here',
-    //         ['primary-body-text']: 'Nobis mollitia maiores accusantium? Vel assumenda voluptas, ea quo repellendus perspiciatis recusandae accusamus, rerum non architecto illo ratione tenetur minima nemo delectus. Quod vero fuga ipsam nihil, adipisci modi aliquam.'
-    //       },
-    //       {
-    //         ['primary-body-text']: 'Nobis mollitia maiores accusantium? Vel assumenda voluptas, ea quo repellendus perspiciatis recusandae accusamus, rerum non architecto illo ratione tenetur minima nemo delectus. Quod vero fuga ipsam nihil, adipisci modi aliquam.'
-    //       },
-    //     ]
-    //   },
-    // },
-
-    // {
-    //   FIXED: {
-    //     skew: 'd',
-    //     shadow: true,
-    //     textAnimation: true,
-    //     content: [
-    //       {
-    //         url: 'https://images.unsplash.com/photo-1701689980722-71e5e89852d2?q=80&amp;w=2072&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    //         text: [
-    //           {
-    //             ['primary-header-text']: 'Some header here',
-    //             ['primary-body-text']: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum. Numquam magni vitae illo magnam, dolor iusto, provident sed'
-    //           },
-    //           {
-    //             ['primary-body-text']: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum.'
-    //           },
-    //           {
-    //             ['primary-body-text']: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum. Numquam magni vitae illo magnam, dolor iusto, provident sed'
-    //           },
-    //         ]
-    //       }
-    //     ]
-    //   }
-    // }
   ];
 </script>
 
@@ -234,6 +176,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    max-width: 500px;
+    overflow: auto;
+    color: white;
   }
 
   .app .side-panel div {
@@ -332,7 +277,7 @@
         transition: opacity var(--background-blend-delay) ease-in;
       }
 
-      .animate .animate-bg-shadow:after {
+      .animate.animate-bg-shadow:after {
         opacity: 1;
       }
 
@@ -342,7 +287,7 @@
         transition: all var(--background-blend-delay) ease-in;
       }
 
-      .animate .animate-bg-blur:after {
+      .animate.animate-bg-blur:after {
         -webkit-backdrop-filter: blur(5px);
         backdrop-filter: blur(5px);
       }
@@ -418,18 +363,29 @@
         overflow: hidden;
       }
 
-      /* ---------------------------------------- */
-      /* .parallax-header .text-content .text > div {
+      /*========================================  */
+      .parallax-header .text-content .text.animate .container.active {
         background: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(5px);
         width: 80%;
         padding: 10px 20px;
-        transform: translateY(50vw);
-        transition: all .5s ease-in;
-        z-index: 5;
+      }
+
+      /* .parallax-header .text-content .text.animate .container {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        width: 80%;
+        padding: 10px 20px;
         opacity: 0;
+        transform: translateY(-50vw);
+        transition: all 1s ease-in;
+      }
+
+      .parallax-header .text-content .text.animate .container.active {
+        opacity: 1;
+        transform: translateY(0);
       } */
-      /* ---------------------------------------- */
+      /*========================================  */
 
       .parallax-header .text-content .text.above:not(.animate) .container {
         transform: translateY(-20vw);
@@ -563,7 +519,7 @@
           position: relative;
         }
 
-        .fixed .content .media:after {
+        .fixed .content .media.insetShadow:after {
           content: '';
           top: 0;
           left: 0;
@@ -574,7 +530,7 @@
         }
       }
     </style>
-    <div class="loader active"></div>
+    <!-- <div class="loader active"></div> -->
     <div class="wrapper-body"></div>
 
     <script>
@@ -632,22 +588,23 @@
 
 
       //!-----------------------------------------TBC
-      const loaderTimeout = 1250;
-      const loader = document.querySelector('.loader');
-      loader.style.opacity = 0;
+      // const loaderTimeout = 1250;
+      // const loader = document.querySelector('.loader');
+      // loader.style.opacity = 0;
 
-      setTimeout(() => {
-        loader.classList.remove('active');
-        loader.classList.add('disabled');
-      }, loaderTimeout * 1.1);
+      // setTimeout(() => {
+      //   loader.classList.remove('active');
+      //   loader.classList.add('disabled');
+      // }, loaderTimeout * 1.1);
 
     </script>
   </div>
 
   <div class="side-panel">
-    <div class="layout"></div>
-    <div class="components">
+    <div class="layout">
 
+    </div>
+    <div class="components">
       <button class='copy'>Copy</button>
     </div>
   </div>
@@ -667,7 +624,8 @@
       return INNERTEXT;
     }
 
-    function populateMediaContent(data) {
+    function populateMediaContent(data, options) {
+      const insetShadow = options?.insetShadow
       if (!data.url) return '';
       return data.type?.includes('video')
         ? `<div class="media">
@@ -676,7 +634,7 @@
             </video>
           </div>`
         : `
-          <div class="media">
+          <div class="media ${insetShadow ? 'insetShadow' : ''}">
             <img alt="" src="${data.url}" />
           </div>`;
     }
@@ -684,9 +642,9 @@
     function exctractFixedContent(data) {
       let CONTENT = '';
       data.content.forEach(val => {
-        CONTENT += populateMediaContent(val);
+        CONTENT += populateMediaContent(val.media, val.options);
         CONTENT += `<div class='text'>
-                      ${extractTextContent(val.text, data.textAnimation)}
+                      ${extractTextContent(val.text, val.options.textAnimation)}
                     </div>`;
       });
       return CONTENT;
@@ -700,39 +658,42 @@
       switch (key) {
         case 'HEADER':
           let BACKGROUND = '', CONTENT = '';
-          const _shadow = value.shadow ? 'animate-bg-shadow' : '';
-          const _blur = value.blur ? 'animate-bg-blur' : '';
 
           value.content.forEach((val, idx) => {
+            const shadow = val.options.shadow ? 'animate-bg-shadow' : '';
+            const blur = val.options.blur ? 'animate-bg-blur' : '';
             BACKGROUND += `
-              <div class="background" data-id="${idx}">
+              <div class="background ${shadow} ${blur}" data-id="${idx}">
                 <div>
-                  ${populateMediaContent(val.background)}
+                  ${populateMediaContent(val.background, val.options)}
                 </div>  
               </div>`;
             CONTENT += `
               <div class="text observe control-opacity" data-id="${idx}">
-                <div class="container">
-                  ${extractTextContent(val.text, value.textAnimation)}
+                <div class="container ${val.options.textContainer ? 'active' : ''}">
+                  ${extractTextContent(val.text, val.options.textAnimation)}
                 </div>
               </div>`;
           });
 
           __DOM__ += `
-            <div class="parallax-header ${_shadow || _blur ? 'animate' : ''}">
-              <div class="background-content ${_shadow} ${_blur}">${BACKGROUND}</div>
+            <div class="parallax-header">
+              <div class="background-content">${BACKGROUND}</div>
               <div class="text-content">${CONTENT}</div>
             </div>`;
           break;
 
         case 'FIXED':
-          if (value.skew && typeof (value.skew) !== 'string') {
+          const skew = value.containerOptions.skew
+          const containerShadow = value.containerOptions.shadow
+
+          if (skew && typeof (skew) !== 'string') {
             throw new Error('skew should either be a/b/c/d OR false');
           }
 
           __DOM__ += `
-            <div class="fixed ${value.shadow ? 'shadow' : ''}">
-              <div class="container ${value.skew ? `cliped clip-${value.skew}` : ''}" ${value.skew === 'd' ? 'style="margin-bottom: 0"' : ''} >
+            <div class="fixed ${containerShadow ? 'shadow' : ''}">
+              <div class="container ${skew ? `cliped clip-${skew}` : ''}" ${skew === 'd' ? 'style="margin-bottom: 0"' : ''} >
                 <div class="content">
                   ${exctractFixedContent(value)} 
                 </div>
@@ -741,15 +702,15 @@
           break;
 
         case 'PARALLAX':
-          const shadow = value.shadow ? 'animate-bg-shadow' : '';
-          const blur = value.blur ? 'animate-bg-blur' : '';
+          const shadow = value.containerOptions.shadow ? 'animate-bg-shadow' : '';
+          const blur = value.containerOptions.blur ? 'animate-bg-blur' : '';
 
           __DOM__ += `
-            <div class="parallax observe">
-              <div class="content ${shadow} ${blur}">
-                ${populateMediaContent(value)}
+            <div class="parallax">
+              <div class="content observe ${shadow} ${blur}">
+                ${populateMediaContent(value.media)}
                 <div class="text">
-                  ${extractTextContent(value.text, value.textAnimation)}
+                  ${extractTextContent(value.text, value.containerOptions.textAnimation)}
                 </div>
               </div>
             </div>`;
@@ -772,14 +733,65 @@
 <!-- !----------------------------------------------------- -->
 <!-- !------------------ APP SIDE PANEL ------------------- -->
 <script>
-  // !-----------------------------------------------
-  // !-----------------------------------------------
   function initSidePanel() {
+
+    //------------------------------ populate the side panel
     CONTENTDATA.forEach((val, idx) => {
       const [k, v] = Object.entries(val)[0];
+      // $('.side-panel .layout').append(`
+      //       <div class='button layout-component'>${k}</div>
+      //     `);
+
+      console.log(k, v)
+      let list = ''
+      // Object.entries(v).forEach(([_k, _v]) => {
+        
+      //   let content = '';
+      //   if (_k !== 'id') {
+      //     if (Array.isArray(_v)) {
+      //       _v.forEach(content => {
+      //         // console.log(content)
+      //       })
+      //     } else {
+
+      //       Object.entries(_v).forEach(([a, b]) => {
+      //         content += `<li><span>${a} :</span> <button>${b}</button></li>`
+      //       })
+      //     }
+
+      //     list += `
+      //     <div>
+      //       <h4>${_k}</h4>
+      //       <ul>${content}</ul> 
+      //     </div>`
+      //   }
+      // })
+
+      function extractArray(data) {
+        console.log(data)
+        return ''
+      }
+
+      function extractObject(title, data) {
+        if (!data) return ''
+
+        let content = '';
+        Object.entries(data).forEach(([_k, _v]) => {
+          content += `<li><span>${_k} :</span> <button>${_v}</button></li>`;
+        })
+        return `<div class="options" element-id="${v.id}">
+            <h3>${title}</h3>
+            <ul>${content}</ul>
+          </div>`
+      }
+
       $('.side-panel .layout').append(`
-            <div class='button layout-component'>${k}</div>
+        <div class="element" data-element="${k}">
+          <div>${k}</div>
+          ${extractObject('Container Options', v.containerOptions)}
+        </div>
           `);
+
 
       $('.side-panel .components').append(`
             <div class='button component'>${k}</div>
@@ -803,8 +815,7 @@
 
     })
   }
-  // !-----------------------------------------------
-  // !-----------------------------------------------
+
   function copyInnerHTMLToClipboard(elementId) {
     const element = document.getElementById(elementId);
 

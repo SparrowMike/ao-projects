@@ -1,0 +1,830 @@
+<script>
+  const CONTENTDATA = [
+    {
+      HEADER: {
+        blur: true,
+        shadow: true,
+        textAnimation: true,
+        content: [
+          {
+            background: {
+              type: 'video/mp4',
+              url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1251532-hlNO0Z9pyk-high.mp4',
+            },
+            text: [
+              {
+                ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+              },
+            ]
+          },
+          {
+            background: {
+              type: 'video/mp4',
+              url: 'https://dsqqu7oxq6o1v.cloudfront.net/drone-video-lapland-winter-forest-1865623-high.mp4',
+            },
+            text: [
+              {
+                ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxiipit recusandae aspernatur maxime tenetur laborum. '
+              },
+            ]
+          },
+          {
+            background: {
+              type: 'video/mp4',
+              url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559800-Winter-Motion-Timelapse1-high.mp4',
+            },
+            text: [
+              {
+                ['primary-header-text']: 'Cupiditate quam suscir maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+              },
+            ]
+          },
+          {
+            background: {
+              type: 'video/mp4',
+              url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559632-Aerial-Winter-Landscape12-Apple-ProRes-422-LT-high.mp4',
+            },
+            text: [
+              {
+                ['primary-header-text']: 'Cupiditate quam suscipit recrnatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+              }
+            ]
+          }
+        ]
+      },
+    },
+
+    {
+      FIXED: {
+        skew: 'a',
+        shadow: false,
+        textAnimation: false,
+        content: [
+          {
+            type: 'image',
+            url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            text: [
+              {
+                ['primary-header-text']: 'Some header here',
+                ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+              },
+              {
+                ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+              },
+            ]
+          },
+          {
+            type: 'image',
+            url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            text: [
+              {
+                ['primary-header-text']: 'Random header here?',
+                ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+              },
+              {
+                ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+              },
+            ]
+          }
+        ]
+      },
+    },
+
+    {
+      PARALLAX: {
+        shadow: true,
+        blur: false,
+        textAnimation: true,
+        // type: 'video/mp4',
+        // url: 'https://video-previews.elements.envatousercontent.com/files/ef9eefa7-ee14-47e7-ae57-18ff4a9a9fb6/video_preview_h264.mp4',
+        url: 'https://images.unsplash.com/photo-1682687982167-d7fb3ed8541d?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        text: [
+          {
+            ['primary-header-text']: 'Some header here',
+            ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+          },
+          {
+            ['primary-body-text']: 'Aliquam quaerat temporibus molestias excepturi praesentium eaque, vero sed dolores at hic soluta facilis laudantium optio reprehenderit assumenda nesciunt saepe itaque rerum quod ducimus eius. Quisquam distinctio aperiam qui mollitia!'
+          },
+        ]
+      },
+    },
+
+    // {
+    //   FIXED: {
+    //     skew: 'b',
+    //     shadow: true,
+    //     textAnimation: false,
+    //     content: [
+    //       {
+    //         url: 'https://images.unsplash.com/photo-1566233601708-73237226554c?q=80&amp;w=2121&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    //         text: [
+    //           {
+    //             ['primary-header-text']: 'Some header here',
+    //             ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+    //           },
+    //           {
+    //             ['primary-body-text']: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sequi quisquam corporis excepturi, rem dignissimos vitae voluptatibus temporibus beatae ex ipsa animi repellat aliquam, magni magnam sunt soluta optio, maiores reiciendis!'
+    //           },
+    //         ]
+    //       }
+    //     ]
+    //   },
+    // },
+
+    // {
+    //   PARALLAX: {
+    //     shadow: true,
+    //     blur: false,
+    //     textAnimation: true,
+    //     type: 'video/mp4',
+    //     url: 'https://video-previews.elements.envatousercontent.com/files/c8a17564-6f77-4d35-b808-889b9d6b2215/video_preview_h264.mp4',
+    //     text: [
+    //       {
+    //         ['primary-header-text']: 'Some header here',
+    //         ['primary-body-text']: 'Est eligendi porro aliquid error debitis voluptas consequatur placeat voluptatem nulla fugit fuga sunt labore, facere aliquam, temporibus aspernatur assumenda eius, reiciendis perspiciatis exercitationem recusandae numquam asperiores cupiditate! A, inventore!'
+    //       }
+    //     ]
+    //   },
+    // },
+
+    // {
+    //   FIXED: {
+    //     skew: 'c',
+    //     shadow: true,
+    //     textAnimation: false,
+    //     content: [
+    //       {
+    //         url: 'https://images.unsplash.com/photo-1701689980722-71e5e89852d2?q=80&amp;w=2072&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    //         text: [
+    //           {
+    //             ['primary-header-text']: 'Some header here',
+    //             ['primary-body-text']: 'Quo fugiat nisi, nam adipisci ratione quis nihil. Velit dicta aut voluptates illum maiores non alias autem labore, vero quo, minus omnis quibusdam quis expedita unde exercitationem nihil doloremque commodi.'
+    //           },
+    //         ]
+    //       }
+    //     ]
+    //   },
+    // },
+
+    // {
+    //   PARALLAX: {
+    //     blur: true,
+    //     shadow: true,
+    //     textAnimation: true,
+    //     type: 'video/mp4',
+    //     url: 'https://video-previews.elements.envatousercontent.com/bbeb869a-4771-4c80-a0d9-80b023e944b1/watermarked_preview/watermarked_preview.mp4',
+    //     text: [
+    //       {
+    //         ['primary-header-text']: 'Some header here',
+    //         ['primary-body-text']: 'Nobis mollitia maiores accusantium? Vel assumenda voluptas, ea quo repellendus perspiciatis recusandae accusamus, rerum non architecto illo ratione tenetur minima nemo delectus. Quod vero fuga ipsam nihil, adipisci modi aliquam.'
+    //       },
+    //       {
+    //         ['primary-body-text']: 'Nobis mollitia maiores accusantium? Vel assumenda voluptas, ea quo repellendus perspiciatis recusandae accusamus, rerum non architecto illo ratione tenetur minima nemo delectus. Quod vero fuga ipsam nihil, adipisci modi aliquam.'
+    //       },
+    //     ]
+    //   },
+    // },
+
+    // {
+    //   FIXED: {
+    //     skew: 'd',
+    //     shadow: true,
+    //     textAnimation: true,
+    //     content: [
+    //       {
+    //         url: 'https://images.unsplash.com/photo-1701689980722-71e5e89852d2?q=80&amp;w=2072&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    //         text: [
+    //           {
+    //             ['primary-header-text']: 'Some header here',
+    //             ['primary-body-text']: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum. Numquam magni vitae illo magnam, dolor iusto, provident sed'
+    //           },
+    //           {
+    //             ['primary-body-text']: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum.'
+    //           },
+    //           {
+    //             ['primary-body-text']: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum. Numquam magni vitae illo magnam, dolor iusto, provident sed'
+    //           },
+    //         ]
+    //       }
+    //     ]
+    //   }
+    // }
+  ];
+</script>
+
+<style type="text/css">
+  .app {
+    display: flex;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .app #wrapper {
+    width: 100%;
+    overflow: auto;
+  }
+
+  .app .side-panel {
+    position: sticky;
+    background: #191919;
+    min-width: 300px;
+    box-shadow: 0 0 8px black;
+    z-index: 9999999999;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .app .side-panel div {
+    padding: 10px;
+  }
+
+  .button {
+    background: grey;
+    margin: 5px auto;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+</style>
+
+<div class="app">
+  <div id="wrapper">
+    <style type="text/css">
+      :root {
+        --primary-text-color: #F0ECE5;
+        --secondary-text-color: #B6BBC4;
+        --accent-text-color: #0077cc;
+
+        --primary-background-color: #191919;
+        --secondary-background-color: #3a5a40;
+        --accent-background-color: #ffc300;
+
+        --background-blend-delay: .5s;
+        --text-animation-delay: 1s;
+      }
+
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      .primary-header-text {
+        color: var(--primary-text-color);
+        padding: 15px 20px;
+        padding-top: 20px;
+        margin: 0;
+        font-size: 28px;
+      }
+
+      .sub-header-text {
+        font-size: 22px;
+      }
+
+      .primary-body-text {
+        margin: 0;
+        padding: 10px 20px;
+        color: var(--secondary-text-color);
+        font-size: 16px;
+      }
+
+      .wrapper-body {
+        background-color: var(--primary-background-color);
+      }
+
+      /* ----- splash laoder ----- */
+      .loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: 999999999;
+      }
+
+      .loader.active {
+        backdrop-filter: blur(10px);
+        background-color: rgb(48 43 43 / 100%);
+      }
+
+      .loader.disabled {
+        display: none;
+      }
+
+      /* ----- animation classes ----- */
+      .animate-bg-shadow:after,
+      .animate-bg-blur:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .animate-bg-shadow:after {
+        background: rgba(0, 0, 0, .5);
+        opacity: 0;
+        transition: opacity var(--background-blend-delay) ease-in;
+      }
+
+      .animate .animate-bg-shadow:after {
+        opacity: 1;
+      }
+
+      .animate-bg-blur:after {
+        -webkit-backdrop-filter: blur(0px);
+        backdrop-filter: blur(0px);
+        transition: all var(--background-blend-delay) ease-in;
+      }
+
+      .animate .animate-bg-blur:after {
+        -webkit-backdrop-filter: blur(5px);
+        backdrop-filter: blur(5px);
+      }
+
+      .observe.primary-header-text {
+        transform: translate3d(-100%, 0, 0);
+        opacity: .5;
+        transition: all var(--text-animation-delay) ease;
+      }
+
+      .animate.primary-header-text {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+      }
+
+      .observe.primary-body-text {
+        transform: translate3d(-100%, 0, 0);
+        opacity: .5;
+        transition: all var(--text-animation-delay) ease;
+      }
+
+      .animate.primary-body-text {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+      }
+
+      .above.primary-header-text:not(.animate) {
+        transform: translate3d(100%, 0, 0);
+        opacity: 1;
+      }
+
+      .above.body:not(.animate) {
+        transform: translate3d(100%, 0, 0);
+        opacity: 1;
+      }
+
+      /* ---------------- header ---------------- */
+      .parallax-header {
+        position: relative;
+      }
+
+      .parallax-header .text-content {
+        margin-top: -100vh;
+      }
+
+      .parallax-header .background-content {
+        position: sticky;
+        top: 0px;
+        height: 100vh;
+      }
+
+      .parallax-header .background-content .media img,
+      .parallax-header .background-content .media video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        transform: translate(-50%, -50%);
+        -o-object-fit: cover;
+        object-fit: cover;
+        -o-object-position: center;
+        object-position: center;
+      }
+
+      .parallax-header .text-content .text {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2em;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* ---------------------------------------- */
+      /* .parallax-header .text-content .text > div {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        width: 80%;
+        padding: 10px 20px;
+        transform: translateY(50vw);
+        transition: all .5s ease-in;
+        z-index: 5;
+        opacity: 0;
+      } */
+      /* ---------------------------------------- */
+
+      .parallax-header .text-content .text.above:not(.animate) .container {
+        transform: translateY(-20vw);
+        opacity: 0;
+      }
+
+      .parallax-header .text-content .text.animate .container {
+        opacity: 1;
+        max-width: 80%;
+      }
+
+      /* ---------------- fixed ---------------- */
+      .fixed {
+        z-index: 2;
+        position: relative;
+      }
+
+      .fixed.shadow {
+        filter: drop-shadow(0 0 12px rgba(0, 0, 0, .8));
+      }
+
+      .fixed .container {
+        width: 100%;
+        height: fit-content;
+        background: var(--primary-background-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .fixed .container {
+        padding: 90px 0;
+      }
+
+      .fixed .cliped {
+        margin: -100px 0 -100px 0;
+      }
+
+      .fixed .cliped.clip-a {
+        clip-path: polygon(0 75px, 100% 0, 100% calc(100% - 75px), 0% 100%);
+      }
+
+      .fixed .cliped.clip-b {
+        clip-path: polygon(0 0, 100% 75px, 100% 100%, 0 calc(100% - 75px));
+      }
+
+      .fixed .cliped.clip-c {
+        clip-path: polygon(0 0, 100% 75px, 100% calc(100% - 75px), 0 100%);
+      }
+
+      .fixed .cliped.clip-d {
+        clip-path: polygon(0 75px, 100% 0, 100% 100%, 0 100%);
+      }
+
+      .fixed .content {
+        max-width: 1000px;
+        width: 100%;
+      }
+
+      .fixed .content img {
+        width: 100%;
+      }
+
+      /* ---------------- parallax ---------------- */
+      .parallax {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .parallax .content {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        clip: rect(0 auto auto 0);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+      }
+
+      .parallax .content .media {
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-position: 50%;
+        background-size: cover;
+      }
+
+      .parallax .content .text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 1;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 700px;
+        padding: 0 10px 0 15px;
+        margin: 0 auto;
+        transform: translate(-50%, -50%);
+      }
+
+      .parallax .content .media img,
+      .parallax .content .media video {
+        -o-object-fit: cover;
+        object-fit: cover;
+        -o-object-position: center center;
+        object-position: center center;
+        width: 100%;
+        height: 100vh;
+      }
+
+      @media only screen and (min-width: 600px) {
+        .primary-header-text {
+          font-size: 32px;
+        }
+
+        .sub-header-text {
+          font-size: 24px;
+        }
+
+        .primary-body-text {
+          font-size: 18px;
+        }
+
+        .fixed .content .media {
+          position: relative;
+        }
+
+        .fixed .content .media:after {
+          content: '';
+          top: 0;
+          left: 0;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          box-shadow: inset 0 0 8px 20px var(--primary-background-color);
+        }
+      }
+    </style>
+    <div class="loader active"></div>
+    <div class="wrapper-body"></div>
+
+    <script>
+      function initObserver() {
+        function handleIntersection(entries, observer) {
+          entries.forEach(entry => {
+            const target = entry.target;
+            const targetID = entry.target.getAttribute('data-id');
+            const inViewPercent = entry.intersectionRatio;
+            const opacityVal = inViewPercent > 0.90 ? 1 : inViewPercent;
+
+            const boundingBox = entry.target.getBoundingClientRect();
+            const elementCenter = boundingBox.top + boundingBox.height / 2;
+            const viewportCenter = window.innerHeight / 2;
+
+            if (elementCenter < viewportCenter) {
+              target.classList.add('above');
+              target.classList.remove('below');
+            } else {
+              target.classList.add('below');
+              target.classList.remove('above');
+            }
+
+            const headerParallaxBackground = document.querySelector(`[data-id="${targetID}"]`)
+            if (targetID && headerParallaxBackground) {
+              if (target.classList.contains('control-opacity') && target.classList.contains('below')) {
+                headerParallaxBackground.style.opacity = opacityVal;
+              }
+            }
+
+            if (entry.isIntersecting) {
+              target.classList.add('animate');
+              (targetID && headerParallaxBackground) && headerParallaxBackground.classList.add('animate');
+            } else {
+              target.classList.remove('animate');
+              (targetID && headerParallaxBackground) && headerParallaxBackground.classList.remove('animate');
+            }
+          });
+        }
+
+        const options = {
+          threshold: Array.from({ length: 41 }, (_, index) => Number((index * 0.025).toFixed(2))),
+        };
+
+        const observer = new IntersectionObserver(handleIntersection, options);
+
+        document.querySelectorAll('.observe').forEach(function (el) {
+          observer.observe(el);
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        initObserver();
+      })
+
+
+      //!-----------------------------------------TBC
+      const loaderTimeout = 1250;
+      const loader = document.querySelector('.loader');
+      loader.style.opacity = 0;
+
+      setTimeout(() => {
+        loader.classList.remove('active');
+        loader.classList.add('disabled');
+      }, loaderTimeout * 1.1);
+
+    </script>
+  </div>
+
+  <div class="side-panel">
+    <div class="layout"></div>
+    <div class="components">
+
+      <button class='copy'>Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- !----------------------------------------------------- -->
+<!-- !---------------- APP DOM GENERATOR ------------------ -->
+<script>
+  function initDOMcontentData(CONTENTDATA) {
+    function extractTextContent(data, observe = false) {
+      let INNERTEXT = '';
+      data.forEach(text => {
+        Object.entries(text).forEach(([k, v]) => {
+          INNERTEXT += `<div contenteditable="true" class='${k} ${observe ? 'observe' : ''}'>${v}</div>`;
+        });
+      });
+      return INNERTEXT;
+    }
+
+    function populateMediaContent(data) {
+      if (!data.url) return '';
+      return data.type?.includes('video')
+        ? `<div class="media">
+            <video autoplay loop muted playsinline>
+              <source src="${data.url}" type="${data.type}" />Your browser does not support the video tag.
+            </video>
+          </div>`
+        : `
+          <div class="media">
+            <img alt="" src="${data.url}" />
+          </div>`;
+    }
+
+    function exctractFixedContent(data) {
+      let CONTENT = '';
+      data.content.forEach(val => {
+        CONTENT += populateMediaContent(val);
+        CONTENT += `<div class='text'>
+                      ${extractTextContent(val.text, data.textAnimation)}
+                    </div>`;
+      });
+      return CONTENT;
+    }
+
+    let __DOM__ = '';
+
+    for (let content of CONTENTDATA) {
+      const [key, value] = Object.entries(content)[0];
+
+      switch (key) {
+        case 'HEADER':
+          let BACKGROUND = '', CONTENT = '';
+          const _shadow = value.shadow ? 'animate-bg-shadow' : '';
+          const _blur = value.blur ? 'animate-bg-blur' : '';
+
+          value.content.forEach((val, idx) => {
+            BACKGROUND += `
+              <div class="background" data-id="${idx}">
+                <div>
+                  ${populateMediaContent(val.background)}
+                </div>  
+              </div>`;
+            CONTENT += `
+              <div class="text observe control-opacity" data-id="${idx}">
+                <div class="container">
+                  ${extractTextContent(val.text, value.textAnimation)}
+                </div>
+              </div>`;
+          });
+
+          __DOM__ += `
+            <div class="parallax-header ${_shadow || _blur ? 'animate' : ''}">
+              <div class="background-content ${_shadow} ${_blur}">${BACKGROUND}</div>
+              <div class="text-content">${CONTENT}</div>
+            </div>`;
+          break;
+
+        case 'FIXED':
+          if (value.skew && typeof (value.skew) !== 'string') {
+            throw new Error('skew should either be a/b/c/d OR false');
+          }
+
+          __DOM__ += `
+            <div class="fixed ${value.shadow ? 'shadow' : ''}">
+              <div class="container ${value.skew ? `cliped clip-${value.skew}` : ''}" ${value.skew === 'd' ? 'style="margin-bottom: 0"' : ''} >
+                <div class="content">
+                  ${exctractFixedContent(value)} 
+                </div>
+              </div>
+            </div>`;
+          break;
+
+        case 'PARALLAX':
+          const shadow = value.shadow ? 'animate-bg-shadow' : '';
+          const blur = value.blur ? 'animate-bg-blur' : '';
+
+          __DOM__ += `
+            <div class="parallax observe">
+              <div class="content ${shadow} ${blur}">
+                ${populateMediaContent(value)}
+                <div class="text">
+                  ${extractTextContent(value.text, value.textAnimation)}
+                </div>
+              </div>
+            </div>`;
+          break;
+      }
+    }
+
+    return __DOM__;
+  }
+
+  const wrapper = document.querySelector('.wrapper-body');
+  document.addEventListener('DOMContentLoaded', function () {
+    wrapper.insertAdjacentHTML('afterbegin', initDOMcontentData(CONTENTDATA));
+    initObserver();
+  })
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- !----------------------------------------------------- -->
+<!-- !------------------ APP SIDE PANEL ------------------- -->
+<script>
+  // !-----------------------------------------------
+  // !-----------------------------------------------
+  function initSidePanel() {
+    CONTENTDATA.forEach((val, idx) => {
+      const [k, v] = Object.entries(val)[0];
+      $('.side-panel .layout').append(`
+            <div class='button layout-component'>${k}</div>
+          `);
+
+      $('.side-panel .components').append(`
+            <div class='button component'>${k}</div>
+          `);
+    })
+
+    function getElementIndex(element) {
+      return Array.from(element.parentNode.children).indexOf(element);
+    }
+
+    //? ------ delete the element
+    $('.layout-component').on('click', (e) => {
+      const currenTarget = getElementIndex(e.target);
+      $('.wrapper-body').children()[currenTarget].remove()
+      e.target.remove()
+    })
+
+    //? ------ add the element
+    $('.component').on('click', (e) => {
+      const currenTarget = getElementIndex(e.target);
+
+    })
+  }
+  // !-----------------------------------------------
+  // !-----------------------------------------------
+  function copyInnerHTMLToClipboard(elementId) {
+    const element = document.getElementById(elementId);
+
+
+    if (element) {
+      const textarea = document.createElement('textarea');
+      const innerHTML = element.innerHTML.replaceAll('contenteditable="true"', '')
+      textarea.value = innerHTML;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+
+      alert('HTML copied')
+    } else {
+      console.error(`Element with ID '${elementId}' not found.`);
+    }
+  }
+
+  initSidePanel();
+
+  $('.copy').on('click', () => copyInnerHTMLToClipboard('wrapper'))
+</script>

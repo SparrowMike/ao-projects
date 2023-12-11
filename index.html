@@ -1,8 +1,12 @@
 <script>
+  const testExamples = ['primary-header-text', 'primary-body-text']
+
+  // const 
   const CONTENTDATA = [
     {
       HEADER: {
         id: 1,
+        expanded: false,
         content: [
           {
             options: {
@@ -10,7 +14,7 @@
               shadow: true,
               textAnimation: true,
             },
-            background: {
+            media: {
               type: 'video/mp4',
               url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1251532-hlNO0Z9pyk-high.mp4',
             },
@@ -27,7 +31,7 @@
               textAnimation: false,
               textContainer: true,
             },
-            background: {
+            media: {
               type: 'video/mp4',
               url: 'https://dsqqu7oxq6o1v.cloudfront.net/drone-video-lapland-winter-forest-1865623-high.mp4',
             },
@@ -44,7 +48,7 @@
               textAnimation: false,
               textContainer: true,
             },
-            background: {
+            media: {
               type: 'video/mp4',
               url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559800-Winter-Motion-Timelapse1-high.mp4',
             },
@@ -61,7 +65,7 @@
               textAnimation: false,
               textContainer: true,
             },
-            background: {
+            media: {
               type: 'video/mp4',
               url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559632-Aerial-Winter-Landscape12-Apple-ProRes-422-LT-high.mp4',
             },
@@ -78,8 +82,9 @@
     {
       FIXED: {
         id: 2,
-        containerOptions: {
-          skew: 'a',
+        expanded: false,
+        options: {
+          skew: 'b',
           shadow: true,
         },
         content: [
@@ -128,8 +133,8 @@
     {
       PARALLAX: {
         id: 3,
-        containerOptions: {
-          textAnimation: false,
+        expanded: true,
+        options: {
           shadow: true,
           blur: false,
           textAnimation: true,
@@ -169,7 +174,7 @@
   .app .side-panel {
     position: sticky;
     background: #191919;
-    min-width: 300px;
+    min-width: 375px;
     box-shadow: 0 0 8px black;
     z-index: 9999999999;
     display: flex;
@@ -180,7 +185,7 @@
     color: white;
   }
 
-  .app .side-panel div {
+  .app .side-panel .element {
     padding: 10px;
   }
 
@@ -194,8 +199,29 @@
     cursor: pointer;
   }
 
-  ul {
-    padding: 0 25px;
+  .layout .element {
+    margin: 5px;
+    background-color: rgb(43, 42, 42);
+  }
+
+  .layout .element .element-container {
+    display: none;
+  }
+
+  .layout .element .element-container.active {
+    display: block;
+    padding: 0;
+  }
+
+  .layout .element .element-container .element-content,
+  .layout .element .element-container .container-options {
+    padding: 5px;
+    margin: 5px 0;
+    background-color: #191919;
+  }
+
+  .layout .element .element-container .element-content .options {
+    padding: 5px;
   }
 </style>
 
@@ -317,12 +343,12 @@
         opacity: 1;
       }
 
-      .above.primary-header-text:not(.animate) {
+      .out.primary-header-text:not(.animate) {
         transform: translate3d(100%, 0, 0);
         opacity: 1;
       }
 
-      .above.body:not(.animate) {
+      .out.body:not(.animate) {
         transform: translate3d(100%, 0, 0);
         opacity: 1;
       }
@@ -390,7 +416,7 @@
       } */
       /*========================================  */
 
-      .parallax-header .text-content .text.above:not(.animate) .container {
+      .parallax-header .text-content .text.out:not(.animate) .container {
         transform: translateY(-20vw);
         opacity: 0;
       }
@@ -550,16 +576,16 @@
             const viewportCenter = window.innerHeight / 2;
 
             if (elementCenter < viewportCenter) {
-              target.classList.add('above');
-              target.classList.remove('below');
+              target.classList.add('out');
+              target.classList.remove('in');
             } else {
-              target.classList.add('below');
-              target.classList.remove('above');
+              target.classList.add('in');
+              target.classList.remove('out');
             }
 
             const headerParallaxBackground = document.querySelector(`[data-id="${targetID}"]`)
             if (targetID && headerParallaxBackground) {
-              if (target.classList.contains('control-opacity') && target.classList.contains('below')) {
+              if (target.classList.contains('control-opacity') && target.classList.contains('in')) {
                 headerParallaxBackground.style.opacity = opacityVal;
               }
             }
@@ -645,10 +671,8 @@
     }
 
     function exctractFixedContent(data) {
-      // console.log(data)
       let CONTENT = '';
       data.content.forEach(val => {
-        // console.log(val)
         CONTENT += populateMediaContent(val.media, val.options);
         CONTENT += `<div class='text'>
                       ${extractTextContent(val.text, val.options.textAnimation)}
@@ -672,7 +696,7 @@
             BACKGROUND += `
               <div class="background ${shadow} ${blur}" data-id="${idx}">
                 <div>
-                  ${populateMediaContent(val.background, val.options)}
+                  ${populateMediaContent(val.media, val.options)}
                 </div>  
               </div>`;
             CONTENT += `
@@ -684,22 +708,19 @@
           });
 
           __DOM__ += `
-            <div class="parallax-header">
+            <div class="parallax-header" container-id='${value.id}'>
               <div class="background-content">${BACKGROUND}</div>
               <div class="text-content">${CONTENT}</div>
             </div>`;
           break;
 
         case 'FIXED':
-          const skew = value.containerOptions.skew
-          const containerShadow = value.containerOptions.shadow
-
-          if (skew && typeof (skew) !== 'string') {
-            throw new Error('skew should either be a/b/c/d OR false');
-          }
-
+          const skew = value.options.skew === 'none'
+            ? false
+            : value.options.skew;
+          const containerShadow = value.options.shadow
           __DOM__ += `
-            <div class="fixed ${containerShadow ? 'shadow' : ''}">
+            <div class="fixed ${containerShadow ? 'shadow' : ''}"  container-id='${value.id}'>
               <div class="container ${skew ? `cliped clip-${skew}` : ''}" ${skew === 'd' ? 'style="margin-bottom: 0"' : ''} >
                 <div class="content">
                   ${exctractFixedContent(value)} 
@@ -709,15 +730,15 @@
           break;
 
         case 'PARALLAX':
-          const shadow = value.containerOptions.shadow ? 'animate-bg-shadow' : '';
-          const blur = value.containerOptions.blur ? 'animate-bg-blur' : '';
+          const shadow = value.options.shadow ? 'animate-bg-shadow' : '';
+          const blur = value.options.blur ? 'animate-bg-blur' : '';
 
           __DOM__ += `
-            <div class="parallax">
+            <div class="parallax"  container-id='${value.id}'>
               <div class="content observe ${shadow} ${blur}">
                 ${populateMediaContent(value.media)}
                 <div class="text">
-                  ${extractTextContent(value.text, value.containerOptions.textAnimation)}
+                  ${extractTextContent(value.text, value.options.textAnimation)}
                 </div>
               </div>
             </div>`;
@@ -743,16 +764,49 @@
 <!-- !----------------------------------------------------- -->
 <!-- !------------------ APP SIDE PANEL ------------------- -->
 <script>
-  function updateContainerOptions(idx, elem) {
-    const element = Object.values(CONTENTDATA.find(x => Object.values(x)[0].id === idx))[0];
-     
+  function deleteText(value) {
+    const index = Number(value.getAttribute('text-index'));
+    const textType = value.getAttribute('text-type')
+    // const index = Nubmer(value.getAttribute('text-index'));
+    console.log(value, index, textType)
+  }
+
+  function addAdditionalText(a,b,c) {
+    console.log('trigger', a.value, b, c)
+  }
+
+  function updateoptions(elementID, type, elem, newVal, elemIndex) {
+    const targetObject = Object.values(CONTENTDATA.find(x => Object.values(x)[0].id === elementID))[0];
+
+    let targetElement;
+    if (elemIndex !== undefined) {
+      targetElement = targetObject['content'][elemIndex][type];
+    } else {
+      targetElement = targetObject[type];
+    }
+
     $('.side-panel .components').empty();
     $('.side-panel .layout').empty();
     $('.wrapper-body').empty();
 
-    console.log(element)
-    if (typeof element.containerOptions[elem] === 'boolean') {
-      element.containerOptions[elem] = !element.containerOptions[elem];
+    switch (type) {
+      case 'options':
+        if (typeof targetElement[elem] === 'boolean') {
+          targetElement[elem] = !targetElement[elem];
+        } else {
+          targetElement[elem] = newVal;
+        }
+        // console.log(targetElement[elem])
+        break;
+      case 'text':
+        const value = newVal.value;
+        const elementIndex = newVal.getAttribute('data-index');
+        targetElement[elementIndex][elem] = value;
+        break;
+
+      case 'media':
+        targetElement[elem] = newVal;
+        break;
     }
 
     initSidePanel(CONTENTDATA);
@@ -760,25 +814,126 @@
   }
 
   function populateSidePanelLayoutElements(key, value) {
-    function extractObject(title, data) {
+
+    function extractObject(title, data, elemIndex) {
       if (!data) return ''
 
       let content = '';
-      Object.entries(data).forEach(([_k, _v]) => {
-        content += `<li><span>${_k} :</span> <button onclick="updateContainerOptions(${value.id}, '${_k}')">${_v}</button></li>`;
-      })
 
+      if (['Media', 'Container Options', 'Options'].includes(title)) {
+        Object.entries(data).forEach(([_k, _v]) => {
+          switch (_k) {
+            case 'skew':
+              const options = ['a', 'b', 'c', 'd', 'none'];
+              let optionsDom = '';
+              options.forEach(val => {
+                optionsDom += `<option value=${val} ${val === data[_k] ? 'selected' : ''}>${val}</option>`
+              })
+
+              content += `
+                <label for="cars">skew:</label>
+                <select onchange="updateoptions(${value.id}, 'options', '${_k}', this.options[this.selectedIndex].value, ${elemIndex})">
+                  ${optionsDom}
+                </select>
+              `
+              break;
+            case 'blur':
+            case 'shadow':
+            case 'textAnimation':
+              content += `<p>${_k}: <button onclick="updateoptions(${value.id}, 'options','${_k}', ${null}, ${elemIndex})">${_v}</button></p>`;
+              break;
+            case 'type':
+              const mediaOptions = ['image', 'video/mp4'];
+              let mediaOptionsDom = '';
+              mediaOptions.forEach(val => {
+                mediaOptionsDom += `<option value=${val} ${val === data[_k] ? 'selected' : ''}>${val}</option>`
+              })
+
+              content += `
+                <label for="cars">type:</label>
+                <select onchange="updateoptions(${value.id}, 'media', '${_k}', this.options[this.selectedIndex].value, ${elemIndex})">
+                  ${mediaOptionsDom}
+                </select>
+                <br/>`
+              break;
+            case 'url':
+              content += `
+                <p style='display: inline-block'>url</p>: <input type="text" value="${_v}" onchange="updateoptions(${value.id}, 'media', '${_k}', this.value, ${elemIndex})">
+              `
+              break;
+          }
+        })
+      }
+
+      if (title === 'Text' && Array.isArray(data)) {
+        console.log(title, data, elemIndex)
+
+        data.forEach((_v, idx) => {
+          Object.entries(_v).forEach(([_k, _v], idx) => {
+            content += `
+              <div style="padding: 0 0 5px;" > 
+                <label for="cars">${_k}:</label>
+                <input data-index="${idx}" type="text" value="${_v}" onchange="updateoptions(${value.id}, 'text', '${_k}', this, ${elemIndex})">
+                <button text-index='${idx}' text-type='${_k}' onclick="deleteText(this)">x</button>
+              </div>
+            `
+          })
+        })
+      }
+
+
+      let textOptions = ''
+      testExamples.forEach(x => {
+        textOptions += `
+          <option value='${x}'>${x}</option>
+        `
+      })
       return `
-            <div class="options">
-              <h4>${title}</h4>
-              <ul>${content}</ul>
-            </div>`
+        <div class="options ${title.toLowerCase().replace(' ', '-')}">
+          <h4>${title}</h4>
+          ${content}
+          ${title === 'Text' ? `
+            <label for="cars">add Text:</label>
+            <select onchange="addAdditionalText(this)">
+              <option value="" selected disabled hidden>Choose here</option>
+              ${textOptions}
+            </select>
+            ` : ''}
+        </div>`
+    }
+
+    // console.log(value)
+
+    let content = '';
+    if (value.content) {
+      value.content.forEach((v, idx) => {
+        // console.log(v, idx)
+        content += `
+          <div class='element-content' data-index='${idx}' >
+            ${extractObject('Options', v.options, idx)}
+            ${extractObject('Media', v.media, idx)}
+            ${extractObject('Text', v.text, idx)}
+          </div>
+        `
+      })
     }
 
     $('.side-panel .layout').append(`
-          <div class="element" data-element="${key}">
-            <h3>${key}</h3>
-            ${extractObject('Container Options', value.containerOptions)}
+          <div class="element" data-element="${key}" element-id="${value.id}">
+            <h3 style='display: inline'>${key}</h3>
+            <div class='delete-element' element-id="${value.id}" style='display: inline-block; padding: 0; float: right;'>D</div>
+            <div class='expand-element' element-id="${value.id}" style='display: inline-block; padding: 0 15px; float: right;'>T</div>
+
+            <div class='element-container ${value.expanded ? 'active' : ''}'> 
+              ${value.options ? `
+                <div class='element-content' >
+                  ${extractObject('Container Options', value.options)}
+                  ${extractObject('Media', value.media)}
+                  ${extractObject('Text', value.text)}
+                </div>  
+              ` : ''}
+              ${content}
+            </div>
           </div>`);
   }
 
@@ -791,32 +946,47 @@
 
       populateSidePanelLayoutElements(k, v)
 
-      $('.side-panel .components').append(`
-            <div class='button component'>${k}</div>
-          `);
+      // $('.side-panel .components').append(`
+      //     <div class='button component'>${k}</div>`);
     })
+    $('.side-panel .components').append(`
+              <div class="button copy">Copy to clipboard</div>
+            `);
 
     function getElementIndex(element) {
       return Array.from(element.parentNode.children).indexOf(element);
     }
 
     //? ------ delete the element
-    $('.layout-component').on('click', (e) => {
-      const currenTarget = getElementIndex(e.target);
-      $('.wrapper-body').children()[currenTarget].remove()
-      e.target.remove()
+    $('.delete-element').on('click', (e) => {
+      const elemId = e.target.getAttribute('element-id')
+      const target = CONTENTDATA.findIndex(x => Object.values(x)[0].id === Number(elemId))
+    
+      CONTENTDATA.splice(target, 1)
+      $(`[element-id="${elemId}"]`).remove();
+      $(`[container-id="${elemId}"]`).remove();
     })
 
     //? ------ add the element
     $('.component').on('click', (e) => {
-      const currenTarget = getElementIndex(e.target);
+      // const currenTarget = getElementIndex(e.target);
+      // console.log(e, currenTarget)
 
+    })
+
+    //? ------ toggle expand the element
+    $('.expand-element').on('click', (e) => {
+      const elemId = e.target.getAttribute('element-id')
+      const target = CONTENTDATA.findIndex(x => Object.values(x)[0].id === Number(elemId))
+
+      Object.values(CONTENTDATA[target])[0].expanded = !Object.values(CONTENTDATA[target])[0].expanded
+
+      $(`.element[element-id='${e.target.getAttribute('element-id')}'] .element-container`).toggleClass('active')
     })
   }
 
   function copyInnerHTMLToClipboard(elementId) {
     const element = document.getElementById(elementId);
-
 
     if (element) {
       const textarea = document.createElement('textarea');

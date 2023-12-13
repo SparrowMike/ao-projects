@@ -1,1253 +1,1354 @@
 <script>
-    const TEXTSAMPLES = ['primary-header-text', 'primary-body-text']
-    //! --------------- TEXT object to only have one type of key value pair ---- 
-    const TEMPLATECONTENT = {
-      HEADER: {
-        options: {
-          blur: false,
-          shadow: true,
-          textAnimation: true,
-        },
-        media: {
-          type: 'video/mp4',
-          url: 'https://video-previews.elements.envatousercontent.com/92feb931-ca82-4981-8507-f519424da3eb/watermarked_preview/watermarked_preview.mp4',
-        },
-        text: [
-          {
-            ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-          },
-        ]
+  const COLORVARIABLES = {
+    ['--primary-text-color']: '#F0ECE5',
+    ['--secondary-text-color']: '#B6BBC4',
+    ['--description-text-color']: '#949ca9',
+    ['--primary-background-color']: '#191919',
+  };
+
+  const TEXTSAMPLES = ['primary-header-text', 'secondary-header-text', 'primary-body-text']
+  //! --------------- TEXT object to only have one type of key value pair ---- 
+  const TEMPLATECONTENT = {
+    HEADER: {
+      options: {
+        blur: false,
+        shadow: true,
+        textAnimation: true,
+        textContainer: false,
       },
-      FIXED: {
-        options: {
-          insetShadow: true,
-          textAnimation: false,
-        },
-        media: {
-          type: 'video/mp4',
-          url: 'https://video-previews.elements.envatousercontent.com/h264-video-previews/b6c7666e-1992-4a7e-9f3c-90cb6627a78d/22373847.mp4',
-        },
-        text: [
-          {
-            ['primary-header-text']: 'Some header here',
-          },
-          {
-            ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-          },
-        ]
+      media: {
+        type: 'video/mp4',
+        url: 'https://video-previews.elements.envatousercontent.com/92feb931-ca82-4981-8507-f519424da3eb/watermarked_preview/watermarked_preview.mp4',
+        description: 'No description'
       },
-    }
-  
-    const TEMPLATESDATA = {
-      HEADER: {
-        id: 1,
-        containerType: 'HEADER',
-        expanded: false,
-        content: [
-          {
-            options: {
-              blur: false,
-              shadow: true,
-              textAnimation: true,
-            },
-            media: {
-              type: 'video/mp4',
-              url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1251532-hlNO0Z9pyk-high.mp4',
-            },
-            text: [
-              {
-                ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-              },
-            ]
-          },
-          {
-            options: {
-              blur: false,
-              shadow: false,
-              textAnimation: false,
-              textContainer: true,
-            },
-            media: {
-              type: 'video/mp4',
-              url: 'https://dsqqu7oxq6o1v.cloudfront.net/drone-video-lapland-winter-forest-1865623-high.mp4',
-            },
-            text: [
-              {
-                ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxiipit recusandae aspernatur maxime tenetur laborum. '
-              },
-            ]
-          },
-          {
-            options: {
-              blur: false,
-              shadow: false,
-              textAnimation: false,
-              textContainer: true,
-            },
-            media: {
-              type: 'video/mp4',
-              url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559800-Winter-Motion-Timelapse1-high.mp4',
-            },
-            text: [
-              {
-                ['primary-header-text']: 'Cupiditate quam suscir maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-              },
-            ]
-          },
-          {
-            options: {
-              blur: false,
-              shadow: false,
-              textAnimation: false,
-              textContainer: true,
-            },
-            media: {
-              type: 'video/mp4',
-              url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559632-Aerial-Winter-Landscape12-Apple-ProRes-422-LT-high.mp4',
-            },
-            text: [
-              {
-                ['primary-header-text']: 'Cupiditate quam suscipit recrnatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-              }
-            ]
-          }
-        ]
-      },
-      FIXED: {
-        id: 2,
-        expanded: false,
-        containerType: 'FIXED',
-        options: {
-          skew: 'b',
-          shadow: true,
+      text: [
+        {
+          ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
         },
-        content: [
-          {
-            options: {
-              insetShadow: true,
-              textAnimation: false,
-            },
-            media: {
-              type: 'image',
-              url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            },
-            text: [
-              {
-                ['primary-header-text']: 'Some header here',
-              },
-              {
-                ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-              },
-            ]
-          },
-          {
-            options: {
-              insetShadow: true,
-              textAnimation: false,
-            },
-            media: {
-              type: 'image',
-              url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            },
-            text: [
-              {
-                ['primary-header-text']: 'Random header here?',
-              },
-              {
-                ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-              },
-            ]
-          }
-        ]
+      ]
+    },
+    FIXED: {
+      options: {
+        insetShadow: true,
+        textAnimation: false,
       },
-      PARALLAX: {
-        id: 3,
-        expanded: false,
-        containerType: 'PARALLAX',
-        options: {
-          shadow: true,
-          blur: false,
-          textAnimation: true,
-        },
-        media: {
-          type: 'video/mp4',
-          url: 'https://video-previews.elements.envatousercontent.com/files/ef9eefa7-ee14-47e7-ae57-18ff4a9a9fb6/video_preview_h264.mp4',
-        },
-        text: [
-          {
-            ['primary-header-text']: 'Some header here',
-          },
-          {
-            ['primary-body-text']: 'Aliquam quaerat temporibus molestias excepturi praesentium eaque, vero sed dolores at hic soluta facilis laudantium optio reprehenderit assumenda nesciunt saepe itaque rerum quod ducimus eius. Quisquam distinctio aperiam qui mollitia!'
-          },
-        ]
+      media: {
+        type: 'video/mp4',
+        url: 'https://video-previews.elements.envatousercontent.com/h264-video-previews/b6c7666e-1992-4a7e-9f3c-90cb6627a78d/22373847.mp4',
+        description: 'No description'
       },
-    }
-  
-    const CONTENTDATA = [
-      {
-        id: 1,
-        containerType: 'HEADER',
-        expanded: false,
-        content: [
-          {
-            options: {
-              blur: false,
-              shadow: true,
-              textAnimation: true,
-            },
-            media: {
-              type: 'video/mp4',
-              url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1251532-hlNO0Z9pyk-high.mp4',
-            },
-            text: [
-              {
-                ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-              },
-            ]
-          },
-          {
-            options: {
-              blur: false,
-              shadow: false,
-              textAnimation: false,
-              textContainer: true,
-            },
-            media: {
-              type: 'video/mp4',
-              url: 'https://dsqqu7oxq6o1v.cloudfront.net/drone-video-lapland-winter-forest-1865623-high.mp4',
-            },
-            text: [
-              {
-                ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxiipit recusandae aspernatur maxime tenetur laborum. '
-              },
-            ]
-          },
-          {
-            options: {
-              blur: false,
-              shadow: false,
-              textAnimation: false,
-              textContainer: true,
-            },
-            media: {
-              type: 'video/mp4',
-              url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559800-Winter-Motion-Timelapse1-high.mp4',
-            },
-            text: [
-              {
-                ['primary-header-text']: 'Cupiditate quam suscir maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-              },
-            ]
-          },
-          {
-            options: {
-              blur: false,
-              shadow: false,
-              textAnimation: false,
-              textContainer: true,
-            },
-            media: {
-              type: 'video/mp4',
-              url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559632-Aerial-Winter-Landscape12-Apple-ProRes-422-LT-high.mp4',
-            },
-            text: [
-              {
-                ['primary-header-text']: 'Cupiditate quam suscipit recrnatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-              }
-            ]
-          }
-        ]
-      },
-  
-      {
-        id: 2,
-        expanded: false,
-        containerType: 'FIXED',
-        options: {
-          skew: 'b',
-          shadow: true,
+      text: [
+        {
+          ['primary-header-text']: 'Some header here',
         },
-        content: [
-          {
-            options: {
-              insetShadow: true,
-              textAnimation: false,
-            },
-            media: {
-              type: 'image',
-              url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            },
-            text: [
-              {
-                ['primary-header-text']: 'Some header here',
-              },
-              {
-                ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-              },
-            ]
-          },
-          {
-            options: {
-              insetShadow: true,
-              textAnimation: false,
-            },
-            media: {
-              type: 'image',
-              url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            },
-            text: [
-              {
-                ['primary-header-text']: 'Random header here?',
-              },
-              {
-                ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quame tenetur laborum quam suscm suscipit recrnatur maxime tenetur laborum.'
-              },
-              {
-                ['primary-body-text']: 'Cupiditate e aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum me tenetur laborum quam suscme tenetur laborum quam suscme tenetur laborum quam susc.'
-              },
-            ]
-          }
-        ]
-      },
-  
-      {
-        id: 3,
-        expanded: false,
-        containerType: 'PARALLAX',
-        options: {
-          shadow: true,
-          blur: false,
-          textAnimation: true,
+        {
+          ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
         },
-        media: {
-          type: 'video/mp4',
-          url: 'https://video-previews.elements.envatousercontent.com/files/ef9eefa7-ee14-47e7-ae57-18ff4a9a9fb6/video_preview_h264.mp4',
+      ]
+    },
+  }
+
+  const TEMPLATESDATA = {
+    HEADER: {
+      id: 1,
+      containerType: 'HEADER',
+      expanded: false,
+      content: [
+        {
+          options: {
+            blur: false,
+            shadow: true,
+            textAnimation: true,
+            textContainer: false,
+          },
+          media: {
+            type: 'video/mp4',
+            url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1251532-hlNO0Z9pyk-high.mp4',
+            description: 'No description'
+          },
+          text: [
+            {
+              ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+            },
+          ]
         },
-        text: [
-          {
-            ['primary-header-text']: 'Some header here',
+        {
+          options: {
+            blur: false,
+            shadow: false,
+            textAnimation: false,
+            textContainer: true,
           },
-          {
-            ['primary-body-text']: 'Aliquam quaerat temporibus molestias excepturi praesentium eaque, vero sed dolores at hic soluta facilis laudantium optio reprehenderit assumenda nesciunt saepe itaque rerum quod ducimus eius. Quisquam distinctio aperiam qui mollitia!'
+          media: {
+            type: 'video/mp4',
+            url: 'https://dsqqu7oxq6o1v.cloudfront.net/drone-video-lapland-winter-forest-1865623-high.mp4',
+            description: 'No description'
           },
-          {
-            ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+          text: [
+            {
+              ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxiipit recusandae aspernatur maxime tenetur laborum. '
+            },
+          ]
+        },
+        {
+          options: {
+            blur: false,
+            shadow: false,
+            textAnimation: false,
+            textContainer: true,
           },
-          {
-            ['primary-body-text']: 'Resusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-          }
-        ]
-      },
-    ];
-  </script>
-  
-  <style type="text/css">
-    .app {
-      display: flex;
-      overflow: hidden;
-      height: 100%;
-    }
-  
-    .app #wrapper {
-      width: 100%;
-      overflow: auto;
-    }
-  
-    .app .side-panel {
-      position: sticky;
-      background: #191919;
-      min-width: 375px;
-      box-shadow: 0 0 8px black;
-      z-index: 9999999999;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      max-width: 500px;
-      overflow: auto;
-      color: white;
-    }
-  
-    .app .side-panel .element {
-      padding: 10px;
-      border-radius: 8px;
-    }
-  
-    .button {
-      background: grey;
-      margin: 5px auto;
-      height: 50px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-    }
-  
-    .layout .element {
-      margin: 5px;
-      background-color: rgb(43, 42, 42);
-    }
-  
-    .layout .element .element-container {
-      display: none;
-    }
-  
-    .layout .element .element-container.active {
-      display: block;
-      padding: 0;
-    }
-  
-    .layout .element .element-container .element-content,
-    .layout .element .element-container .container-options {
-      padding: 5px;
-      margin: 5px 0;
-      background-color: #191919;
-    }
-  
-    .layout .element .element-container .element-content .options {
-      padding: 5px;
-    }
-  </style>
-  
-  <div class="app">
-    <div id="wrapper">
-      <style type="text/css">
-        :root {
-          --primary-text-color: #F0ECE5;
-          --secondary-text-color: #B6BBC4;
-          --accent-text-color: #0077cc;
-  
-          --primary-background-color: #191919;
-          --secondary-background-color: #3a5a40;
-          --accent-background-color: #ffc300;
-  
-          --background-blend-delay: .5s;
-          --text-animation-delay: 1s;
+          media: {
+            type: 'video/mp4',
+            url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559800-Winter-Motion-Timelapse1-high.mp4',
+            description: 'No description'
+          },
+          text: [
+            {
+              ['primary-header-text']: 'Cupiditate quam suscir maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+            },
+          ]
+        },
+        {
+          options: {
+            blur: false,
+            shadow: false,
+            textAnimation: false,
+            textContainer: true,
+          },
+          media: {
+            type: 'video/mp4',
+            url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559632-Aerial-Winter-Landscape12-Apple-ProRes-422-LT-high.mp4',
+            description: 'No description'
+          },
+          text: [
+            {
+              ['primary-header-text']: 'Cupiditate quam suscipit recrnatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+            }
+          ]
         }
-  
-        * {
-          padding: 0;
-          margin: 0;
-          box-sizing: border-box;
+      ]
+    },
+    FIXED: {
+      id: 2,
+      expanded: false,
+      containerType: 'FIXED',
+      options: {
+        skew: 'b',
+        shadow: true,
+      },
+      content: [
+        {
+          options: {
+            insetShadow: true,
+            textAnimation: false,
+          },
+          media: {
+            type: 'image',
+            url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            description: 'No description'
+          },
+          text: [
+            {
+              ['primary-header-text']: 'Some header here',
+            },
+            {
+              ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+            },
+          ]
+        },
+        {
+          options: {
+            insetShadow: true,
+            textAnimation: false,
+          },
+          media: {
+            type: 'image',
+            url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            description: 'No description'
+          },
+          text: [
+            {
+              ['primary-header-text']: 'Random header here?',
+            },
+            {
+              ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+            },
+          ]
         }
-  
+      ]
+    },
+    PARALLAX: {
+      id: 3,
+      expanded: false,
+      containerType: 'PARALLAX',
+      options: {
+        shadow: true,
+        blur: false,
+        textAnimation: true,
+      },
+      media: {
+        type: 'video/mp4',
+        url: 'https://video-previews.elements.envatousercontent.com/files/ef9eefa7-ee14-47e7-ae57-18ff4a9a9fb6/video_preview_h264.mp4',
+        description: 'No description'
+      },
+      text: [
+        {
+          ['primary-header-text']: 'Some header here',
+        },
+        {
+          ['primary-body-text']: 'Aliquam quaerat temporibus molestias excepturi praesentium eaque, vero sed dolores at hic soluta facilis laudantium optio reprehenderit assumenda nesciunt saepe itaque rerum quod ducimus eius. Quisquam distinctio aperiam qui mollitia!'
+        },
+      ]
+    },
+  }
+
+  let CONTENTDATA = [
+    {
+      id: 1,
+      containerType: 'HEADER',
+      expanded: false,
+      content: [
+        {
+          options: {
+            blur: false,
+            shadow: true,
+            textAnimation: true,
+            textContainer: false,
+          },
+          media: {
+            type: 'video/mp4',
+            url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1251532-hlNO0Z9pyk-high.mp4',
+            description: 'No description'
+          },
+          text: [
+            {
+              ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+            },
+          ]
+        },
+        {
+          options: {
+            blur: false,
+            shadow: false,
+            textAnimation: false,
+            textContainer: true,
+          },
+          media: {
+            type: 'video/mp4',
+            url: 'https://dsqqu7oxq6o1v.cloudfront.net/drone-video-lapland-winter-forest-1865623-high.mp4',
+            description: 'No description'
+          },
+          text: [
+            {
+              ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxiipit recusandae aspernatur maxime tenetur laborum. '
+            },
+          ]
+        },
+        {
+          options: {
+            blur: false,
+            shadow: false,
+            textAnimation: false,
+            textContainer: true,
+          },
+          media: {
+            type: 'video/mp4',
+            url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559800-Winter-Motion-Timelapse1-high.mp4',
+            description: 'No description'
+          },
+          text: [
+            {
+              ['primary-header-text']: 'Cupiditate quam suscir maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+            },
+          ]
+        },
+        {
+          options: {
+            blur: false,
+            shadow: false,
+            textAnimation: false,
+            textContainer: true,
+          },
+          media: {
+            type: 'video/mp4',
+            url: 'https://dsqqu7oxq6o1v.cloudfront.net/motion-array-1559632-Aerial-Winter-Landscape12-Apple-ProRes-422-LT-high.mp4',
+            description: 'No description'
+          },
+          text: [
+            {
+              ['primary-header-text']: 'Cupiditate quam suscipit recrnatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 2,
+      expanded: false,
+      containerType: 'FIXED',
+      options: {
+        skew: 'b',
+        shadow: true,
+      },
+      content: [
+        {
+          options: {
+            insetShadow: true,
+            textAnimation: false,
+          },
+          media: {
+            type: 'image',
+            url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            description: 'No description'
+          },
+          text: [
+            {
+              ['primary-header-text']: 'Some header here',
+            },
+            {
+              ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+            },
+          ]
+        },
+        {
+          options: {
+            insetShadow: true,
+            textAnimation: false,
+          },
+          media: {
+            type: 'image',
+            url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            description: 'No description'
+          },
+          text: [
+            {
+              ['primary-header-text']: 'Random header here?',
+            },
+            {
+              ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quame tenetur laborum quam suscm suscipit recrnatur maxime tenetur laborum.'
+            },
+            {
+              ['primary-body-text']: 'Cupiditate e aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum me tenetur laborum quam suscme tenetur laborum quam suscme tenetur laborum quam susc.'
+            },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 3,
+      expanded: false,
+      containerType: 'PARALLAX',
+      options: {
+        shadow: true,
+        blur: false,
+        textAnimation: true,
+      },
+      media: {
+        type: 'video/mp4',
+        url: 'https://video-previews.elements.envatousercontent.com/files/ef9eefa7-ee14-47e7-ae57-18ff4a9a9fb6/video_preview_h264.mp4',
+        description: 'No description'
+      },
+      text: [
+        {
+          ['primary-header-text']: 'Some header here',
+        },
+        {
+          ['primary-body-text']: 'Aliquam quaerat temporibus molestias excepturi praesentium eaque, vero sed dolores at hic soluta facilis laudantium optio reprehenderit assumenda nesciunt saepe itaque rerum quod ducimus eius. Quisquam distinctio aperiam qui mollitia!'
+        },
+        {
+          ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+        },
+        {
+          ['primary-body-text']: 'Resusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
+        }
+      ]
+    },
+  ];
+</script>
+
+<style type="text/css">
+  .app {
+    display: flex;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  .app #wrapper {
+    width: 100%;
+    overflow: auto;
+    overflow-y: overlay;
+  }
+
+  .app .side-panel {
+    position: sticky;
+    background: #191919;
+    min-width: 385px;
+    box-shadow: 0 0 8px black;
+    z-index: 9999999999;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 500px;
+    overflow: auto;
+    overflow-y: overlay;
+    color: white;
+  }
+
+  .app .side-panel .element {
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .app .side-panel .components {
+    margin-top: auto;
+  }
+
+  .app .side-panel .design {
+    padding: 10px;
+    border-radius: 8px;
+    margin: 5px;
+    background-color: rgb(43, 42, 42);
+  }
+
+  .app .side-panel .design .theme-color {
+    margin: 0 40px;
+    text-transform: capitalize;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .button {
+    background: grey;
+    margin: 5px auto;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .layout .element {
+    margin: 5px;
+    background-color: rgb(43, 42, 42);
+  }
+
+  .layout .element .element-container {
+    display: none;
+  }
+
+  .layout .element .element-container.active {
+    display: block;
+    padding: 0;
+  }
+
+  .layout .element .element-container .element-content,
+  .layout .element .element-container .container-options {
+    padding: 5px;
+    margin: 5px 0;
+    background-color: #191919;
+  }
+
+  .layout .element .element-container .element-content .options {
+    padding: 5px;
+  }
+</style>
+
+<div class="app">
+  <div id="wrapper">
+    <style type="text/css">
+      :root {
+        --primary-text-color: #F0ECE5;
+        --secondary-text-color: #B6BBC4;
+        --description-text-color: #949ca9;
+
+        --primary-background-color: #191919;
+        --secondary-background-color: #3a5a40;
+
+        --background-blend-delay: .5s;
+        --text-animation-delay: 1s;
+
+        --content-max-width: 1000px;
+      }
+
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      /* ----- global text ----- */
+      .primary-header-text {
+        color: var(--primary-text-color);
+        padding: 15px 20px;
+        padding-top: 20px;
+        margin: 0;
+        font-size: 28px;
+      }
+
+      .secondary-header-text {
+        color: var(--primary-text-color);
+        font-size: 22px;
+        padding: 15px 20px;
+      }
+
+      .primary-body-text {
+        margin: 0;
+        padding: 10px 20px;
+        color: var(--secondary-text-color);
+        font-size: 16px;
+      }
+
+      .description {
+        font-size: 16px;
+        color: var(--description-text-color);
+        padding: 0 30px;
+      }
+
+      .parallax .description,
+      .parallax-header .description {
+        position: absolute !important;
+        bottom: 20px !important;
+        right: 20px;
+      }
+
+      .wrapper-body {
+        background-color: var(--primary-background-color);
+      }
+
+      /* ----- splash laoder ----- */
+      .loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: 999999999;
+      }
+
+      .loader.active {
+        backdrop-filter: blur(10px);
+        background-color: rgb(48 43 43 / 100%);
+      }
+
+      .loader.disabled {
+        display: none;
+      }
+
+      /* ----- animation classes ----- */
+      .animate-bg-shadow:after,
+      .animate-bg-blur:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .animate-bg-shadow:after {
+        background: rgba(0, 0, 0, .5);
+        opacity: 0;
+        transition: opacity var(--background-blend-delay) ease-in;
+      }
+
+      .animate.animate-bg-shadow:after {
+        opacity: 1;
+      }
+
+      .animate-bg-blur:after {
+        -webkit-backdrop-filter: blur(0px);
+        backdrop-filter: blur(0px);
+        transition: all var(--background-blend-delay) ease-in;
+      }
+
+      .animate.animate-bg-blur:after {
+        -webkit-backdrop-filter: blur(5px);
+        backdrop-filter: blur(5px);
+      }
+
+      .observe.secondary-header-text,
+      .observe.primary-header-text {
+        transform: translate3d(-100%, 0, 0);
+        opacity: .5;
+        transition: all var(--text-animation-delay) ease;
+      }
+
+      .animate.secondary-header-text,
+      .animate.primary-header-text {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+      }
+
+      .out.secondary-header-text:not(.animate),
+      .out.primary-header-text:not(.animate) {
+        transform: translate3d(100%, 0, 0);
+        opacity: 1;
+      }
+
+      .observe.primary-body-text {
+        transform: translate3d(-100%, 0, 0);
+        opacity: .5;
+        transition: all var(--text-animation-delay) ease;
+      }
+
+      .animate.primary-body-text {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+      }
+
+      .out.primary-body-text:not(.animate) {
+        transform: translate3d(100%, 0, 0);
+        opacity: 1;
+      }
+
+      /* ---------------- header ---------------- */
+      .parallax-header {
+        position: relative;
+      }
+
+      .parallax-header .text-content {
+        margin-top: -100vh;
+      }
+
+      .parallax-header .background-content {
+        position: sticky;
+        top: 0px;
+        height: 100vh;
+      }
+
+      .parallax-header .background-content .media img,
+      .parallax-header .background-content .media video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        transform: translate(-50%, -50%);
+        -o-object-fit: cover;
+        object-fit: cover;
+        -o-object-position: center;
+        object-position: center;
+      }
+
+      .parallax-header .text-content .text {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2em;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /*========================================  */
+      .parallax-header .text-content .text.animate .container.active {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        width: 80%;
+        padding: 10px 20px;
+      }
+
+      /* .parallax-header .text-content .text.animate .container {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        width: 80%;
+        padding: 10px 20px;
+        opacity: 0;
+        transform: translateY(-50vw);
+        transition: all 1s ease-in;
+      }
+
+      .parallax-header .text-content .text.animate .container.active {
+        opacity: 1;
+        transform: translateY(0);
+      } */
+      /*========================================  */
+
+      .parallax-header .text-content .text.out:not(.animate) .container {
+        transform: translateY(-20vw);
+        opacity: 0;
+      }
+
+      .parallax-header .text-content .text.animate .container {
+        opacity: 1;
+        max-width: 80%;
+      }
+
+      /* ---------------- fixed ---------------- */
+      .fixed {
+        z-index: 2;
+        position: relative;
+      }
+
+      .fixed.shadow {
+        filter: drop-shadow(0 0 12px rgba(0, 0, 0, .8));
+      }
+
+      .fixed .container {
+        width: 100%;
+        height: fit-content;
+        background: var(--primary-background-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 90px 0;
+        overflow: hidden;
+      }
+
+      .fixed .cliped {
+        margin: -100px 0 -100px 0;
+      }
+
+      .fixed .cliped.clip-a {
+        clip-path: polygon(0 75px, 100% 0, 100% calc(100% - 75px), 0% 100%);
+      }
+
+      .fixed .cliped.clip-b {
+        clip-path: polygon(0 0, 100% 75px, 100% 100%, 0 calc(100% - 75px));
+      }
+
+      .fixed .cliped.clip-c {
+        clip-path: polygon(0 0, 100% 75px, 100% calc(100% - 75px), 0 100%);
+      }
+
+      .fixed .cliped.clip-d {
+        clip-path: polygon(0 75px, 100% 0, 100% 100%, 0 100%);
+      }
+
+      .fixed .content {
+        max-width: var(--content-max-width);
+        width: 100%;
+      }
+
+      .fixed .content video,
+      .fixed .content img {
+        width: 100%;
+      }
+
+      /* ---------------- parallax ---------------- */
+      .parallax {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .parallax .content {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        clip: rect(0 auto auto 0);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+      }
+
+      .parallax .content .media {
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-position: 50%;
+        background-size: cover;
+      }
+
+      .parallax .content .text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 1;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: var(--content-max-width);
+        padding: 0 10px 0 15px;
+        margin: 0 auto;
+        transform: translate(-50%, -50%);
+      }
+
+      .parallax .content .media img,
+      .parallax .content .media video {
+        -o-object-fit: cover;
+        object-fit: cover;
+        -o-object-position: center center;
+        object-position: center center;
+        width: 100%;
+        height: 100vh;
+      }
+
+      @media only screen and (min-width: 600px) {
         .primary-header-text {
-          color: var(--primary-text-color);
-          padding: 15px 20px;
-          padding-top: 20px;
-          margin: 0;
-          font-size: 28px;
+          font-size: 32px;
         }
-  
-        .sub-header-text {
-          font-size: 22px;
+
+        .secondary-header-text {
+          font-size: 24px;
         }
-  
+
         .primary-body-text {
-          margin: 0;
-          padding: 10px 20px;
-          color: var(--secondary-text-color);
-          font-size: 16px;
+          font-size: 18px;
         }
-  
-        .wrapper-body {
-          background-color: var(--primary-background-color);
+
+        .fixed .content .media {
+          position: relative;
         }
-  
-        /* ----- splash laoder ----- */
-        .loader {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100vh;
-          z-index: 999999999;
-        }
-  
-        .loader.active {
-          backdrop-filter: blur(10px);
-          background-color: rgb(48 43 43 / 100%);
-        }
-  
-        .loader.disabled {
-          display: none;
-        }
-  
-        /* ----- animation classes ----- */
-        .animate-bg-shadow:after,
-        .animate-bg-blur:after {
+
+        .fixed .content .media.insetShadow:after {
           content: '';
-          position: absolute;
           top: 0;
           left: 0;
-          width: 100%;
-          height: 100%;
-        }
-  
-        .animate-bg-shadow:after {
-          background: rgba(0, 0, 0, .5);
-          opacity: 0;
-          transition: opacity var(--background-blend-delay) ease-in;
-        }
-  
-        .animate.animate-bg-shadow:after {
-          opacity: 1;
-        }
-  
-        .animate-bg-blur:after {
-          -webkit-backdrop-filter: blur(0px);
-          backdrop-filter: blur(0px);
-          transition: all var(--background-blend-delay) ease-in;
-        }
-  
-        .animate.animate-bg-blur:after {
-          -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
-        }
-  
-        .observe.primary-header-text {
-          transform: translate3d(-100%, 0, 0);
-          opacity: .5;
-          transition: all var(--text-animation-delay) ease;
-        }
-  
-        .animate.primary-header-text {
-          transform: translate3d(0, 0, 0);
-          opacity: 1;
-        }
-  
-        .observe.primary-body-text {
-          transform: translate3d(-100%, 0, 0);
-          opacity: .5;
-          transition: all var(--text-animation-delay) ease;
-        }
-  
-        .animate.primary-body-text {
-          transform: translate3d(0, 0, 0);
-          opacity: 1;
-        }
-  
-        .out.primary-header-text:not(.animate) {
-          transform: translate3d(100%, 0, 0);
-          opacity: 1;
-        }
-  
-        .out.primary-body-text:not(.animate) {
-          transform: translate3d(100%, 0, 0);
-          opacity: 1;
-        }
-  
-        /* ---------------- header ---------------- */
-        .parallax-header {
-          position: relative;
-        }
-  
-        .parallax-header .text-content {
-          margin-top: -100vh;
-        }
-  
-        .parallax-header .background-content {
-          position: sticky;
-          top: 0px;
-          height: 100vh;
-        }
-  
-        .parallax-header .background-content .media img,
-        .parallax-header .background-content .media video {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 100%;
-          height: 100%;
-          transform: translate(-50%, -50%);
-          -o-object-fit: cover;
-          object-fit: cover;
-          -o-object-position: center;
-          object-position: center;
-        }
-  
-        .parallax-header .text-content .text {
-          height: 100vh;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-size: 2em;
-          position: relative;
-          overflow: hidden;
-        }
-  
-        /*========================================  */
-        .parallax-header .text-content .text.animate .container.active {
-          background: rgba(0, 0, 0, 0.5);
-          backdrop-filter: blur(5px);
-          width: 80%;
-          padding: 10px 20px;
-        }
-  
-        /* .parallax-header .text-content .text.animate .container {
-          background: rgba(0, 0, 0, 0.5);
-          backdrop-filter: blur(5px);
-          width: 80%;
-          padding: 10px 20px;
-          opacity: 0;
-          transform: translateY(-50vw);
-          transition: all 1s ease-in;
-        }
-  
-        .parallax-header .text-content .text.animate .container.active {
-          opacity: 1;
-          transform: translateY(0);
-        } */
-        /*========================================  */
-  
-        .parallax-header .text-content .text.out:not(.animate) .container {
-          transform: translateY(-20vw);
-          opacity: 0;
-        }
-  
-        .parallax-header .text-content .text.animate .container {
-          opacity: 1;
-          max-width: 80%;
-        }
-  
-        /* ---------------- fixed ---------------- */
-        .fixed {
-          z-index: 2;
-          position: relative;
-        }
-  
-        .fixed.shadow {
-          filter: drop-shadow(0 0 12px rgba(0, 0, 0, .8));
-        }
-  
-        .fixed .container {
-          width: 100%;
-          height: fit-content;
-          background: var(--primary-background-color);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-  
-        .fixed .container {
-          padding: 90px 0;
-        }
-  
-        .fixed .cliped {
-          margin: -100px 0 -100px 0;
-        }
-  
-        .fixed .cliped.clip-a {
-          clip-path: polygon(0 75px, 100% 0, 100% calc(100% - 75px), 0% 100%);
-        }
-  
-        .fixed .cliped.clip-b {
-          clip-path: polygon(0 0, 100% 75px, 100% 100%, 0 calc(100% - 75px));
-        }
-  
-        .fixed .cliped.clip-c {
-          clip-path: polygon(0 0, 100% 75px, 100% calc(100% - 75px), 0 100%);
-        }
-  
-        .fixed .cliped.clip-d {
-          clip-path: polygon(0 75px, 100% 0, 100% 100%, 0 100%);
-        }
-  
-        .fixed .content {
-          max-width: 1000px;
-          width: 100%;
-        }
-  
-        .fixed .content video,
-        .fixed .content img {
-          width: 100%;
-        }
-  
-        /* ---------------- parallax ---------------- */
-        .parallax {
-          position: relative;
-          width: 100%;
-          height: 100vh;
-          overflow: hidden;
-        }
-  
-        .parallax .content {
           position: absolute;
           width: 100%;
           height: 100%;
-          box-sizing: border-box;
-          clip: rect(0 auto auto 0);
-          clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+          box-shadow: inset 0 0 8px 20px var(--primary-background-color);
         }
-  
-        .parallax .content .media {
-          position: fixed;
-          top: 0;
-          left: 0;
-          display: block;
-          width: 100%;
-          height: 100%;
-          background-repeat: no-repeat;
-          background-attachment: scroll;
-          background-position: 50%;
-          background-size: cover;
-        }
-  
-        .parallax .content .text {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          z-index: 1;
-          box-sizing: border-box;
-          width: 100%;
-          max-width: 700px;
-          padding: 0 10px 0 15px;
-          margin: 0 auto;
-          transform: translate(-50%, -50%);
-        }
-  
-        .parallax .content .media img,
-        .parallax .content .media video {
-          -o-object-fit: cover;
-          object-fit: cover;
-          -o-object-position: center center;
-          object-position: center center;
-          width: 100%;
-          height: 100vh;
-        }
-  
-        @media only screen and (min-width: 600px) {
-          .primary-header-text {
-            font-size: 32px;
-          }
-  
-          .sub-header-text {
-            font-size: 24px;
-          }
-  
-          .primary-body-text {
-            font-size: 18px;
-          }
-  
-          .fixed .content .media {
-            position: relative;
-          }
-  
-          .fixed .content .media.insetShadow:after {
-            content: '';
-            top: 0;
-            left: 0;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            box-shadow: inset 0 0 8px 20px var(--primary-background-color);
-          }
-        }
-      </style>
-      <!-- <div class="loader active"></div> -->
-      <div class="wrapper-body"></div>
-  
-      <script>
-        function initObserver() {
-          function handleIntersection(entries, observer) {
-            entries.forEach(entry => {
-              const target = entry.target;
-              const inViewPercent = entry.intersectionRatio;
-              const opacityVal = inViewPercent > 0.90 ? 1 : inViewPercent;
-  
-              const boundingBox = entry.target.getBoundingClientRect();
-              const elementCenter = boundingBox.top + boundingBox.height / 2;
-              const viewportCenter = window.innerHeight / 2;
-  
-              if (elementCenter < viewportCenter) {
-                target.classList.add('out');
-                target.classList.remove('in');
-              } else {
-                target.classList.add('in');
-                target.classList.remove('out');
+      }
+    </style>
+    <!-- <div class="loader active"></div> -->
+    <div class="wrapper-body"></div>
+
+    <script>
+      function initObserver() {
+        function handleIntersection(entries, observer) {
+          entries.forEach(entry => {
+            const target = entry.target;
+            const inViewPercent = entry.intersectionRatio;
+            const opacityVal = inViewPercent > 0.90 ? 1 : inViewPercent;
+
+            const boundingBox = entry.target.getBoundingClientRect();
+            const elementCenter = boundingBox.top + boundingBox.height / 2;
+            const viewportCenter = window.innerHeight / 2;
+
+            if (elementCenter < viewportCenter) {
+              target.classList.add('out');
+              target.classList.remove('in');
+            } else {
+              target.classList.add('in');
+              target.classList.remove('out');
+            }
+
+            const headerParallaxBackground = target.id ? document.querySelector(`#${target.id}`) : null;
+
+            if (headerParallaxBackground) {
+              if (target.classList.contains('control-opacity') && target.classList.contains('in')) {
+                headerParallaxBackground.style.opacity = opacityVal;
               }
-  
-              const headerParallaxBackground = target.id ? document.querySelector(`#${target.id}`) : null;
-  
-              if (headerParallaxBackground) {
-                if (target.classList.contains('control-opacity') && target.classList.contains('in')) {
-                  headerParallaxBackground.style.opacity = opacityVal;
-                }
-              }
-  
-              if (entry.isIntersecting) {
-                target.classList.add('animate');
-                headerParallaxBackground && headerParallaxBackground.classList.add('animate');
-              } else {
-                target.classList.remove('animate');
-                headerParallaxBackground && headerParallaxBackground.classList.remove('animate');
-              }
-            });
-          }
-  
-          const options = {
-            threshold: Array.from({ length: 41 }, (_, index) => Number((index * 0.025).toFixed(2))),
-          };
-  
-          const observer = new IntersectionObserver(handleIntersection, options);
-  
-          document.querySelectorAll('.observe').forEach(function (el) {
-            observer.observe(el);
+            }
+
+            if (entry.isIntersecting) {
+              target.classList.add('animate');
+              headerParallaxBackground && headerParallaxBackground.classList.add('animate');
+            } else {
+              target.classList.remove('animate');
+              headerParallaxBackground && headerParallaxBackground.classList.remove('animate');
+            }
           });
         }
-  
-        document.addEventListener('DOMContentLoaded', function () {
-          initObserver();
-        })
-  
-  
-        //!-----------------------------------------TBC
-        // const loaderTimeout = 1250;
-        // const loader = document.querySelector('.loader');
-        // loader.style.opacity = 0;
-  
-        // setTimeout(() => {
-        //   loader.classList.remove('active');
-        //   loader.classList.add('disabled');
-        // }, loaderTimeout * 1.1);
-  
-      </script>
-    </div>
-  
-    <div class="side-panel">
-      <div class="layout">
-  
-      </div>
-      <div class="components">
-  
-      </div>
-    </div>
+
+        const options = {
+          threshold: Array.from({ length: 41 }, (_, index) => Number((index * 0.025).toFixed(2))),
+        };
+
+        const observer = new IntersectionObserver(handleIntersection, options);
+
+        document.querySelectorAll('.observe').forEach(function (el) {
+          observer.observe(el);
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        initObserver();
+      })
+
+
+      //!-----------------------------------------TBC
+      // const loaderTimeout = 1250;
+      // const loader = document.querySelector('.loader');
+      // loader.style.opacity = 0;
+
+      // setTimeout(() => {
+      //   loader.classList.remove('active');
+      //   loader.classList.add('disabled');
+      // }, loaderTimeout * 1.1);
+
+    </script>
   </div>
-  
-  <!-- !----------------------------------------------------- -->
-  <!-- !---------------- APP DOM GENERATOR ------------------ -->
-  <script>
-    function initDOMcontentData(CONTENTDATA) {
-      const wrapper = document.querySelector('.wrapper-body');
-  
-      function extractTextContent(data, observe = false) {
-        let INNERTEXT = '';
-        
-        if (!data) return;
 
-        data.forEach(text => {
-          const [key, value] = Object.entries(text)[0];
-          INNERTEXT += `<div contenteditable="true" class='${key} ${observe ? 'observe' : ''}'>${value}</div>`;
-        });
-        return INNERTEXT;
-      }
-  
-      function populateMediaContent(data, options) {
-        const insetShadow = options?.insetShadow;
-        if (!data || !data.url) return '';
-        return data.type?.includes('video')
-          ? `<div class="media ${insetShadow ? 'insetShadow' : ''}">
-              <video autoplay loop muted playsinline>
-                <source src="${data.url}" type="${data.type}" />Your browser does not support the video tag.
-              </video>
-            </div>`
-          : `
-            <div class="media ${insetShadow ? 'insetShadow' : ''}">
-              <img alt="" src="${data.url}" />
-            </div>`;
-      }
-  
-      function exctractFixedContent(data) {
-        let CONTENT = '';
-        data.content.forEach(val => {
-          CONTENT += populateMediaContent(val.media, val.options);
-          CONTENT += `<div class='text'>
-                        ${extractTextContent(val.text, val.options?.textAnimation)}
-                      </div>`;
-        });
-        return CONTENT;
-      }
-  
-      let __DOM__ = '';
-  
-      
-      for (let component of CONTENTDATA) {
-        // console.log(component)
+  <div class="side-panel">
+    <div class="design"></div>
+    <div class="layout"></div>
+    <div class="components"></div>
+  </div>
+</div>
 
-        switch (component.containerType) {
-          case 'HEADER':
-            let BACKGROUND = '', CONTENT = '';
-  
-            component.content.forEach((val, idx) => {
-              const shadow = val.options.shadow ? 'animate-bg-shadow' : '';
-              const blur = val.options.blur ? 'animate-bg-blur' : '';
-              BACKGROUND += `
-                <div class='background ${shadow} ${blur}' id='o${component.id}-${idx}'>
-                  <div>
-                    ${populateMediaContent(val.media, val.options)}
-                  </div>  
-                </div>`;
-              CONTENT += `
-                <div class='text observe ${idx ? 'control-opacity' : ''}' id='o${component.id}-${idx}'>
-                  ${val.text.length ? `
-                    <div class="container ${val.options.textContainer ? 'active' : ''}">
-                      ${extractTextContent(val.text, val.options.textAnimation)}
-                    </div>
-                  `: ''}
-                </div>`;
-            });
-  
-            __DOM__ += `
-              <div class='parallax-header' container-id='${component.id}'>
-                <div class='background-content'>${BACKGROUND}</div>
-                <div class='text-content'>${CONTENT}</div>
-              </div>`;
-            break;
-  
-          case 'FIXED':
-            const skew = component.options.skew === 'none'
-              ? false
-              : component.options.skew;
-            const containerShadow = component.options.shadow
-            __DOM__ += `
-              <div class='fixed ${containerShadow ? 'shadow' : ''}'  container-id='${component.id}'>
-                <div class="container ${skew ? `cliped clip-${skew}` : ''}" ${skew === 'd' ? 'style="margin-bottom: 0"' : ''} >
-                  <div class='content'>
-                    ${exctractFixedContent(component)} 
-                  </div>
-                </div>
-              </div>`;
-            break;
-  
-          case 'PARALLAX':
-            const shadow = component.options.shadow ? 'animate-bg-shadow' : '';
-            const blur = component.options.blur ? 'animate-bg-blur' : '';
-  
-            __DOM__ += `
-              <div class="parallax" container-id='${component.id}'>
-                <div class="content observe ${shadow} ${blur}">
-                  ${populateMediaContent(component.media)}
-                  ${component.text ? `
-                    <div class="text">
-                      ${extractTextContent(component.text, component.options.textAnimation)}
-                    </div>
-                    ` : ''}
-                </div>
-              </div>`;
-            break;
-        }
-      }
-  
-      wrapper.insertAdjacentHTML('afterbegin', __DOM__);
-    }
-  
-    function domInit(data) {
-      initDOMcontentData(data)
-      initObserver();
-    }
-  
-    document.addEventListener('DOMContentLoaded', function () {
-      domInit(CONTENTDATA)
-    })
-  </script>
-  
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  
-  <!-- !----------------------------------------------------- -->
-  <!-- !------------------ APP SIDE PANEL ------------------- -->
-  <script>
-    function EMPTYDOMCOMPONENTS() {
-      $('.side-panel .components').empty();
-      $('.side-panel .layout').empty();
-      $('.wrapper-body').empty();
-    }
-  
-    function REPOPULATEDOM() {
-      initSidePanel(CONTENTDATA);
-      domInit(CONTENTDATA)
-    }
-  
-    function deleteElement(componentID, elementIndex, elementType, textIndex) {
-      const componentIndex = CONTENTDATA.findIndex(x => x.id === componentID)
+<!-- !----------------------------------------------------- -->
+<!-- !---------------- APP DOM GENERATOR ------------------ -->
+<script>
+  function initDOMcontentData(CONTENTDATA) {
+    const wrapper = document.querySelector('.wrapper-body');
 
-      EMPTYDOMCOMPONENTS();
-  
-      if (elementType === 'text' && textIndex !== undefined) {
-        if (CONTENTDATA[componentIndex].content) {
-          CONTENTDATA[componentIndex].content[elementIndex][elementType].splice(textIndex, 1)
-        } else {
-          CONTENTDATA[componentIndex][elementType].splice(textIndex, 1)
-        }
-      } else {
-        // ? -------------- got to be a better way right ???? -------------
-        // ! --------------------------------------------------------------
-        if (elementIndex !== undefined) {
-          delete CONTENTDATA[componentIndex].content[elementIndex][elementType.toLowerCase()];
-        } else {
-          delete CONTENTDATA[componentIndex][elementType.toLowerCase()];
-        }
-      }
+    function extractTextContent(data, observe = false) {
+      let INNERTEXT = '';
 
-      REPOPULATEDOM()
+      if (!data) return;
+
+      data.forEach(text => {
+        const [key, value] = Object.entries(text)[0];
+        INNERTEXT += `<div contenteditable="true" class='${key} ${observe ? 'observe' : ''}'>${value}</div>`;
+      });
+      return INNERTEXT;
     }
-  
-    function addAdditionalText(textType, componentID, textIndex) {
-      const target = CONTENTDATA[CONTENTDATA.findIndex(x => x.id === Number(componentID))]
-  
-      if (target.text) {
-        target.text.push({ [textType.value]: 'Text here...' })
-      } else {
-        target.content[textIndex].text.push({ [textType.value]: 'Text here...' })
-      }
-  
-      EMPTYDOMCOMPONENTS();
-      REPOPULATEDOM();
-    }
-  
-    function updateComponentValues(componentID, dataType, target, newValue, elementIndex, textIndex) {
-      const targetObject = CONTENTDATA.find(x => x.id === componentID);
-  
-      let targetElement;
-  
-      console.log('componentID', componentID, 'dataType', dataType,'target', target,'newValue', newValue, 'elemidx', elementIndex, 'textIndex', textIndex)
-      // ------ honestly not the best way but it works for now
-      if (elementIndex !== undefined) {
-        targetElement = targetObject.content[elementIndex][dataType];
-      } else {
-        targetElement = targetObject[dataType];
-      }
-  
-      EMPTYDOMCOMPONENTS();
-  
-      switch (dataType) {
-        case 'options':
-          if (typeof targetElement[target] === 'boolean') {
-            targetElement[target] = !targetElement[target];
-          } else {
-            targetElement[target] = newValue;
-          }
-          break;
-        case 'text':
-          console.log(targetElement)
-          targetElement[textIndex][target] = newValue.value;
-          break;
-        case 'media':
-          targetElement[target] = newValue;
-          break;
-      }
-  
-      REPOPULATEDOM()
-    }
-  
-    const toggleExpand = (componentID) => {
-      const target = CONTENTDATA[CONTENTDATA.findIndex(x => x.id === Number(componentID))];
-  
-      target.expanded = !target.expanded
-  
-      $(`.element[element-id='${componentID}'] .element-container`).toggleClass('active');
-    }
-  
-    const addComponent = (componentType) => {
-      const newComponent = TEMPLATESDATA[componentType.value];
-      newComponent.id = CONTENTDATA.length + 1;
-      CONTENTDATA.push(newComponent);
-  
-      EMPTYDOMCOMPONENTS();
-      REPOPULATEDOM();
-    }
-  
-    const addMoreContent = (componentID, componentType) => {
-      const target = CONTENTDATA[CONTENTDATA.findIndex(x => x.id === Number(componentID))];
-      const newContent = TEMPLATECONTENT[componentType]
-      target.content.push(JSON.parse(JSON.stringify(newContent)))
-      EMPTYDOMCOMPONENTS();
-      REPOPULATEDOM();
-    }
-  
-    const deleteComponent = (componentID) => {
-      const targetIndex = CONTENTDATA.findIndex(x => x.id === Number(componentID));
-  
-      CONTENTDATA.splice(targetIndex, 1)
-      $(`[element-id="${componentID}"]`).remove();
-      $(`[container-id="${componentID}"]`).remove();
-  
-      EMPTYDOMCOMPONENTS();
-      REPOPULATEDOM();
-    }
-  
-    function populateSidePanelLayoutElements(component) {
-      function extractObject(title, data, elementIndex) {
-        if (!data) return ''
-  
-        let content = '';
-  
-        if (['Media', 'Container Options', 'Options'].includes(title)) {
-          Object.entries(data).forEach(([_k, _v]) => {
-            switch (_k) {
-              case 'skew':
-                const options = ['a', 'b', 'c', 'd', 'none'];
-                let optionsDom = '';
-                options.forEach(val => {
-                  optionsDom += `
-                  <option value=${val} ${val === data[_k] ? 'selected' : ''}>${val}</option>`
-                })
-  
-                content += `
-                  <label for="skew">skew:</label>
-                  <select onchange="updateComponentValues(${component.id}, 'options', '${_k}', this.options[this.selectedIndex].value, ${elementIndex})">
-                    ${optionsDom}
-                  </select>
-                `
-                break;
-              case 'blur':
-              case 'shadow':
-              case 'insetShadow':
-              case 'textAnimation':
-                content += `
-                  <p>${_k}: <button onclick="updateComponentValues(${component.id}, 'options', '${_k}', ${!_v}, ${elementIndex})">${_v}</button></p>`;
-                break;
-              case 'type':
-                const mediaOptions = ['image', 'video/mp4'];
-                let mediaOptionsDom = '';
-                mediaOptions.forEach(val => {
-                  mediaOptionsDom += `
-                  <option value=${val} ${val === data[_k] ? 'selected' : ''}>${val}</option>`
-                })
-  
-                content += `
-                  <label for="media">type:</label>
-                  <select onchange="updateComponentValues(${component.id}, 'media', '${_k}', this.options[this.selectedIndex].value, ${elementIndex})">
-                    ${mediaOptionsDom}
-                  </select>
-                  <br/>`
-                break;
-              case 'url':
-                content += `
-                  <p style='display: inline-block'>url</p>: <input type="text" value="${_v}" onchange="updateComponentValues(${component.id}, 'media', '${_k}', this.value, ${elementIndex})">
-                `
-                break;
-            }
-          })
-        }
-  
-        if (title === 'Text' && Array.isArray(data)) {
-          data.forEach((text, idx) => {
-            const [key, value] = Object.entries(text)[0];
-            content += `
-              <div style="padding: 0 0 5px;" ${idx}> 
-                <label for="text">${key}:</label>
-                <input type="text" value="${value}" onchange="updateComponentValues(${component.id}, 'text', '${key}', this, ${elementIndex}, ${idx})">
-                <button onclick="deleteElement(${component.id}, ${elementIndex}, 'text', ${idx})">x</button>
-                </div>
-            `
-          })
-        }
-  
-        let textOptions = ''
-        TEXTSAMPLES.forEach(x => {
-          textOptions += `<option value='${x}'>${x}</option>`
-        })
-  
-        // !---------------------- when adding text CONTENTDATA[elmentIndex].content.[text - OR just text for FIXED][textIndex]
-        return `
-          <div class="options ${title.toLowerCase().replace(' ', '-')}">
-            <h4>${title} ${title !== 'Container Options' ? 
-              `<button style="float: right;" onClick='deleteElement(${component.id}, ${elementIndex}, "${title}")'>x</button>` : ''}</h4> 
-            ${content}
-            ${title === 'Text'
-            ? `
-                <label for="text">Add Text:</label>
-                <select onchange="addAdditionalText(this, ${component.id}, ${elementIndex})">
-                  <option value="" selected disabled hidden>Choose here</option>
-                  ${textOptions}
-                </select>`
-            : ''}
+
+    function populateMediaContent(data, options) {
+      const insetShadow = options?.insetShadow;
+      if (!data || !data.url) return '';
+      const mediaDescription = data.description ? `<p contenteditable="true" class="description">${data.description}</p>` : '';
+
+      const mediaContent = data.type?.includes('video')
+        ? `<div class="media ${insetShadow ? 'insetShadow' : ''}">
+            <video autoplay loop muted playsinline preload="none" loading="lazy">
+              <source src="${data.url}" type="${data.type}" />Your browser does not support the video tag.
+            </video>
           </div>`
+        : `
+          <div class="media ${insetShadow ? 'insetShadow' : ''}">
+            <img alt="${data.description}" src="${data.url}" preload="none" loading="lazy" decoding="async"/>
+          </div>`;
+
+      return `<div class='media-content'>${mediaContent}${mediaDescription}</div>`
+    }
+
+    function exctractFixedContent(data) {
+      let CONTENT = '';
+      data.content.forEach(val => {
+        CONTENT += populateMediaContent(val.media, val.options);
+        CONTENT += `<div class='text'>
+                      ${extractTextContent(val.text, val.options?.textAnimation)}
+                    </div>`;
+      });
+      return CONTENT;
+    }
+
+    let __DOM__ = '';
+
+
+    for (let component of CONTENTDATA) {
+      // console.log(component)
+
+      switch (component.containerType) {
+        case 'HEADER':
+          let BACKGROUND = '', CONTENT = '';
+
+          component.content.forEach((val, idx) => {
+            const shadow = val.options?.shadow ? 'animate-bg-shadow' : '';
+            const blur = val.options?.blur ? 'animate-bg-blur' : '';
+            BACKGROUND += `
+              <div class='background ${shadow} ${blur}' id='o${component.id}-${idx}'>
+                ${populateMediaContent(val.media, val.options)}
+              </div>`;
+            CONTENT += `
+              <div class='text observe ${idx ? 'control-opacity' : ''}' id='o${component.id}-${idx}'>
+                ${val.text?.length ? `
+                  <div class="container ${val.options?.textContainer ? 'active' : ''}">
+                    ${extractTextContent(val.text, val.options?.textAnimation)}
+                  </div>
+                `: ''}
+              </div>`;
+          });
+
+          __DOM__ += `
+            <div class='parallax-header' container-id='${component.id}'>
+              <div class='background-content'>${BACKGROUND}</div>
+              <div class='text-content'>${CONTENT}</div>
+            </div>`;
+          break;
+
+        case 'FIXED':
+          const skew = component.options.skew === 'none'
+            ? false
+            : component.options.skew;
+          const containerShadow = component.options.shadow
+          __DOM__ += `
+            <div class='fixed ${containerShadow ? 'shadow' : ''}'  container-id='${component.id}'>
+              <div class="container ${skew ? `cliped clip-${skew}` : ''}" ${skew === 'd' ? 'style="margin-bottom: 0"' : ''} >
+                <div class='content'>
+                  ${exctractFixedContent(component)} 
+                </div>
+              </div>
+            </div>`;
+          break;
+
+        case 'PARALLAX':
+          const shadow = component.options.shadow ? 'animate-bg-shadow' : '';
+          const blur = component.options.blur ? 'animate-bg-blur' : '';
+
+          __DOM__ += `
+            <div class="parallax" container-id='${component.id}'>
+              <div class="content observe ${shadow} ${blur}">
+                ${populateMediaContent(component.media)}
+                ${component.text ? `
+                  <div class="text">
+                    ${extractTextContent(component.text, component.options.textAnimation)}
+                  </div>
+                  ` : ''}
+              </div>
+            </div>`;
+          break;
       }
-  
+    }
+
+    wrapper.insertAdjacentHTML('afterbegin', __DOM__);
+  }
+
+  function domInit(data) {
+    initDOMcontentData(data)
+    initObserver();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    domInit(CONTENTDATA)
+  })
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- !----------------------------------------------------- -->
+<!-- !------------------ APP SIDE PANEL ------------------- -->
+<script>
+  function EMPTYDOMCOMPONENTS() {
+    $('.side-panel .components').empty();
+    $('.side-panel .layout').empty();
+    $('.wrapper-body').empty();
+  }
+
+  function REPOPULATEDOM() {
+    localStorage.setItem('CONTENTDATA', JSON.stringify(CONTENTDATA));
+    localStorage.setItem('COLORVARIABLES', JSON.stringify(COLORVARIABLES));
+
+    initSidePanel(CONTENTDATA);
+    domInit(CONTENTDATA)
+  }
+
+  function deleteElement(componentID, elementIndex, elementType, textIndex) {
+    const componentIndex = CONTENTDATA.findIndex(x => x.id === componentID)
+
+    // console.log(CONTENTDATA[componentIndex], elementIndex, elementType, textIndex)
+    // return
+
+    EMPTYDOMCOMPONENTS();
+
+    if (elementType === 'content') {
+      CONTENTDATA[componentIndex].content.splice(elementIndex, 1);
+    } else if (elementType === 'text' && textIndex !== undefined) {
+      if (CONTENTDATA[componentIndex].content) {
+        CONTENTDATA[componentIndex].content[elementIndex][elementType].splice(textIndex, 1)
+      } else {
+        CONTENTDATA[componentIndex][elementType].splice(textIndex, 1)
+      }
+    } else {
+      // ? -------------- got to be a better way right ???? -------------
+      // ! --------------------------------------------------------------
+      if (elementIndex !== undefined) {
+        delete CONTENTDATA[componentIndex].content[elementIndex][elementType.toLowerCase()];
+      } else {
+        delete CONTENTDATA[componentIndex][elementType.toLowerCase()];
+      }
+    }
+
+    REPOPULATEDOM()
+  }
+
+  function addAdditionalText(textType, componentID, textIndex) {
+    const target = CONTENTDATA[CONTENTDATA.findIndex(x => x.id === Number(componentID))]
+
+    if (target.text) {
+      target.text.push({ [textType.value]: 'Text here...' })
+    } else {
+      target.content[textIndex].text.push({ [textType.value]: 'Text here...' })
+    }
+
+    EMPTYDOMCOMPONENTS();
+    REPOPULATEDOM();
+  }
+
+  function updateComponentValues(componentID, dataType, target, newValue, elementIndex, textIndex) {
+    const targetObject = CONTENTDATA.find(x => x.id === componentID);
+
+    let targetElement;
+
+    console.log('componentID', componentID, 'dataType', dataType, 'target', target, 'newValue', newValue, 'elemidx', elementIndex, 'textIndex', textIndex)
+    // ------ honestly not the best way but it works for now
+    if (elementIndex !== undefined) {
+      targetElement = targetObject.content[elementIndex][dataType];
+    } else {
+      targetElement = targetObject[dataType];
+    }
+
+    EMPTYDOMCOMPONENTS();
+
+    switch (dataType) {
+      case 'options':
+        if (typeof targetElement[target] === 'boolean') {
+          targetElement[target] = !targetElement[target];
+        } else {
+          targetElement[target] = newValue;
+        }
+        break;
+      case 'text':
+        console.log(targetElement)
+        targetElement[textIndex][target] = newValue.value;
+        break;
+      case 'media':
+        targetElement[target] = newValue;
+        break;
+    }
+
+    REPOPULATEDOM()
+  }
+
+  const toggleExpand = (componentID) => {
+    const targetIndex = CONTENTDATA.findIndex(x => x.id === Number(componentID));
+
+    CONTENTDATA[targetIndex].expanded = !CONTENTDATA[targetIndex].expanded
+
+    $(`.element[element-id='${componentID}'] .element-container`).toggleClass('active');
+  }
+
+  const addComponent = (componentType) => {
+    const newComponent = TEMPLATESDATA[componentType.value];
+    newComponent.id = CONTENTDATA.length + 1;
+    CONTENTDATA.push(JSON.parse(JSON.stringify(newComponent)));
+
+    EMPTYDOMCOMPONENTS();
+    REPOPULATEDOM();
+  }
+
+  const addMoreContent = (componentID, componentType) => {
+    const target = CONTENTDATA[CONTENTDATA.findIndex(x => x.id === Number(componentID))];
+    const newContent = TEMPLATECONTENT[componentType]
+    target.content.push(JSON.parse(JSON.stringify(newContent)))
+    EMPTYDOMCOMPONENTS();
+    REPOPULATEDOM();
+  }
+
+  const deleteComponent = (componentID) => {
+    const targetIndex = CONTENTDATA.findIndex(x => x.id === Number(componentID));
+
+    CONTENTDATA.splice(targetIndex, 1)
+    $(`[element-id="${componentID}"]`).remove();
+    $(`[container-id="${componentID}"]`).remove();
+
+    EMPTYDOMCOMPONENTS();
+    REPOPULATEDOM();
+  }
+
+  function populateSidePanelLayoutElements(component) {
+    function extractObject(title, data, elementIndex) {
+      if (!data) return ''
+
       let content = '';
-      if (component.content) {
-        component.content.forEach((v, idx) => {
+
+      if (['Media', 'Container Options', 'Options'].includes(title)) {
+        Object.entries(data).forEach(([_k, _v]) => {
+          switch (_k) {
+            case 'skew':
+              const options = ['a', 'b', 'c', 'd', 'none'];
+              let optionsDom = '';
+              options.forEach(val => {
+                optionsDom += `
+                <option value=${val} ${val === data[_k] ? 'selected' : ''}>${val}</option>`
+              })
+
+              content += `
+                <label for="skew">skew:</label>
+                <select onchange="updateComponentValues(${component.id}, 'options', '${_k}', this.options[this.selectedIndex].value, ${elementIndex})">
+                  ${optionsDom}
+                </select>
+              `
+              break;
+            case 'blur':
+            case 'shadow':
+            case 'textContainer':
+            case 'insetShadow':
+            case 'textAnimation':
+              content += `
+                <p>${_k}: <button onclick="updateComponentValues(${component.id}, 'options', '${_k}', ${!_v}, ${elementIndex})">${_v}</button></p>`;
+              break;
+            case 'type':
+              const mediaOptions = ['image', 'video/mp4'];
+              let mediaOptionsDom = '';
+              mediaOptions.forEach(val => {
+                mediaOptionsDom += `
+                <option value=${val} ${val === data[_k] ? 'selected' : ''}>${val}</option>`
+              })
+
+              content += `
+                <label for="media">type:</label>
+                <select onchange="updateComponentValues(${component.id}, 'media', '${_k}', this.options[this.selectedIndex].value, ${elementIndex})">
+                  ${mediaOptionsDom}
+                </select>
+                <br/>`
+              break;
+            case 'description':
+            case 'url':
+              content += `
+              <div>
+                <p style='display: inline-block'>${_k}</p>: <input type="text" value="${_v}" onchange="updateComponentValues(${component.id}, 'media', '${_k}', this.value, ${elementIndex})">
+              </div>`
+              break;
+          }
+        })
+      }
+
+      if (title === 'Text' && Array.isArray(data)) {
+        data.forEach((text, idx) => {
+          const [key, value] = Object.entries(text)[0];
           content += `
-            <div class='element-content'>
-              ${extractObject('Options', v.options, idx)}
-              ${extractObject('Media', v.media, idx)}
-              ${extractObject('Text', v.text, idx)}
-            </div>
+            <div style="padding: 0 0 5px;" ${idx}> 
+              <label for="text">${key}:</label>
+              <input type="text" value="${value}" onchange="updateComponentValues(${component.id}, 'text', '${key}', this, ${elementIndex}, ${idx})">
+              <button onclick="deleteElement(${component.id}, ${elementIndex}, 'text', ${idx})">x</button>
+              </div>
           `
         })
       }
-  
-      $('.side-panel .layout').append(`
-        <div class="element" element-id="${component.id}">
-          <h3 style='display: inline'>${component.containerType}</h3>
-          <div class='delete-element' onclick="deleteComponent(${component.id})" style='display: inline-block; padding: 0; float: right;'>D</div>
-          <div class='expand-element' onclick="toggleExpand(${component.id})" style='display: inline-block; padding: 0 15px; float: right;'>T</div>
-  
-          <div class='element-container ${component.expanded ? 'active' : ''}'> 
-            ${component.options ? `
-              <div class='element-content' >
-                ${extractObject('Container Options', component.options)}
-                ${extractObject('Media', component.media)}
-                ${extractObject('Text', component.text)}
-              </div>` : ''}
-            ${content}
-            ${component.containerType !== 'PARALLAX' ?
-          `<button onclick="addMoreContent(${component.id}, '${component.containerType}')">Add more content</button>` : ''}
-          </div>
-        </div>`);
-    }
-  
-    function initSidePanel(CONTENTDATA) {
-      CONTENTDATA.forEach((val, idx) => {
-        // $('.side-panel .layout').append(`<div class='button layout-component'>${k}</div>`);
-        // $('.side-panel .components').append(`<div class='button component'>${k}</div>`);
-  
-        populateSidePanelLayoutElements(val)
+
+      let textOptions = ''
+      TEXTSAMPLES.forEach(x => {
+        textOptions += `<option value='${x}'>${x}</option>`
       })
-  
-      let templates = '';
-      Object.keys(TEMPLATESDATA).forEach(template => {
-        templates += `<option value='${template}'>${template}</option>`
-      });
-  
-      const components = `
-        <label for="media">Add Component:</label>
-        <select onchange="addComponent(this)">
-          <option value="" selected disabled hidden>Choose here</option>
-          ${templates}
-        </select>`
-  
-      $('.side-panel .components').append(`
-        ${components}
-        <div class="button copy">Copy to Clipboard</div>
-      `);
-  
-      $('.copy').on('click', () => copyInnerHTMLToClipboard('wrapper'))
-  
-      // function getElementIndex(element) {
-      //   return Array.from(element.parentNode.children).indexOf(element);
-      // }
+
+      // !---------------------- when adding text CONTENTDATA[elmentIndex].content.[text - OR just text for FIXED][textIndex]
+      return `
+        <div class="options ${title.toLowerCase().replace(' ', '-')}">
+          <h4>${title} ${title !== 'Container Options' ?
+          `<button style="float: right;" onClick='deleteElement(${component.id}, ${elementIndex}, "${title}")'>x</button>` : ''}</h4> 
+          ${content}
+          ${title === 'Text'
+          ? `
+            <label for="text">Add Text:</label>
+            <select onchange="addAdditionalText(this, ${component.id}, ${elementIndex})">
+              <option value="" selected disabled hidden>Choose here</option>
+              ${textOptions}
+            </select>
+
+            `
+          : ''}
+        </div>`
     }
-  
-    function copyInnerHTMLToClipboard(componentID) {
-      const element = document.getElementById(componentID);
-  
-      if (element) {
-        const textarea = document.createElement('textarea');
-        const innerHTML = element.innerHTML.replaceAll('contenteditable="true"', '')
-        textarea.value = innerHTML;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-  
-        alert('HTML copied')
-      } else {
-        console.error(`Element with ID '${componentID}' not found.`);
-      }
+
+    let content = '';
+    if (component.content) {
+      component.content.forEach((v, idx) => {
+        content += `
+          <div class='element-content'>
+            ${extractObject('Options', v.options, idx)}
+            ${extractObject('Media', v.media, idx)}
+            ${extractObject('Text', v.text, idx)}
+          ${component.containerType !== 'PARALLAX' ? `<button style="margin-top: 10px; display: block;" onclick="deleteElement(${component.id}, ${idx}, 'content')">Delete Element</button>` : ''}
+
+          </div>
+        `
+      })
     }
-  
-    initSidePanel(CONTENTDATA);
-  </script>
-  
+
+    $('.side-panel .layout').append(`
+      <div class="element" element-id="${component.id}">
+        <h3 style='display: inline'>${component.containerType}</h3>
+        <div class='delete-element' onclick="deleteComponent(${component.id})" style='cursor: pointer; display: inline-block; padding: 0; float: right;'>D</div>
+        <div class='expand-element' onclick="toggleExpand(${component.id})" style='cursor: pointer; display: inline-block; padding: 0 15px; float: right;'>T</div>
+
+        <div class='element-container ${component.expanded ? 'active' : ''}'> 
+          ${component.options ? `
+            <div class='element-content' >
+              ${extractObject('Container Options', component.options)}
+              ${extractObject('Media', component.media)}
+              ${extractObject('Text', component.text)}
+            </div>` : ''}
+          ${content}
+          ${component.containerType !== 'PARALLAX' ?
+        `<button onclick="addMoreContent(${component.id}, '${component.containerType}')">Add more content</button>` : ''}
+        </div>
+      </div>`);
+  }
+
+  function initSidePanel(data) {
+    data.forEach((val, idx) => {
+      // $('.side-panel .layout').append(`<div class='button layout-component'>${k}</div>`);
+      // $('.side-panel .components').append(`<div class='button component'>${k}</div>`);
+
+      populateSidePanelLayoutElements(val)
+    })
+
+    let templates = '';
+    Object.keys(TEMPLATESDATA).forEach(template => {
+      templates += `<option value='${template}'>${template}</option>`
+    });
+
+    const components = `
+      <label for="media">Add Component:</label>
+      <select onchange="addComponent(this)">
+        <option value="" selected disabled hidden>Choose here</option>
+        ${templates}
+      </select>`
+
+    $('.side-panel .components').append(`
+      ${components}
+      <div class="button copy">Copy to Clipboard</div>
+    `);
+
+    $('.copy').on('click', () => copyInnerHTMLToClipboard('wrapper'))
+
+    // function getElementIndex(element) {
+    //   return Array.from(element.parentNode.children).indexOf(element);
+    // }
+  }
+
+  const updateColor = (data, target) => {
+    COLORVARIABLES[target] = data.value
+    $('.wrapper-body').css(target, data.value)
+  }
+
+  function populateSidePanelDesign() {
+    let content = ''
+
+    Object.entries(COLORVARIABLES).forEach(([k, v]) => {
+      content += `
+        <div class='theme-color'>
+          <label for="${k}">${k.replaceAll('-', ' ')}</label>
+          <input type='color' oninput='updateColor(this, "${k}")' value="${v}" />
+        </div>
+        `
+    })
+
+    $('.design').append(content);
+  }
+
+  populateSidePanelDesign();
+
+  initSidePanel(CONTENTDATA);
+
+  function copyInnerHTMLToClipboard(componentID) {
+    const element = document.getElementById(componentID);
+
+    if (element) {
+      const textarea = document.createElement('textarea');
+      const innerHTML = element.innerHTML.replaceAll('contenteditable="true"', '')
+      textarea.value = innerHTML;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+
+      alert('HTML copied')
+    } else {
+      console.error(`Element with ID '${componentID}' not found.`);
+    }
+  }
+
+</script>

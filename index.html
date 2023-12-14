@@ -5,13 +5,13 @@
     return parseInt(Math.ceil(Math.random() * Date.now()).toPrecision(length).toString().replace(".", ""))
   }
 
-  const DESIGN_COLOR_VARIABLES = 
+  const DESIGN_COLOR_VARIABLES =
     JSON.parse(localStorage.getItem('ColorVariables')) || {
-    ['--primary-text-color']: '#F0ECE5',
-    ['--secondary-text-color']: '#B6BBC4',
-    ['--description-text-color']: '#949ca9',
-    ['--primary-background-color']: '#191919',
-  };
+      ['--primary-text-color']: '#F0ECE5',
+      ['--secondary-text-color']: '#B6BBC4',
+      ['--description-text-color']: '#949ca9',
+      ['--primary-background-color']: '#191919',
+    };
 
   const TEXT_TYPES = ['primary-header-text', 'secondary-header-text', 'primary-body-text']
 
@@ -543,7 +543,7 @@
       }
 
       .loader.disabled {
-        opacity: 0; 
+        opacity: 0;
         backdrop-filter: blur(0);
       }
 
@@ -710,7 +710,7 @@
       }
 
       .fixed .container.cliped {
-        margin: -100px 0 -100px 0;
+        margin: -80px 0 -80px 0;
       }
 
       .fixed .container.cliped.clip-a {
@@ -876,7 +876,7 @@
 
       document.addEventListener('DOMContentLoaded', function () {
         initObserver();
-        
+
         const loader = document.querySelector('.loader');
         setTimeout(() => loader.classList.add('disabled'), 100);
         setTimeout(() => loader.remove(), 1100);
@@ -1090,6 +1090,7 @@
 
     switch (dataType) {
       case 'options':
+      case 'container options':
         if (typeof targetElement[target] === 'boolean') {
           targetElement[target] = !targetElement[target];
         } else {
@@ -1105,7 +1106,7 @@
         break;
     }
 
-    REPOPULATEDOM()
+    REPOPULATEDOM();
   }
 
   const toggleExpand = (componentID) => {
@@ -1114,7 +1115,7 @@
       if (componentID !== x.id) x.expanded = false;
       else x.expanded = !x.expanded;
     });
-    
+
     //! ------------- find better approach to dealing with repainting 
     localStorage.setItem('StoredComponents', JSON.stringify(components));
     $('.side-panel .layout').empty();
@@ -1172,52 +1173,50 @@
 
     let content = '';
 
-    if (['Media', 'Container Options', 'Options'].includes(title)) {
-      Object.entries(data).forEach(([_k, _v]) => {
-        switch (_k) {
-          case 'skew':
-            const options = ['a', 'b', 'c', 'd', 'none'];
-            let optionsDom = '';
-            options.forEach(val => {
-              optionsDom += `
-                <option value=${val} ${val === data[_k] ? 'selected' : ''}>${val}</option>`
-            })
-
-            content += `
-                <label for="skew">skew:</label>
-                <select onchange="updateComponentValues(${componentID}, 'options', '${_k}', this.options[this.selectedIndex].value, ${elementIndex})">
-                  ${optionsDom}
-                </select>
-              `
-            break;
+    if (['media', 'container options', 'options'].includes(title)) {
+      Object.entries(data).forEach(([key, value]) => {
+        switch (key) {
+          // ! ---------- boolean values
           case 'blur':
           case 'shadow':
           case 'textContainer':
           case 'insetShadow':
           case 'textAnimation':
             content += `
-                <p>${_k}: <button onclick="updateComponentValues(${componentID}, 'options', '${_k}', ${!_v}, ${elementIndex})">${_v}</button></p>`;
+                <p>${key}: <button onclick="updateComponentValues(${componentID}, 'options', '${key}', ${!value}, ${elementIndex})">${value}</button></p>`;
             break;
+
+          //! =------------ dropdown values
           case 'type':
-            const mediaOptions = ['image', 'video/mp4'];
-            let mediaOptionsDom = '';
-            mediaOptions.forEach(val => {
-              mediaOptionsDom += `
-                <option value=${val} ${val === data[_k] ? 'selected' : ''}>${val}</option>`
+          case 'skew':
+            const options = key === 'skew' 
+              ? ['a', 'b', 'c', 'd', 'none']
+              : ['image', 'video/mp4'];
+
+            let dataType = title;
+            if (title === 'container options') dataType = 'options'; //? unique case --- 
+
+            let optionsDom = '';
+            options.forEach(val => {
+              optionsDom += `
+                <option value=${val} ${val === data[key] ? 'selected' : ''}>${val}</option>`
             })
 
             content += `
-                <label for="media">type:</label>
-                <select onchange="updateComponentValues(${componentID}, 'media', '${_k}', this.options[this.selectedIndex].value, ${elementIndex})">
-                  ${mediaOptionsDom}
+                <label for="${key}">${key}:</label>
+                <select onchange="updateComponentValues(${componentID}, '${dataType}', '${key}', this.options[this.selectedIndex].value, ${elementIndex})">
+                  ${optionsDom}
                 </select>
-                <br/>`
+              `
             break;
+
+          // ! ---------- string values 
           case 'description':
           case 'url':
             content += `
               <div>
-                <p style='display: inline-block'>${_k}</p>: <input type="text" value="${_v}" onchange="updateComponentValues(${componentID}, 'media', '${_k}', this.value, ${elementIndex})">
+                <p style='display: inline-block'>${key}:</p>
+                <input type="text" value="${value}" onchange="updateComponentValues(${componentID}, '${title}', '${key}', this.value, ${elementIndex})">
               </div>`
             break;
         }
@@ -1260,7 +1259,7 @@
         </div>`
   }
 
-  const initSidePanel = (data) => data.forEach((val, idx) => populateSidePanelLayoutComponents(val)); 
+  const initSidePanel = (data) => data.forEach((val, idx) => populateSidePanelLayoutComponents(val));
 
   function populateSidePanelLayoutComponents(component) {
     let content = '';
@@ -1268,9 +1267,9 @@
       component.content.forEach((v, idx) => {
         content += `
           <div class='component-content'>
-            ${extractComponentFields(component.id, 'Options', v.options, idx)}
-            ${extractComponentFields(component.id, 'Media', v.media, idx)}
-            ${extractComponentFields(component.id, 'Text', v.text, idx)}
+            ${extractComponentFields(component.id, 'options', v.options, idx)}
+            ${extractComponentFields(component.id, 'media', v.media, idx)}
+            ${extractComponentFields(component.id, 'text', v.text, idx)}
           ${component.containerType !== 'PARALLAX' ? `<button style="margin-top: 5px 10px; display: block;" onclick="deleteElement(${component.id}, ${idx}, 'content')">Delete Element</button>` : ''}
           </div>
         `
@@ -1289,9 +1288,9 @@
         <div class='component-container ${component.expanded ? 'active' : ''}'> 
           ${component.options ? `
             <div class='component-content' >
-              ${extractComponentFields(component.id, 'Container Options', component.options)}
-              ${extractComponentFields(component.id, 'Media', component.media)}
-              ${extractComponentFields(component.id, 'Text', component.text)}
+              ${extractComponentFields(component.id, 'container options', component.options)}
+              ${extractComponentFields(component.id, 'media', component.media)}
+              ${extractComponentFields(component.id, 'text', component.text)}
             </div>` : ''}
           ${content}
           ${component.containerType !== 'PARALLAX' ?

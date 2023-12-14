@@ -6,7 +6,7 @@
   }
 
   const DESIGN_COLOR_VARIABLES =
-    JSON.parse(localStorage.getItem('ColorVariables')) 
+    JSON.parse(localStorage.getItem('ColorVariables'))
     || {
       ['--primary-text-color']: '#F0ECE5',
       ['--secondary-text-color']: '#B6BBC4',
@@ -225,13 +225,25 @@
   };
 
   let COMPONENTS_DATA =
-    JSON.parse(localStorage.getItem('StoredComponents')) || 
+    JSON.parse(localStorage.getItem('StoredComponents')) ||
     COMPONENTS_TYPES.map(component => COMPONENTS_OBJECT_GENERATOR(component));
 </script>
 
 <!-- !----------------------------------------------------- -->
 <!-- !------------------- APP STYLES ---------------------- -->
 <style type="text/css">
+  .app .side-panel::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .app .side-panel::-webkit-scrollbar-track {
+    background: var(--primary-background-color);
+  }
+
+  .app .side-panel::-webkit-scrollbar-thumb {
+    background: var(--description-text-color);
+  }
+
   * {
     padding: 0;
     margin: 0;
@@ -261,9 +273,9 @@
     flex-direction: column;
     justify-content: space-between;
     max-width: 500px;
-    overflow: auto;
-    overflow-y: overlay;
+    overflow-y: scroll;
     color: white;
+    padding-left: 5px;
   }
 
   .app .side-panel .controls {
@@ -316,6 +328,7 @@
     border-radius: 5px;
     margin: 5px 0;
   }
+
   .app .side-panel .layout .component .component-container .component-content .options button {
     padding: 2px 4px;
     cursor: pointer;
@@ -328,7 +341,7 @@
 
   .button {
     background: grey;
-    margin: 5px auto;
+    margin: 5px;
     height: 50px;
     display: flex;
     justify-content: center;
@@ -898,7 +911,7 @@
     domInit(components)
   }
 
-  function deleteElement(componentID, elementIndex, elementType, textIndex) {
+  const deleteElement = (componentID, elementIndex, elementType, textIndex) => {
     const components = COMPONENTS_DATA;
     const componentIndex = components.findIndex(x => x.id === componentID)
 
@@ -926,7 +939,7 @@
     REPOPULATEDOM()
   }
 
-  function addAdditionalText(componentID, textType, textIndex) {
+  const addAdditionalText = (componentID, textType, textIndex) => {
     const components = COMPONENTS_DATA;
     const target = components[components.findIndex(x => x.id === Number(componentID))]
 
@@ -940,7 +953,7 @@
     REPOPULATEDOM();
   }
 
-  function updateComponentValues(componentID, dataType, target, newValue, elementIndex, textIndex) {
+  const updateComponentValues = (componentID, dataType, target, newValue, elementIndex, textIndex) => {
     const targetObject = COMPONENTS_DATA.find(x => x.id === componentID);
 
     let targetElement;

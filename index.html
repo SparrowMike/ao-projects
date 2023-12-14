@@ -5,7 +5,7 @@
     return parseInt(Math.ceil(Math.random() * Date.now()).toPrecision(length).toString().replace(".", ""))
   }
 
-  const DESIGN_COLOR_VARIABLES = {
+  const DESIGN_COLOR_VARIABLES = JSON.parse(localStorage.getItem('ColorVariables')) || {
     ['--primary-text-color']: '#F0ECE5',
     ['--secondary-text-color']: '#B6BBC4',
     ['--description-text-color']: '#949ca9',
@@ -376,6 +376,12 @@
 <!-- !----------------------------------------------------- -->
 <!-- !------------------- APP STYLES ---------------------- -->
 <style type="text/css">
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
   .app {
     display: flex;
     overflow: hidden;
@@ -480,12 +486,6 @@
         --text-animation-delay: 1s;
 
         --content-max-width: 1000px;
-      }
-
-      * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
       }
 
       /* ----- global text ----- */
@@ -1117,17 +1117,19 @@
 
   const toggleExpand = (componentID) => {
     const components = COMPONENTS_DATA;
-    components.forEach(x => x.expanded = false);
-
-    const targetIndex = components.findIndex(x => x.id === Number(componentID));
-
-    components[targetIndex].expanded = true;
-
-    $(`.component[component-id='${componentID}'] .component-container`).toggleClass('active');
+    components.forEach(x => {
+      if (componentID !== x.id) x.expanded = false;
+      else x.expanded = !x.expanded;
+    });
+    
+    EMPTYDOMCOMPONENTS();
+    REPOPULATEDOM();
   }
 
-  const addComponent = (componentType) => {
-    const newComponent = COMPONENTS_SAMPLE_DATA[componentType.value];
+  const addComponent = (selectedElement) => {
+    const newComponent = COMPONENTS_SAMPLE_DATA[selectedElement.value];
+
+    selectedElement.value = ''
     newComponent.id = generateUniqueId();
     COMPONENTS_DATA.push(JSON.parse(JSON.stringify(newComponent)));
 
@@ -1156,8 +1158,8 @@
     REPOPULATEDOM();
   }
 
-  const scrollToElement = (componentID) => {
-    $('#wrapper').animate({
+  const scrollToComponent = (componentID) => {
+    $('#wrapper').stop().animate({
       scrollTop: $(`[container-id=${componentID}]`).offset().top
     });
   }
@@ -1169,7 +1171,7 @@
     localStorage.setItem('ColorVariables', JSON.stringify(DESIGN_COLOR_VARIABLES));
   }
 
-  const extractComponentFields = (title, data, elementIndex) => {
+  const extractComponentFields = (componentID, title, data, elementIndex) => {
     if (!data) return ''
 
     let content = '';
@@ -1187,7 +1189,7 @@
 
             content += `
                 <label for="skew">skew:</label>
-                <select onchange="updateComponentValues(${component.id}, 'options', '${_k}', this.options[this.selectedIndex].value, ${elementIndex})">
+                <select onchange="updateComponentValues(${componentID}, 'options', '${_k}', this.options[this.selectedIndex].value, ${elementIndex})">
                   ${optionsDom}
                 </select>
               `
@@ -1198,7 +1200,7 @@
           case 'insetShadow':
           case 'textAnimation':
             content += `
-                <p>${_k}: <button onclick="updateComponentValues(${component.id}, 'options', '${_k}', ${!_v}, ${elementIndex})">${_v}</button></p>`;
+                <p>${_k}: <button onclick="updateComponentValues(${componentID}, 'options', '${_k}', ${!_v}, ${elementIndex})">${_v}</button></p>`;
             break;
           case 'type':
             const mediaOptions = ['image', 'video/mp4'];
@@ -1210,7 +1212,7 @@
 
             content += `
                 <label for="media">type:</label>
-                <select onchange="updateComponentValues(${component.id}, 'media', '${_k}', this.options[this.selectedIndex].value, ${elementIndex})">
+                <select onchange="updateComponentValues(${componentID}, 'media', '${_k}', this.options[this.selectedIndex].value, ${elementIndex})">
                   ${mediaOptionsDom}
                 </select>
                 <br/>`
@@ -1219,7 +1221,7 @@
           case 'url':
             content += `
               <div>
-                <p style='display: inline-block'>${_k}</p>: <input type="text" value="${_v}" onchange="updateComponentValues(${component.id}, 'media', '${_k}', this.value, ${elementIndex})">
+                <p style='display: inline-block'>${_k}</p>: <input type="text" value="${_v}" onchange="updateComponentValues(${componentID}, 'media', '${_k}', this.value, ${elementIndex})">
               </div>`
             break;
         }
@@ -1232,8 +1234,8 @@
         content += `
             <div style="padding: 0 0 5px;" ${idx}> 
               <label for="text">${key}:</label>
-              <input type="text" value="${value}" onchange="updateComponentValues(${component.id}, 'text', '${key}', this, ${elementIndex}, ${idx})">
-              <button onclick="deleteElement(${component.id}, ${elementIndex}, 'text', ${idx})">x</button>
+              <input type="text" value="${value}" onchange="updateComponentValues(${componentID}, 'text', '${key}', this, ${elementIndex}, ${idx})">
+              <button onclick="deleteElement(${componentID}, ${elementIndex}, 'text', ${idx})">x</button>
               </div>
           `
       })
@@ -1247,13 +1249,13 @@
     return `
         <div class="options ${title.toLowerCase().replace(' ', '-')}">
           <h4>${title} ${title !== 'Container Options' ?
-        `<button style="float: right;" onClick='deleteElement(${component.id}, ${elementIndex}, "${title}")'>x</button>` : ''}</h4> 
+        `<button style="float: right;" onClick='deleteElement(${componentID}, ${elementIndex}, "${title}")'>x</button>` : ''}</h4> 
           ${content}
           ${title === 'Text'
         ? `
             <label for="text">Add Text:</label>
-            <select onchange="addAdditionalText(${component.id}, this, ${elementIndex})">
-              <option value="" selected disabled hidden>Choose here</option>
+            <select onchange="addAdditionalText(${componentID}, this, ${elementIndex})">
+              <option value="" selected disabled>Choose here</option>
               ${textOptions}
             </select>
 
@@ -1268,9 +1270,9 @@
       component.content.forEach((v, idx) => {
         content += `
           <div class='component-content'>
-            ${extractComponentFields('Options', v.options, idx)}
-            ${extractComponentFields('Media', v.media, idx)}
-            ${extractComponentFields('Text', v.text, idx)}
+            ${extractComponentFields(component.id, 'Options', v.options, idx)}
+            ${extractComponentFields(component.id, 'Media', v.media, idx)}
+            ${extractComponentFields(component.id, 'Text', v.text, idx)}
           ${component.containerType !== 'PARALLAX' ? `<button style="margin-top: 5px 10px; display: block;" onclick="deleteElement(${component.id}, ${idx}, 'content')">Delete Element</button>` : ''}
           </div>
         `
@@ -1283,15 +1285,15 @@
           <h3 style='display: inline'>${component.containerType}</h3>
           <div class='delete-component' onclick="deleteComponent(${component.id})" style='cursor: pointer; display: inline-block; padding: 5px 10px; float: right;'>D</div>
           <div class='expand-component' onclick="toggleExpand(${component.id})" style='cursor: pointer; display: inline-block; padding: 5px 10px; float: right;'>T</div>
-          <div class='scroll-to-component' onclick="scrollToElement(${component.id})" style='cursor: pointer; display: inline-block; padding: 5px 10px; float: right;'>S</div>
+          <div class='scroll-to-component' onclick="scrollToComponent(${component.id})" style='cursor: pointer; display: inline-block; padding: 5px 10px; float: right;'>S</div>
         </div>
 
         <div class='component-container ${component.expanded ? 'active' : ''}'> 
           ${component.options ? `
             <div class='component-content' >
-              ${extractComponentFields('Container Options', component.options)}
-              ${extractComponentFields('Media', component.media)}
-              ${extractComponentFields('Text', component.text)}
+              ${extractComponentFields(component.id, 'Container Options', component.options)}
+              ${extractComponentFields(component.id, 'Media', component.media)}
+              ${extractComponentFields(component.id, 'Text', component.text)}
             </div>` : ''}
           ${content}
           ${component.containerType !== 'PARALLAX' ?
@@ -1307,22 +1309,18 @@
 
       populateSidePanelLayoutComponents(val)
     })
-
   }
 
   function populateStaticSidePanelControls() {
     //? ---------------- color picker -----------------
     let content = ''
 
-    const localStorageColorVariables = JSON.parse(localStorage.getItem('ColorVariables'));
-    if (localStorageColorVariables) {
-      Object.entries(localStorageColorVariables)
-        .forEach(([k, v]) => {
-          $('.wrapper-body').css({ [k]: v });
-        })
-    }
+    Object.entries(DESIGN_COLOR_VARIABLES)
+      .forEach(([k, v]) => {
+        $('.wrapper-body').css({ [k]: v });
+      })
 
-    Object.entries(localStorageColorVariables || DESIGN_COLOR_VARIABLES)
+    Object.entries(DESIGN_COLOR_VARIABLES)
       .forEach(([k, v]) => {
         content += `
           <div class='theme-color'>
@@ -1344,7 +1342,7 @@
     const components = `
       <label for="media">Add Component:</label>
       <select onchange="addComponent(this)">
-        <option value="" selected disabled hidden>Choose here</option>
+        <option value="" selected disabled>Choose here</option>
         ${templates}
       </select>`
 
@@ -1354,7 +1352,6 @@
     `);
 
     $('.copy').on('click', () => copyInnerHTMLToClipboard('wrapper'))
-
   }
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -1385,4 +1382,4 @@
   }
 </script>
 
-<!-- ? scrollToElement needs some tweaking -->
+<!-- ? scrollToComponent needs some tweaking -->

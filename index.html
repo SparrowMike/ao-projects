@@ -5,7 +5,8 @@
     return parseInt(Math.ceil(Math.random() * Date.now()).toPrecision(length).toString().replace(".", ""))
   }
 
-  const DESIGN_COLOR_VARIABLES = JSON.parse(localStorage.getItem('ColorVariables')) || {
+  const DESIGN_COLOR_VARIABLES = 
+    JSON.parse(localStorage.getItem('ColorVariables')) || {
     ['--primary-text-color']: '#F0ECE5',
     ['--secondary-text-color']: '#B6BBC4',
     ['--description-text-color']: '#949ca9',
@@ -876,7 +877,6 @@
         initObserver();
       })
 
-
       //!-----------------------------------------TBC
       // const loaderTimeout = 1250;
       // const loader = document.querySelector('.loader');
@@ -1032,7 +1032,6 @@
   function REPOPULATEDOM() {
     const components = COMPONENTS_DATA;
     localStorage.setItem('StoredComponents', JSON.stringify(components));
-    localStorage.setItem('ColorVariables', JSON.stringify(DESIGN_COLOR_VARIABLES));
 
     initSidePanel(components);
     domInit(components)
@@ -1122,8 +1121,10 @@
       else x.expanded = !x.expanded;
     });
     
-    EMPTYDOMCOMPONENTS();
-    REPOPULATEDOM();
+    //! ------------- find better approach to dealing with repainting 
+    localStorage.setItem('StoredComponents', JSON.stringify(components));
+    $('.side-panel .layout').empty();
+    initSidePanel(components);
   }
 
   const addComponent = (selectedElement) => {
@@ -1159,9 +1160,10 @@
   }
 
   const scrollToComponent = (componentID) => {
-    $('#wrapper').stop().animate({
-      scrollTop: $(`[container-id=${componentID}]`).offset().top
-    });
+    const container = document.querySelector(`[container-id="${componentID}"]`);
+    if (container) {
+      container.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   const updateColor = (data, target) => {
@@ -1264,6 +1266,8 @@
         </div>`
   }
 
+  const initSidePanel = (data) => data.forEach((val, idx) => populateSidePanelLayoutComponents(val)); 
+
   function populateSidePanelLayoutComponents(component) {
     let content = '';
     if (component.content) {
@@ -1300,15 +1304,6 @@
         `<button onclick="addMoreContent(${component.id}, '${component.containerType}')">Add more content</button>` : ''}
         </div>
       </div>`);
-  }
-
-  function initSidePanel(data) {
-    data.forEach((val, idx) => {
-      // $('.side-panel .layout').append(`<div class='button layout-component'>${k}</div>`);
-      // $('.side-panel .components').append(`<div class='button component'>${k}</div>`);
-
-      populateSidePanelLayoutComponents(val)
-    })
   }
 
   function populateStaticSidePanelControls() {
@@ -1359,16 +1354,18 @@
 
     domInit(components)
     initSidePanel(components);
-  })
-
-  populateStaticSidePanelControls();
+    populateStaticSidePanelControls();
+  });
 
   function copyInnerHTMLToClipboard(componentID) {
     const element = document.getElementById(componentID);
 
     if (element) {
       const textarea = document.createElement('textarea');
-      const innerHTML = element.innerHTML.replaceAll('contenteditable="true"', '')
+      const innerHTML = element.innerHTML
+        .replaceAll('contenteditable="true"', '')
+        .replace(/container-id="[^"]*"/g, '');
+
       textarea.value = innerHTML;
       document.body.appendChild(textarea);
       textarea.select();

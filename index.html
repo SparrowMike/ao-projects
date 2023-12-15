@@ -1,6 +1,10 @@
 <!-- !----------------------------------------------------- -->
 <!-- !----------------- APP SAMPLES/DATA ------------------ -->
 <script>
+  const SKEW_OPTIONS = ['a', 'b', 'c', 'd', 'none'];
+  const TEXT_TYPES = ['primary-header-text', 'secondary-header-text', 'primary-body-text'];
+  const COMPONENTS_TYPES = ['HEADER', 'FIXED', 'PARALLAX'];
+
   const generateUniqueId = (length = 16) => {
     return parseInt(Math.ceil(Math.random() * Date.now()).toPrecision(length).toString().replace(".", ""))
   }
@@ -14,50 +18,106 @@
       ['--primary-background-color']: '#191919',
     };
 
-  const TEXT_TYPES = ['primary-header-text', 'secondary-header-text', 'primary-body-text']
+  const GET_SAMPLE_TEXT = () => {
+    const sample_text = [
+      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis mollitia ut sunt nulla ullam eum sed odio dolorem rem, laboriosam, suscipit facilis soluta assumenda nesciunt ratione. Sequi similique ab consectetur!",
+      "Nulla architecto veniam rem voluptas, vitae nihil saepe sunt aliquam animi atque laboriosam molestias voluptates, pariatur corrupti perspiciatis tempora. Eum voluptate illo cum iusto aliquam voluptatem distinctio inventore ab iure.",
+      "Cum rerum et, iusto placeat adipisci ut! Eveniet labore incidunt dolor vel est culpa ut velit accusamus dignissimos voluptatibus ipsa laudantium pariatur ullam tempora, porro dicta eius quos cumque nam!",
+      "Vero exercitationem adipisci corrupti sapiente error. Voluptas veritatis porro harum voluptates repudiandae vel nam iure minima nisi! Molestiae esse asperiores dignissimos voluptatum dolorem rerum tenetur amet. Amet adipisci pariatur mollitia.",
+      "Iusto necessitatibus impedit qui ducimus culpa assumenda neque blanditiis corrupti odio perspiciatis. Veniam quas quia accusamus nobis nihil praesentium debitis repellendus nostrum doloremque nemo. Accusamus itaque nemo amet provident tempore?",
+      "Iure natus ipsa minus quas, blanditiis inventore cupiditate officia iusto pariatur autem voluptates aliquid nisi temporibus voluptatum eum harum obcaecati quidem voluptate. Temporibus odio, explicabo minus in consequatur obcaecati laborum.",
+      "Ducimus commodi rem, et sapiente delectus aspernatur, qui ratione hic ullam quisquam deleniti sint, recusandae vel consequatur mollitia doloremque. Nam, fugiat. Labore laudantium dolor quaerat officia rem animi ab cupiditate?",
+      "Architecto, laborum maxime voluptatibus consequatur delectus odit at! Aliquam porro sapiente sequi obcaecati nulla, ea blanditiis eveniet earum praesentium reprehenderit deleniti debitis totam doloribus soluta explicabo perferendis. Amet, impedit fugit.",
+      "Iste delectus reprehenderit itaque, eligendi soluta dolorum esse quia mollitia at! Provident corporis nam impedit saepe quas quibusdam deleniti, reiciendis earum perferendis pariatur qui cupiditate. Consequatur eaque error voluptatibus blanditiis.",
+      "Praesentium vitae earum minima in quis eaque pariatur, optio officia repellat quae possimus unde repellendus, beatae deleniti, harum autem sequi nulla itaque. Fugit soluta eaque omnis amet quasi accusantium hic!"
+    ]
 
-  const COMPONENTS_TYPES = ['HEADER', 'FIXED', 'PARALLAX'];
+    return [
+      {
+        ['primary-header-text']: sample_text[Math.floor(Math.random() * sample_text.length)].slice(0, Math.max(30, Math.floor(Math.random() * 60)))
+      },
+      ...Array.from({ length: Math.max(1, Math.floor(Math.random() * 3)) }, () => {
+        return {
+          ['primary-body-text']: sample_text[Math.floor(Math.random() * sample_text.length)]
+        }
+      })
+    ]
+  }
+
+  const GET_SAMPLE_MEDIA = () => {
+    const sample_media = [
+      {
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        description: ''
+      },
+      {
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        description: ''
+      }, {
+        type: 'video/mp4',
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-landscape-of-a-large-lake-during-sunset-from-the-air-4998-large.mp4',
+        description: ''
+      }, {
+        type: 'video/mp4',
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-meadow-surrounded-by-trees-on-a-sunny-afternoon-40647-large.mp4',
+        description: ''
+      }, {
+        type: 'video/mp4',
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-turquoise-blue-water-bay-from-above-5008-large.mp4',
+        description: ''
+      }, {
+        type: 'video/mp4',
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-shot-of-a-small-isthmus-44399-large.mp4',
+        description: ''
+      }, {
+        type: 'video/mp4',
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-countryside-meadow-4075-large.mp4',
+        description: ''
+      }, {
+        type: 'video/mp4',
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-landscape-of-a-lake-during-a-red-sunset-5002-large.mp4',
+        description: ''
+      }
+    ]
+
+    return sample_media[Math.floor(Math.random() * sample_media.length)];
+  }
+
+  const booleanGenerator = () => Math.random() >= 0.5;
 
   const COMPONENTS_CONTENT_GENERATOR = (componentType) => {
     switch (componentType) {
       case 'HEADER':
         return {
           options: {
-            blur: false,
-            shadow: false,
-            textAnimation: false,
-            textContainer: true,
+            blur: booleanGenerator(),
+            shadow: booleanGenerator(),
+            textAnimation: booleanGenerator(),
+            textContainer: booleanGenerator(),
           },
-          media: {
-            type: 'video/mp4',
-            url: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-shot-of-a-small-isthmus-44399-large.mp4',
-            description: 'No description'
-          },
-          text: [
-            {
-              ['primary-header-text']: 'Cupiditate quam suscipit recrnatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-            }
-          ]
+          media: GET_SAMPLE_MEDIA(),
+          text: GET_SAMPLE_TEXT()
         }
       case 'FIXED':
         return {
           options: {
-            insetShadow: true,
-            textAnimation: false,
+            insetShadow: booleanGenerator(),
+            textAnimation: booleanGenerator(),
           },
-          media: {
-            type: 'image',
-            url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            description: 'No description'
+          media: GET_SAMPLE_MEDIA(),
+          text: GET_SAMPLE_TEXT()
+        }
+      case 'PARALLAX':
+        return {
+          options: {
+            blur: booleanGenerator(),
+            shadow: booleanGenerator(),
+            textAnimation: booleanGenerator(),
           },
-          text: [
-            {
-              ['primary-header-text']: 'Some header here',
-            },
-            {
-              ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-            },
-          ]
+          media: GET_SAMPLE_MEDIA(),
+          text: GET_SAMPLE_TEXT()
         }
     }
   };
@@ -69,80 +129,7 @@
           id: generateUniqueId(),
           componentType: componentType,
           expanded: false,
-          content: [
-            {
-              options: {
-                blur: false,
-                shadow: true,
-                textAnimation: true,
-                textContainer: false,
-              },
-              media: {
-                type: 'video/mp4',
-                url: 'https://assets.mixkit.co/videos/preview/mixkit-landscape-of-a-large-lake-during-sunset-from-the-air-4998-large.mp4',
-                description: 'No description'
-              },
-              text: [
-                {
-                  ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-                },
-              ]
-            },
-            {
-              options: {
-                blur: false,
-                shadow: false,
-                textAnimation: false,
-                textContainer: true,
-              },
-              media: {
-                type: 'video/mp4',
-                url: 'https://assets.mixkit.co/videos/preview/mixkit-meadow-surrounded-by-trees-on-a-sunny-afternoon-40647-large.mp4',
-                description: 'No description'
-              },
-              text: [
-                {
-                  ['primary-header-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxiipit recusandae aspernatur maxime tenetur laborum. '
-                },
-              ]
-            },
-            {
-              options: {
-                blur: false,
-                shadow: false,
-                textAnimation: false,
-                textContainer: true,
-              },
-              media: {
-                type: 'video/mp4',
-                url: 'https://assets.mixkit.co/videos/preview/mixkit-turquoise-blue-water-bay-from-above-5008-large.mp4',
-                description: 'No description'
-              },
-              text: [
-                {
-                  ['primary-header-text']: 'Cupiditate quam suscir maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-                },
-              ]
-            },
-            {
-              options: {
-                blur: false,
-                shadow: false,
-                textAnimation: false,
-                textContainer: true,
-              },
-              media: {
-                type: 'video/mp4',
-                url: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-shot-of-a-small-isthmus-44399-large.mp4',
-                description: 'No description'
-              },
-              text: [
-                {
-                  ['primary-header-text']: 'Cupiditate quam suscipit recrnatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-                }
-              ]
-            }
-          ]
+          content: Array.from({ length: 5 }, () => COMPONENTS_CONTENT_GENERATOR('HEADER'))
         }
       case 'FIXED':
         return {
@@ -150,76 +137,17 @@
           expanded: false,
           componentType: componentType,
           options: {
-            skew: 'b',
-            shadow: true,
+            skew: SKEW_OPTIONS[Math.floor(Math.random() * SKEW_OPTIONS.length)],
+            shadow: booleanGenerator(),
           },
-          content: [
-            {
-              options: {
-                insetShadow: true,
-                textAnimation: false,
-              },
-              media: {
-                type: 'image',
-                url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                description: 'No description'
-              },
-              text: [
-                {
-                  ['primary-header-text']: 'Some header here',
-                },
-                {
-                  ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum.'
-                },
-              ]
-            },
-            {
-              options: {
-                insetShadow: true,
-                textAnimation: false,
-              },
-              media: {
-                type: 'image',
-                url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                description: 'No description'
-              },
-              text: [
-                {
-                  ['primary-header-text']: 'Random header here?',
-                },
-                {
-                  ['primary-body-text']: 'Cupiditate quam suscipit recusandae aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quame tenetur laborum quam suscm suscipit recrnatur maxime tenetur laborum.'
-                },
-                {
-                  ['primary-body-text']: 'Cupiditate e aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum aspernatur maxime tenetur laborum quam suscipit recusandae aspernatur maxime tenetur laborum me tenetur laborum quam suscme tenetur laborum quam suscme tenetur laborum quam susc.'
-                },
-              ]
-            }
-          ]
+          content: Array.from({ length: 3 }, () => COMPONENTS_CONTENT_GENERATOR('FIXED'))
         }
       case 'PARALLAX':
         return {
           id: generateUniqueId(),
           componentType: componentType,
           expanded: false,
-          options: {
-            shadow: true,
-            blur: false,
-            textAnimation: true,
-          },
-          media: {
-            type: 'video/mp4',
-            url: 'https://assets.mixkit.co/videos/preview/mixkit-aurora-borealis-at-dawn-4040-large.mp4',
-            description: 'No description'
-          },
-          text: [
-            {
-              ['primary-header-text']: 'Some header here',
-            },
-            {
-              ['primary-body-text']: 'Aliquam quaerat temporibus molestias excepturi praesentium eaque, vero sed dolores at hic soluta facilis laudantium optio reprehenderit assumenda nesciunt saepe itaque rerum quod ducimus eius. Quisquam distinctio aperiam qui mollitia!'
-            },
-          ]
+          ...COMPONENTS_CONTENT_GENERATOR('PARALLAX')
         }
     }
   };
@@ -266,7 +194,7 @@
   .app .side-panel {
     position: sticky;
     background: #191919;
-    min-width: 385px;
+    min-width: 400px;
     box-shadow: 0 0 8px black;
     z-index: 9999999999;
     display: flex;
@@ -366,14 +294,13 @@
         --background-blend-delay: .5s;
         --text-animation-delay: 1s;
 
-        --content-max-width: 1000px;
+        --content-max-width: 1200px;
       }
 
       /* ----- global text ----- */
       .primary-header-text {
         color: var(--primary-text-color);
         padding: 15px 20px;
-        padding-top: 20px;
         margin: 0;
         font-size: 28px;
       }
@@ -394,7 +321,7 @@
       .description {
         font-size: 16px;
         color: var(--description-text-color);
-        padding: 0 30px;
+        padding: 10px 30px;
       }
 
       .parallax .description,
@@ -533,19 +460,14 @@
         overflow: hidden;
       }
 
-      /*========================================  */
-      .parallax-header .text-content .text.animate .container.active {
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(5px);
+
+      .parallax-header .text-content .text.animate .container {
+        opacity: 1;
         width: 80%;
-        padding: 10px 20px;
       }
 
+      /*========================================  */
       /* .parallax-header .text-content .text.animate .container {
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(5px);
-        width: 80%;
-        padding: 10px 20px;
         opacity: 0;
         transform: translateY(-50vw);
         transition: all 1s ease-in;
@@ -555,16 +477,21 @@
         opacity: 1;
         transform: translateY(0);
       } */
+
+      .parallax-header .text-content .text.animate .container.active {
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        padding: 10px 20px;
+        min-width: 300px;
+        max-width: 600px;
+      }
+
       /*========================================  */
 
       .parallax-header .text-content .text.out:not(.animate) .container {
         transform: translateY(-20vw);
         opacity: 0;
-      }
-
-      .parallax-header .text-content .text.animate .container {
-        opacity: 1;
-        max-width: 80%;
       }
 
       /* ---------------- fixed ---------------- */
@@ -917,7 +844,6 @@
 
     EMPTYDOMCOMPONENTS();
 
-    // console.log(componentIndex, componentID, elementIndex, elementType, textIndex)
     if (elementType === 'content') {
       components[componentIndex].content.splice(elementIndex, 1);
     } else if (elementType === 'text' && textIndex !== undefined) {
@@ -927,6 +853,7 @@
         components[componentIndex][elementType].splice(textIndex, 1)
       }
     } else {
+
       // ? -------------- got to be a better way right ???? -------------
       // ! --------------------------------------------------------------
       if (elementIndex !== undefined) {
@@ -953,12 +880,12 @@
     REPOPULATEDOM();
   }
 
-  const updateComponentValues = (componentID, dataType, target, newValue, elementIndex, textIndex) => {
+  const updateComponentValues = (componentID, dataType, key, newValue, elementIndex, textIndex) => {
     const targetObject = COMPONENTS_DATA.find(x => x.id === componentID);
 
     let targetElement;
 
-    // console.log('componentID', componentID, 'dataType', dataType, 'target', target, 'newValue', newValue, 'elemidx', elementIndex, 'textIndex', textIndex)
+    // console.log('componentID', componentID, 'dataType', dataType, 'key', key, 'newValue', newValue, 'elemidx', elementIndex, 'textIndex', textIndex)
     // ------ honestly not the best way but it works for now
     if (elementIndex !== undefined) {
       targetElement = targetObject.content[elementIndex][dataType];
@@ -971,18 +898,17 @@
     switch (dataType) {
       case 'options':
       case 'container options':
-        if (typeof targetElement[target] === 'boolean') {
-          targetElement[target] = !targetElement[target];
+        if (typeof targetElement[key] === 'boolean') {
+          targetElement[key] = !targetElement[key];
         } else {
-          targetElement[target] = newValue;
+          targetElement[key] = newValue;
         }
         break;
       case 'text':
-        console.log(targetElement)
-        targetElement[textIndex][target] = newValue.value;
+        targetElement[textIndex][key] = newValue.value;
         break;
       case 'media':
-        targetElement[target] = newValue;
+        targetElement[key] = newValue;
         break;
     }
 
@@ -1067,7 +993,7 @@
           case 'type':
           case 'skew':
             const options = key === 'skew'
-              ? ['a', 'b', 'c', 'd', 'none']
+              ? SKEW_OPTIONS
               : ['image', 'video/mp4'];
 
             let dataType = title;
@@ -1249,4 +1175,4 @@
   }
 </script>
 
-<!-- ? scrollToComponent needs some tweaking -->
+<!-- ! --------- add flex for FIXED component -->

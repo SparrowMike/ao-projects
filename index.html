@@ -520,41 +520,41 @@
         overflow: hidden;
       }
 
-
-      .parallax-header .text-content .text.animate .container {
-        opacity: 1;
-        width: 80%;
+      .parallax-header .text-content .text .container:not(.active) {
+        max-width: var(--content-max-width);
       }
 
-      /*========================================  */
-      /* !------------------------------------------------*/
-      /* !---------- Animation for the container? --------*/
-      /* .parallax-header .text-content .text.animate .container {
+      .parallax-header .text-content .text .container.active {
         opacity: 0;
-        transform: translateY(-50vw);
-        transition: all 1s ease-in;
-      }
-
-      .parallax-header .text-content .text.animate .container.active {
-        opacity: 1;
-        transform: translateY(0);
-      } */
-
-      .parallax-header .text-content .text.animate .container.active {
-        opacity: 1;
         background: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(5px);
         padding: 10px 20px;
         min-width: 300px;
         max-width: 600px;
+        width: 80%;
+        transition: all .3s ease-in;
       }
 
-      /*========================================  */
-
-      .parallax-header .text-content .text.out:not(.animate) .container {
-        transform: translateY(-20vw);
-        opacity: 0;
+      .parallax-header .text-content .text .container.active {
+        opacity: 1;
       }
+
+      .parallax-header .text-content .text .container.active.left {
+        transform: translateX(-100%);
+      }
+      
+      .parallax-header .text-content .text .container.active.right {
+        transform: translateX(100%);
+      }
+
+      .parallax-header .text-content .text.animate .container.active.left {
+        transform: translateX(-9vw);
+      }
+      
+      .parallax-header .text-content .text.animate .container.active.right {
+        transform: translateX(9vw);
+      }
+
 
       /* ---------------- fixed ---------------- */
       .fixed {
@@ -586,13 +586,13 @@
         align-items: baseline;
         flex-direction: row;
         justify-content: center;
-        gap: 25px;
         max-width: var(--content-max-width);
         margin: 0 auto;
       }
 
       .fixed .container .flex .content {
         flex: 1 1 400px;
+        align-self: flex-start;
       }
 
       .fixed .container .content video,
@@ -837,6 +837,10 @@
           component.content.forEach((val, idx) => {
             const shadow = val.options?.shadow ? ' animate-bg-shadow' : '';
             const blur = val.options?.blur ? ' animate-bg-blur' : '';
+
+            const textContainer = val.options?.textContainer ? ' active' : '';
+            const textAnimation = textContainer ? false : val.options?.textAnimation;
+
             BACKGROUND += `
               <div class='background${shadow}${blur}' id='o${component.id}-${idx}'>
                 ${populateMediaContent(val.media, val.options)}
@@ -844,8 +848,8 @@
             CONTENT += `
               <div class='text observe${idx ? ' control-opacity' : ''}' id='o${component.id}-${idx}'>
                 ${val.text?.length ? `
-                  <div class="container ${val.options?.textContainer ? 'active' : ''}">
-                    ${extractTextContent(val.text, val.options?.textAnimation)}
+                  <div class="container${textContainer}">
+                    ${extractTextContent(val.text, textAnimation)}
                   </div>
                 `: ''}
               </div>`;
@@ -1080,6 +1084,32 @@
 
     if (['media', 'container options', 'options'].includes(title)) {
       Object.entries(data).forEach(([key, value]) => {
+
+        let formInputType = key;
+        if (['blur', 'type', 'skew', 'shadow', 'textContainer', 'insetShadow', 'flex'].includes(key)) {
+          formInputType = 'boolean';
+        }
+        if (['textAnimation', 'textAlignment', 'type'].includes(key)) {
+          formInputType = 'dropdown';
+        }
+        if (['description', 'url'].includes(key)) {
+          formInputType = 'text-field';
+        }
+
+        switch (formInputType) {
+          case 'boolean':
+
+            break
+          case 'dropdown':
+
+            break
+          case 'text-field':
+
+            break
+          default:
+            throw new Error(`Invalid form input type: ${formInputType}`)
+        }
+
         switch (key) {
           // ! ---------- boolean values
           case 'blur':
@@ -1284,3 +1314,4 @@
 <!-- TODO --------- draggable components --- -->
 
 <!-- TODO --------- update skew --- -->
+<!-- TODO --------- mobile media url --- -->

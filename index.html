@@ -5,7 +5,7 @@
   const TEXT_TYPES = ['primary-header-text', 'secondary-header-text', 'primary-body-text'];
   const COMPONENTS_TYPES = ['HEADER', 'FIXED', 'PARALLAX'];
 
-  const generateUniqueId = (length = 16) => {
+  const generateUniqueId = (length = 3) => {
     return parseInt(Math.ceil(Math.random() * Date.now()).toPrecision(length).toString().replace(".", ""))
   }
 
@@ -129,7 +129,7 @@
           id: generateUniqueId(),
           componentType: componentType,
           expanded: false,
-          content: Array.from({ length: 5 }, () => COMPONENTS_CONTENT_GENERATOR('HEADER'))
+          content: Array.from({ length: 5 }, () => COMPONENTS_CONTENT_GENERATOR(componentType))
         }
       case 'FIXED':
         return {
@@ -140,20 +140,22 @@
             skew: SKEW_OPTIONS[Math.floor(Math.random() * SKEW_OPTIONS.length)],
             shadow: booleanGenerator(),
           },
-          content: Array.from({ length: 3 }, () => COMPONENTS_CONTENT_GENERATOR('FIXED'))
+          content: Array.from({ length: 3 }, () => COMPONENTS_CONTENT_GENERATOR(componentType))
         }
       case 'PARALLAX':
         return {
           id: generateUniqueId(),
           componentType: componentType,
           expanded: false,
-          ...COMPONENTS_CONTENT_GENERATOR('PARALLAX')
+          ...COMPONENTS_CONTENT_GENERATOR(componentType)
         }
     }
   };
 
+  const localStorageComponents = JSON.parse(localStorage.getItem('StoredComponents'));
+
   let COMPONENTS_DATA =
-    JSON.parse(localStorage.getItem('StoredComponents')) ||
+    localStorageComponents ||
     COMPONENTS_TYPES.map(component => COMPONENTS_OBJECT_GENERATOR(component));
 </script>
 
@@ -467,6 +469,8 @@
       }
 
       /*========================================  */
+      /* !------------------------------------------------*/
+      /* !---------- Animation for the container? --------*/
       /* .parallax-header .text-content .text.animate .container {
         opacity: 0;
         transform: translateY(-50vw);
@@ -833,9 +837,20 @@
   function REPOPULATEDOM() {
     const components = COMPONENTS_DATA;
     localStorage.setItem('StoredComponents', JSON.stringify(components));
-
     initSidePanel(components);
     domInit(components)
+  }
+
+  function clearFromLocalStorage(item) {
+    switch (item) {
+      case 'StoredComponents':
+        $('.clearStoredComponents').remove()
+        localStorage.removeItem(item)
+        break;
+      case 'ColorVariables':
+
+        break;
+    }
   }
 
   const deleteElement = (componentID, elementIndex, elementType, textIndex) => {
@@ -1139,10 +1154,9 @@
 
     $('.side-panel .controls').append(`
       ${components}
-      <div class="button copy">Copy to Clipboard</div>
+      <div class="button copy" onclick="copyInnerHTMLToClipboard('wrapper')">Copy to Clipboard</div>
+      ${localStorageComponents ? `<div class="button clearStoredComponents" onclick="clearFromLocalStorage('StoredComponents')">Clear Local Storage</div>` : ''}
     `);
-
-    $('.copy').on('click', () => copyInnerHTMLToClipboard('wrapper'))
   }
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -1175,4 +1189,5 @@
   }
 </script>
 
-<!-- ! --------- add flex for FIXED component -->
+<!-- ! --------- add flex for FIXED component ------- -->
+<!-- ! --------- positions for header containers ---- -->

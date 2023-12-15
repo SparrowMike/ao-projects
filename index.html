@@ -62,7 +62,7 @@
       })
     ]
   }
-  
+
   /**
    * Retrieves a sample media.
    * @returns {object} - The sample media object.
@@ -170,6 +170,7 @@
           options: {
             skew: SKEW_OPTIONS[Math.floor(Math.random() * SKEW_OPTIONS.length)],
             shadow: booleanGenerator(),
+            flex: booleanGenerator(),
           },
           content: Array.from({ length: 3 }, () => COMPONENTS_CONTENT_GENERATOR(componentType))
         }
@@ -330,7 +331,7 @@
         --background-blend-delay: .5s;
         --text-animation-delay: 1s;
 
-        --content-max-width: 1200px;
+        --content-max-width: 1000px;
       }
 
       /* ----- global text ----- */
@@ -546,15 +547,39 @@
         width: 100%;
         height: fit-content;
         background: var(--primary-background-color);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 90px 0;
-        /* must match the clipped negative margin */
+        padding: 20px 0;
         overflow: hidden;
       }
 
+      .fixed .container .content {
+        width: 100%;
+        margin: 0 auto;
+        max-width: var(--content-max-width);
+      }
+
+      .fixed .container .flex {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        flex-direction: row;
+        justify-content: center;
+        gap: 25px;
+        max-width: var(--content-max-width);
+        margin: 0 auto;
+      }
+
+      .fixed .container .flex .content {
+        flex: 1 1 400px;
+      }
+
+      .fixed .container .content video,
+      .fixed .container .content img {
+        width: 100%;
+      }
+
       .fixed .container.cliped {
+        padding: 90px 0;
+        /* top must match the clipped negative margin */
         margin: -80px 0 -80px 0;
       }
 
@@ -573,16 +598,6 @@
       .fixed .container.cliped.clip-d {
         clip-path: polygon(0 75px, 100% 0, 100% 100%, 0 100%);
         padding: 40px 0;
-      }
-
-      .fixed .content {
-        max-width: var(--content-max-width);
-        width: 100%;
-      }
-
-      .fixed .content video,
-      .fixed .content img {
-        width: 100%;
       }
 
       /* ---------------- parallax ---------------- */
@@ -757,13 +772,13 @@
     const mediaDescription = data.description ? `<p contenteditable="true" class="description">${data.description}</p>` : '';
 
     const mediaContent = data.type?.includes('video')
-      ? `<div class="media ${insetShadow ? 'insetShadow' : ''}">
+      ? `<div class="media${insetShadow ? ' insetShadow' : ''}">
             <video autoplay loop muted playsinline preload="none" loading="lazy">
               <source src="${data.url}" type="${data.type}" />Your browser does not support the video tag.
             </video>
           </div>`
       : `
-          <div class="media ${insetShadow ? 'insetShadow' : ''}">
+          <div class="media${insetShadow ? ' insetShadow' : ''}">
             <img alt="${data.description}" src="${data.url}" preload="none" loading="lazy" decoding="async"/>
           </div>`;
 
@@ -773,10 +788,13 @@
   function exctractFixedContent(data) {
     let CONTENT = '';
     data.content.forEach(val => {
-      CONTENT += populateMediaContent(val.media, val.options);
-      CONTENT += `<div class='text'>
-                    ${extractTextContent(val.text, val.options?.textAnimation)}
-                  </div>`;
+      CONTENT += `
+        <div class='content'>
+          ${populateMediaContent(val.media, val.options)}
+          <div class='text'>
+            ${extractTextContent(val.text, val.options?.textAnimation)}
+          </div>
+        </div>`
     });
     return CONTENT;
   }
@@ -792,14 +810,14 @@
           let BACKGROUND = '', CONTENT = '';
 
           component.content.forEach((val, idx) => {
-            const shadow = val.options?.shadow ? 'animate-bg-shadow' : '';
-            const blur = val.options?.blur ? 'animate-bg-blur' : '';
+            const shadow = val.options?.shadow ? ' animate-bg-shadow' : '';
+            const blur = val.options?.blur ? ' animate-bg-blur' : '';
             BACKGROUND += `
-              <div class='background ${shadow} ${blur}' id='o${component.id}-${idx}'>
+              <div class='background${shadow}${blur}' id='o${component.id}-${idx}'>
                 ${populateMediaContent(val.media, val.options)}
               </div>`;
             CONTENT += `
-              <div class='text observe ${idx ? 'control-opacity' : ''}' id='o${component.id}-${idx}'>
+              <div class='text observe${idx ? ' control-opacity' : ''}' id='o${component.id}-${idx}'>
                 ${val.text?.length ? `
                   <div class="container ${val.options?.textContainer ? 'active' : ''}">
                     ${extractTextContent(val.text, val.options?.textAnimation)}
@@ -820,23 +838,28 @@
             ? false
             : component.options.skew;
           const containerShadow = component.options.shadow
+          const containerFlex = component.options.flex
+
+          const containerClasses = `${skew ? ` cliped clip-${skew}` : ''}`
           __DOM__ += `
-            <div class='fixed ${containerShadow ? 'shadow' : ''}'  container-id='${component.id}'>
-              <div class="container ${skew ? `cliped clip-${skew}` : ''}" ${skew === 'd' ? 'style="margin-bottom: 0"' : ''} >
-                <div class='content'>
-                  ${exctractFixedContent(component)} 
-                </div>
+            <div class='fixed${containerShadow ? ' shadow' : ''}' container-id='${component.id}'>
+              <div class="container${containerClasses}" ${skew === 'd' ? 'style="margin-bottom: 0"' : ''}>
+                ${containerFlex 
+                  ? `<div class='flex'>
+                      ${exctractFixedContent(component)}
+                    </div>` 
+                  : exctractFixedContent(component)}
               </div>
             </div>`;
           break;
 
         case 'PARALLAX':
-          const shadow = component.options.shadow ? 'animate-bg-shadow' : '';
-          const blur = component.options.blur ? 'animate-bg-blur' : '';
+          const shadow = component.options.shadow ? ' animate-bg-shadow' : '';
+          const blur = component.options.blur ? ' animate-bg-blur' : '';
 
           __DOM__ += `
             <div class="parallax" container-id='${component.id}'>
-              <div class="content observe ${shadow} ${blur}">
+              <div class="content observe${shadow}${blur}">
                 ${populateMediaContent(component.media)}
                 ${component.text ? `
                   <div class="text">
@@ -1033,6 +1056,7 @@
           case 'shadow':
           case 'textContainer':
           case 'insetShadow':
+          case 'flex':
           case 'textAnimation':
             content += `
                 <p>${key}: <button onclick="updateComponentValues(${componentID}, 'options', '${key}', ${!value}, ${elementIndex})">${value}</button></p>`;
@@ -1223,5 +1247,9 @@
   }
 </script>
 
-<!-- ! --------- add flex for FIXED component ------- -->
-<!-- ! --------- positions for header containers ---- -->
+<!-- TODO --------- positions for header containers, containers animated instead of text when animated selected ? ----------- -->
+<!-- TODO --------- scroll and highlight selected component --- -->
+<!-- TODO --------- dropdown with selecitons for textAnimation --- -->
+<!-- TODO --------- draggable components --- -->
+
+<!-- TODO --------- update skew --- -->

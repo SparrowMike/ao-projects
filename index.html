@@ -1,10 +1,6 @@
 <!-- !----------------------------------------------------- -->
 <!-- !--------- APP SAMPLES CONTENT AND COMPONENTS -------- -->
 <script>
-  const SKEW_OPTIONS = ['a', 'b', 'c', 'd', 'none'];
-  const TEXT_TYPES = ['primary-header-text', 'secondary-header-text', 'primary-body-text'];
-  const COMPONENTS_TYPES = ['HEADER', 'FIXED', 'PARALLAX'];
-
   /**
    * Generates unique ID of specified length.
    * @param {number} length - The length of the unique ID. Default is 3.
@@ -108,6 +104,13 @@
     return sample_media[Math.floor(Math.random() * sample_media.length)];
   }
 
+  const SKEW_OPTIONS = ['a', 'b', 'c', 'd', 'none'];
+  const TEXT_ANIMATIONS = ['slide', 'opacity', 'none'];
+  const TEXT_CONTAINER = ['left', 'right', 'center', 'none'];
+  const TEXT_ALIGNMENT = ['left', 'right', 'center'];
+  const TEXT_TYPES = ['primary-header-text', 'secondary-header-text', 'primary-body-text'];
+  const COMPONENTS_TYPES = ['HEADER', 'FIXED', 'PARALLAX'];
+
   /**
    * Generates the content for different components based on the component type.
    * @param {string} componentType - The type of the component.
@@ -120,8 +123,9 @@
           options: {
             blur: booleanGenerator(),
             shadow: booleanGenerator(),
-            textAnimation: booleanGenerator(),
-            textContainer: booleanGenerator(),
+            textAnimation: TEXT_ANIMATIONS[Math.floor(Math.random() * TEXT_ANIMATIONS.length)],
+            textContainer: TEXT_CONTAINER[Math.floor(Math.random() * TEXT_CONTAINER.length)],
+            textAlignment: TEXT_ALIGNMENT[Math.floor(Math.random() * TEXT_ALIGNMENT.length)],
           },
           media: GET_SAMPLE_MEDIA(),
           text: GET_SAMPLE_TEXT()
@@ -130,7 +134,8 @@
         return {
           options: {
             insetShadow: booleanGenerator(),
-            textAnimation: booleanGenerator(),
+            textAnimation: TEXT_ANIMATIONS[Math.floor(Math.random() * TEXT_ANIMATIONS.length)],
+            textAlignment: TEXT_ALIGNMENT[Math.floor(Math.random() * TEXT_ALIGNMENT.length)],
           },
           media: GET_SAMPLE_MEDIA(),
           text: GET_SAMPLE_TEXT()
@@ -140,11 +145,14 @@
           options: {
             blur: booleanGenerator(),
             shadow: booleanGenerator(),
-            textAnimation: booleanGenerator(),
+            textAnimation: TEXT_ANIMATIONS[Math.floor(Math.random() * TEXT_ANIMATIONS.length)],
+            textAlignment: TEXT_ALIGNMENT[Math.floor(Math.random() * TEXT_ALIGNMENT.length)],
           },
           media: GET_SAMPLE_MEDIA(),
           text: GET_SAMPLE_TEXT()
         }
+      default:
+        throw new Error('Invalid data type at COMPONENTS_CONTENT_GENERATOR');
     }
   };
 
@@ -181,6 +189,8 @@
           expanded: false,
           ...COMPONENTS_CONTENT_GENERATOR(componentType)
         }
+      default: 
+        throw new Error('Invalid data type at COMPONENTS_OBJECT_GENERATOR');
     }
   };
 
@@ -197,8 +207,6 @@
 <!-- !----------------------------------------------------- -->
 <!-- !------------------- APP STYLES ---------------------- -->
 <style type="text/css">
-
-
   * {
     padding: 0;
     margin: 0;
@@ -232,10 +240,10 @@
   .componentExpanded.fixed .content {
     border: 5px solid #ff5200;
   }
-  
+
   .componentExpanded::after {
     content: '';
-    position: absolute; 
+    position: absolute;
     top: 0;
     left: 0;
     height: 100%;
@@ -315,6 +323,10 @@
     border: 2px solid grey;
     border-radius: 5px;
     margin: 5px 0;
+  }
+
+  .app .side-panel .layout .component .component-container .component-content .options .option {
+    padding: 5px 0;
   }
 
   .app .side-panel .layout .component .component-container .component-content .options button {
@@ -446,37 +458,29 @@
         backdrop-filter: blur(5px);
       }
 
-      .observe.secondary-header-text,
-      .observe.primary-header-text {
+      /* ----- text opacity animation classes ----- */
+      .opacity {
+        opacity: 0;
+        transition: all 3s ease;
+      }
+
+      .opacity.animate {
+        opacity: 1;
+      }
+
+      /* ----- text slide animation classes ----- */
+      .slide {
         transform: translate3d(-100%, 0, 0);
         opacity: .5;
         transition: all var(--text-animation-delay) ease;
       }
 
-      .animate.secondary-header-text,
-      .animate.primary-header-text {
+      .slide.animate {
         transform: translate3d(0, 0, 0);
         opacity: 1;
       }
 
-      .out.secondary-header-text:not(.animate),
-      .out.primary-header-text:not(.animate) {
-        transform: translate3d(100%, 0, 0);
-        opacity: 1;
-      }
-
-      .observe.primary-body-text {
-        transform: translate3d(-100%, 0, 0);
-        opacity: .5;
-        transition: all var(--text-animation-delay) ease;
-      }
-
-      .animate.primary-body-text {
-        transform: translate3d(0, 0, 0);
-        opacity: 1;
-      }
-
-      .out.primary-body-text:not(.animate) {
+      .slide.out:not(.animate) {
         transform: translate3d(100%, 0, 0);
         opacity: 1;
       }
@@ -777,14 +781,19 @@
 <!-- !----------------------------------------------------- -->
 <!-- !---------------- APP DOM GENERATOR ------------------ -->
 <script>
-  function extractTextContent(data, observe = false) {
+  function extractTextContent(data, textAnimation = 'none') {
     let INNERTEXT = '';
 
     if (!data) return '';
 
+    const textAnimationClass = textAnimation !== 'none' ? ` observe ${textAnimation}` : '';
+
     data.forEach(text => {
       const [key, value] = Object.entries(text)[0];
-      INNERTEXT += `<div contenteditable="true" class='${key} ${observe ? 'observe' : ''}'>${value}</div>`;
+      INNERTEXT += `
+        <div contenteditable="true" class='${key}${textAnimationClass}'>
+          ${value}
+        </div>`;
     });
     return INNERTEXT;
   }
@@ -814,7 +823,7 @@
       CONTENT += `
         <div class='content'>
           ${populateMediaContent(val.media, val.options)}
-          <div class='text'>
+          <div class='text' style="text-align: ${val.options.textAlignment}">
             ${extractTextContent(val.text, val.options?.textAnimation)}
           </div>
         </div>`
@@ -842,7 +851,7 @@
                 ${populateMediaContent(val.media, val.options)}
               </div>`;
             CONTENT += `
-              <div class='text observe${idx ? ' control-opacity' : ''}' id='o${component.id}-${idx}'>
+              <div class='text observe${idx ? ' control-opacity' : ''}' id='o${component.id}-${idx}' style="text-align: ${val.options.textAlignment}">
                 ${val.text?.length ? `
                   <div class="container ${val.options?.textContainer ? 'active' : ''}">
                     ${extractTextContent(val.text, val.options?.textAnimation)}
@@ -887,7 +896,7 @@
               <div class="content observe${shadow}${blur}">
                 ${populateMediaContent(component.media)}
                 ${component.text ? `
-                  <div class="text">
+                  <div class="text" style="text-align: ${component.options.textAlignment}">
                     ${extractTextContent(component.text, component.options.textAnimation)}
                   </div>
                   ` : ''}
@@ -982,8 +991,7 @@
 
     let targetElement;
 
-    // console.log('componentID', componentID, 'dataType', dataType, 'key', key, 'newValue', newValue, 'elemidx', elementIndex, 'textIndex', textIndex)
-    // ------ honestly not the best way but it works for now
+    //! ------ honestly not the best way but it works for now
     if (elementIndex !== undefined) {
       targetElement = targetObject.content[elementIndex][dataType];
     } else {
@@ -994,7 +1002,6 @@
 
     switch (dataType) {
       case 'options':
-      case 'container options':
         if (typeof targetElement[key] === 'boolean') {
           targetElement[key] = !targetElement[key];
         } else {
@@ -1007,6 +1014,8 @@
       case 'media':
         targetElement[key] = newValue;
         break;
+      default:
+        throw new Error('Invalid data type at updateComponentValues');
     }
 
     REPOPULATEDOM();
@@ -1080,51 +1089,54 @@
 
     if (['media', 'container options', 'options'].includes(title)) {
       Object.entries(data).forEach(([key, value]) => {
-        switch (key) {
-          // ! ---------- boolean values
-          case 'blur':
-          case 'shadow':
-          case 'textContainer':
-          case 'insetShadow':
-          case 'flex':
-          case 'textAnimation':
-            content += `
-                <p>${key}: <button onclick="updateComponentValues(${componentID}, 'options', '${key}', ${!value}, ${elementIndex})">${value}</button></p>`;
-            break;
 
-          //! =------------ dropdown values
-          case 'type':
-          case 'skew':
-            const options = key === 'skew'
-              ? SKEW_OPTIONS
-              : ['image', 'video/mp4'];
+        let dataType = title;
+        if (title === 'container options') dataType = 'options'; //? unique case ---
 
-            let dataType = title;
-            if (title === 'container options') dataType = 'options'; //? unique case --- 
+        // ! ---------- boolean values
+        if (['blur', 'shadow', 'insetShadow', 'flex'].includes(key)) {
+          console.log(title)
+          content += `
+            <div class='option'>
+              ${key}: 
+              <button onclick="updateComponentValues(${componentID}, '${dataType}', '${key}', ${!value}, ${elementIndex})">
+                ${value}
+              </button>
+            </div>`;
+        }
 
-            let optionsDom = '';
-            options.forEach(val => {
-              optionsDom += `
-                <option value=${val} ${val === data[key] ? 'selected' : ''}>${val}</option>`
-            })
+        //! =------------ dropdown values
+        if (['textContainer', 'textAnimation', 'textAlignment', 'type', 'skew'].includes(key)) {
+          const dropdownValuesMap = {
+            textContainer: TEXT_CONTAINER,
+            textAnimation: TEXT_ANIMATIONS,
+            textAlignment: TEXT_ALIGNMENT,
+            type: ['image', 'video/mp4'],
+            skew: SKEW_OPTIONS
+          };
 
-            content += `
-                <label for="${key}">${key}:</label>
-                <select onchange="updateComponentValues(${componentID}, '${dataType}', '${key}', this.options[this.selectedIndex].value, ${elementIndex})">
-                  ${optionsDom}
-                </select>
-              `
-            break;
+          let optionsDom = '';
+          dropdownValuesMap[key].forEach(val => {
+            optionsDom += `
+              <option value=${val} ${val === data[key] ? 'selected' : ''}>${val}</option>`
+          })
 
-          // ! ---------- string values 
-          case 'description':
-          case 'url':
-            content += `
-              <div>
+          content += `
+            <div class='option'>
+              <label for="${key}">${key}:</label>
+              <select onchange="updateComponentValues(${componentID}, '${dataType}', '${key}', this.options[this.selectedIndex].value, ${elementIndex})">
+                ${optionsDom}
+              </select>
+            </div>`
+        }
+
+        // ! ---------- string values 
+        if (['description', 'url'].includes(key)) {
+          content += `
+              <div class='option'>
                 <p style='display: inline-block'>${key}:</p>
-                <input type="text" value="${value}" onchange="updateComponentValues(${componentID}, '${title}', '${key}', this.value, ${elementIndex})">
+                <input type="text" value="${value}" onchange="updateComponentValues(${componentID}, '${dataType}', '${key}', this.value, ${elementIndex})">
               </div>`
-            break;
         }
       })
     }
@@ -1133,7 +1145,7 @@
       data.forEach((text, idx) => {
         const [key, value] = Object.entries(text)[0];
         content += `
-            <div style="padding: 5px 0;" ${idx}> 
+            <div class='option' ${idx}> 
               <label for="text">${key}:</label>
               <input type="text" value="${value}" onchange="updateComponentValues(${componentID}, 'text', '${key}', this, ${elementIndex}, ${idx})">
               <button style='float: right;' onclick="deleteElement(${componentID}, ${elementIndex}, 'text', ${idx})">x</button>
@@ -1154,12 +1166,13 @@
           ${content}
           ${title === 'text'
         ? `
+          <div class='option'>
             <label for="${title}">Add Text:</label>
             <select onchange="addAdditionalText(${componentID}, this, ${elementIndex})">
               <option value="" selected disabled>Choose here</option>
               ${textOptions}
             </select>
-
+          </div>
             `
         : ''}
         </div>`
@@ -1278,9 +1291,10 @@
   }
 </script>
 
-<!-- TODO --------- dropdown with selecitons for textAnimation --- -->
+<!-- TODO --------- ANIMATIONS FOR textContainer --- -->
 
 <!-- TODO --------- positions for header containers, containers animated instead of text when animated selected ? ----------- -->
 <!-- TODO --------- draggable components --- -->
 
 <!-- TODO --------- update skew --- -->
+<!-- TODO --------- cleanup --- updateComponentValues--- -->

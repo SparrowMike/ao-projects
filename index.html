@@ -1,14 +1,29 @@
 <!-- !----------------------------------------------------- -->
-<!-- !----------------- APP SAMPLES/DATA ------------------ -->
+<!-- !--------- APP SAMPLES CONTENT AND COMPONENTS -------- -->
 <script>
   const SKEW_OPTIONS = ['a', 'b', 'c', 'd', 'none'];
   const TEXT_TYPES = ['primary-header-text', 'secondary-header-text', 'primary-body-text'];
   const COMPONENTS_TYPES = ['HEADER', 'FIXED', 'PARALLAX'];
 
-  const generateUniqueId = (length = 3) => {
+  /**
+   * Generates unique ID of specified length.
+   * @param {number} length - The length of the unique ID. Default is 3.
+   * @returns {number} - The generated unique ID.
+   */
+  const generateUniqueId = (length = 4) => {
     return parseInt(Math.ceil(Math.random() * Date.now()).toPrecision(length).toString().replace(".", ""))
   }
 
+  /**
+   * Generates a random boolean value.
+   * @returns {boolean} - The generated boolean value.
+   */
+  const booleanGenerator = () => Math.random() >= 0.5;
+
+  /**
+   * Retrieves the color variables from local storage or returns default color variables.
+   * @returns {object} - The color variables object.
+   */
   const DESIGN_COLOR_VARIABLES =
     JSON.parse(localStorage.getItem('ColorVariables'))
     || {
@@ -18,6 +33,10 @@
       ['--primary-background-color']: '#191919',
     };
 
+  /**
+   * Retrieves a sample text.
+   * @returns {array} - An array of sample text objects.
+   */
   const GET_SAMPLE_TEXT = () => {
     const sample_text = [
       "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis mollitia ut sunt nulla ullam eum sed odio dolorem rem, laboriosam, suscipit facilis soluta assumenda nesciunt ratione. Sequi similique ab consectetur!",
@@ -43,7 +62,11 @@
       })
     ]
   }
-
+  
+  /**
+   * Retrieves a sample media.
+   * @returns {object} - The sample media object.
+   */
   const GET_SAMPLE_MEDIA = () => {
     const sample_media = [
       {
@@ -85,8 +108,11 @@
     return sample_media[Math.floor(Math.random() * sample_media.length)];
   }
 
-  const booleanGenerator = () => Math.random() >= 0.5;
-
+  /**
+   * Generates the content for different components based on the component type.
+   * @param {string} componentType - The type of the component.
+   * @returns {object} - The generated content object.
+   */
   const COMPONENTS_CONTENT_GENERATOR = (componentType) => {
     switch (componentType) {
       case 'HEADER':
@@ -122,6 +148,11 @@
     }
   };
 
+  /**
+   * Generates the object for different components based on the component type.
+   * @param {string} componentType - The type of the component.
+   * @returns {object} - The generated component object.
+   */
   const COMPONENTS_OBJECT_GENERATOR = (componentType) => {
     switch (componentType) {
       case 'HEADER':
@@ -152,8 +183,11 @@
     }
   };
 
+  /**
+   * Retrieves the stored components from local storage or generates new components.
+   * @returns {array} - An array of components.
+   */
   const localStorageComponents = JSON.parse(localStorage.getItem('StoredComponents'));
-
   let COMPONENTS_DATA =
     localStorageComponents ||
     COMPONENTS_TYPES.map(component => COMPONENTS_OBJECT_GENERATOR(component));

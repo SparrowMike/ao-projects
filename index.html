@@ -197,6 +197,14 @@
 <!-- !----------------------------------------------------- -->
 <!-- !------------------- APP STYLES ---------------------- -->
 <style type="text/css">
+
+
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
   .app .side-panel::-webkit-scrollbar {
     width: 8px;
   }
@@ -209,16 +217,31 @@
     background: var(--description-text-color);
   }
 
-  * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-  }
-
   .app {
     display: flex;
     overflow: hidden;
     height: 100vh;
+  }
+
+  .componentExpanded {
+    border: 5px solid #ff5200;
+    position: relative !important;
+  }
+
+  .componentExpanded.parallax-header .text,
+  .componentExpanded.fixed .content {
+    border: 5px solid #ff5200;
+  }
+  
+  .componentExpanded::after {
+    content: '';
+    position: absolute; 
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #ff290021;
+    z-index: 99999999999 !important;
   }
 
   .app #wrapper {
@@ -805,6 +828,8 @@
     let __DOM__ = '';
 
     for (let component of components) {
+      const isExpanded = component.expanded ? ' componentExpanded' : '';
+
       switch (component.componentType) {
         case 'HEADER':
           let BACKGROUND = '', CONTENT = '';
@@ -827,7 +852,7 @@
           });
 
           __DOM__ += `
-            <div class='parallax-header' container-id='${component.id}'>
+            <div class='parallax-header${isExpanded}' container-id='${component.id}'>
               <div class='background-content'>${BACKGROUND}</div>
               <div class='text-content'>${CONTENT}</div>
             </div>`;
@@ -842,13 +867,13 @@
 
           const containerClasses = `${skew ? ` cliped clip-${skew}` : ''}`
           __DOM__ += `
-            <div class='fixed${containerShadow ? ' shadow' : ''}' container-id='${component.id}'>
+            <div class='fixed${containerShadow ? ' shadow' : ''}${isExpanded}' container-id='${component.id}'>
               <div class="container${containerClasses}" ${skew === 'd' ? 'style="margin-bottom: 0"' : ''}>
-                ${containerFlex 
-                  ? `<div class='flex'>
+                ${containerFlex
+              ? `<div class='flex'>
                       ${exctractFixedContent(component)}
-                    </div>` 
-                  : exctractFixedContent(component)}
+                    </div>`
+              : exctractFixedContent(component)}
               </div>
             </div>`;
           break;
@@ -858,7 +883,7 @@
           const blur = component.options.blur ? ' animate-bg-blur' : '';
 
           __DOM__ += `
-            <div class="parallax" container-id='${component.id}'>
+            <div class="parallax${isExpanded}" container-id='${component.id}'>
               <div class="content observe${shadow}${blur}">
                 ${populateMediaContent(component.media)}
                 ${component.text ? `
@@ -935,7 +960,7 @@
       }
     }
 
-    REPOPULATEDOM()
+    REPOPULATEDOM();
   }
 
   const addAdditionalText = (componentID, textType, textIndex) => {
@@ -1034,6 +1059,11 @@
     localStorage.setItem('StoredComponents', JSON.stringify(components));
     $('.side-panel .layout').empty();
     initSidePanel(components);
+
+    $(`[container-id='${componentID}']`).toggleClass('componentExpanded');
+    $(`.componentExpanded:not([container-id='${componentID}'])`).removeClass('componentExpanded');
+
+    scrollToComponent(componentID)
   }
 
   const updateColor = (data, target) => {
@@ -1232,6 +1262,7 @@
       const textarea = document.createElement('textarea');
       const innerHTML = element.innerHTML
         .replaceAll('contenteditable="true"', '')
+        .replaceAll(' componentExpanded', '')
         .replace(/container-id="[^"]*"/g, '');
 
       textarea.value = innerHTML;
@@ -1247,9 +1278,9 @@
   }
 </script>
 
-<!-- TODO --------- positions for header containers, containers animated instead of text when animated selected ? ----------- -->
-<!-- TODO --------- scroll and highlight selected component --- -->
 <!-- TODO --------- dropdown with selecitons for textAnimation --- -->
+
+<!-- TODO --------- positions for header containers, containers animated instead of text when animated selected ? ----------- -->
 <!-- TODO --------- draggable components --- -->
 
 <!-- TODO --------- update skew --- -->

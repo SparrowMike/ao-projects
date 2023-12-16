@@ -600,29 +600,6 @@
         width: 100%;
       }
 
-      .fixed .container.cliped {
-        padding: 90px 0;
-        /* top must match the clipped negative margin */
-        margin: -80px 0 -80px 0;
-      }
-
-      .fixed .container.cliped.clip-a {
-        clip-path: polygon(0 75px, 100% 0, 100% calc(100% - 75px), 0% 100%);
-      }
-
-      .fixed .container.cliped.clip-b {
-        clip-path: polygon(0 0, 100% 75px, 100% 100%, 0 calc(100% - 75px));
-      }
-
-      .fixed .container.cliped.clip-c {
-        clip-path: polygon(0 0, 100% 75px, 100% calc(100% - 75px), 0 100%);
-      }
-
-      .fixed .container.cliped.clip-d {
-        clip-path: polygon(0 75px, 100% 0, 100% 100%, 0 100%);
-        padding: 40px 0;
-      }
-
       /* ---------------- parallax ---------------- */
       .parallax {
         position: relative;
@@ -863,16 +840,31 @@
           break;
 
         case 'FIXED':
-          const skew = component.options.skew === 'none'
-            ? false
-            : component.options.skew;
+          const skewTopOptions = {
+            a: '0 75px, 100% 0',
+            b: '0 0, 100% 75px',
+            none: '0 0, 100% 0'
+          };
+
+          const skewBottomOptions = {
+            a: '100% calc(100% - 75px), 0 100%',
+            b: '100% 100%, 0 calc(100% - 75px)',
+            none: '100% 100%, 0 100%'
+          };
+
+          const skewTop = 'none';
+          const skewBottom = 'none';
+          const skewStyle = (skewTop === 'none' && skewBottom === 'none') 
+            ? '' : `style='clip-path: polygon(${skewTopOptions[skewTop]}, ${skewBottomOptions[skewBottom]});
+            ${skewTop === 'none' ? '' : 'margin-top: -80px; padding-top: 85px;'} 
+            ${skewBottom === 'none' ? '' : 'margin-bottom: -80px; paddig-bottom: 85px;'}'` //? --- padding to offset the clip cut
+
           const containerShadow = component.options.shadow
           const containerFlex = component.options.flex
 
-          const containerClasses = `${skew ? ` cliped clip-${skew}` : ''}`
           __DOM__ += `
             <div class='fixed${containerShadow ? ' shadow' : ''}${isExpanded}' container-id='${component.id}'>
-              <div class="container${containerClasses}" ${skew === 'd' ? 'style="margin-bottom: 0"' : ''}>
+              <div class="container" ${skewStyle}>
                 ${containerFlex
               ? `<div class='flex'>
                       ${exctractFixedContent(component)}
@@ -1309,6 +1301,8 @@
 </script>
 
 <!-- TODO --------- dropdown with selecitons for textAnimation --- -->
+<!-- TODO --------- expand for indivudal elements --- -->
+<!-- TODO --------- skew top and bottom for fixed element --- -->
 
 <!-- TODO --------- positions for header containers, containers animated instead of text when animated selected ? ----------- -->
 <!-- TODO --------- draggable components --- -->

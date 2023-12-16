@@ -117,6 +117,7 @@
     switch (componentType) {
       case 'HEADER':
         return {
+          elementExpanded: false,
           options: {
             blur: booleanGenerator(),
             shadow: booleanGenerator(),
@@ -128,6 +129,7 @@
         }
       case 'FIXED':
         return {
+          elementExpanded: false,
           options: {
             insetShadow: booleanGenerator(),
             textAnimation: booleanGenerator(),
@@ -160,7 +162,7 @@
           id: generateUniqueId(),
           componentType: componentType,
           expanded: false,
-          content: Array.from({ length: 5 }, () => COMPONENTS_CONTENT_GENERATOR(componentType))
+          content: Array.from({ length: Math.max(2, Math.floor(Math.random() * 5)) }, () => COMPONENTS_CONTENT_GENERATOR(componentType))
         }
       case 'FIXED':
         return {
@@ -172,7 +174,7 @@
             shadow: booleanGenerator(),
             flex: booleanGenerator(),
           },
-          content: Array.from({ length: 3 }, () => COMPONENTS_CONTENT_GENERATOR(componentType))
+          content: Array.from({ length: Math.max(2, Math.floor(Math.random() * 4)) }, () => COMPONENTS_CONTENT_GENERATOR(componentType))
         }
       case 'PARALLAX':
         return {
@@ -197,8 +199,6 @@
 <!-- !----------------------------------------------------- -->
 <!-- !------------------- APP STYLES ---------------------- -->
 <style type="text/css">
-
-
   * {
     padding: 0;
     margin: 0;
@@ -232,10 +232,10 @@
   .componentExpanded.fixed .content {
     border: 5px solid #ff5200;
   }
-  
+
   .componentExpanded::after {
     content: '';
-    position: absolute; 
+    position: absolute;
     top: 0;
     left: 0;
     height: 100%;
@@ -308,6 +308,10 @@
     background-color: #191919;
     border: 2px solid #8080806b;
     border-radius: 5px;
+  }
+
+  .app .side-panel .layout .component .component-container .component-content .content.active {
+    display: none;
   }
 
   .app .side-panel .layout .component .component-container .component-content .options {
@@ -542,7 +546,7 @@
       .parallax-header .text-content .text .container.active.left {
         transform: translateX(-100%);
       }
-      
+
       .parallax-header .text-content .text .container.active.right {
         transform: translateX(100%);
       }
@@ -550,7 +554,7 @@
       .parallax-header .text-content .text.animate .container.active.left {
         transform: translateX(-9vw);
       }
-      
+
       .parallax-header .text-content .text.animate .container.active.right {
         transform: translateX(9vw);
       }
@@ -857,7 +861,7 @@
           const skewStyle = (skewTop === 'none' && skewBottom === 'none') 
             ? '' : `style='clip-path: polygon(${skewTopOptions[skewTop]}, ${skewBottomOptions[skewBottom]});
             ${skewTop === 'none' ? '' : 'margin-top: -80px; padding-top: 85px;'} 
-            ${skewBottom === 'none' ? '' : 'margin-bottom: -80px; paddig-bottom: 85px;'}'` //? --- padding to offset the clip cut
+            ${skewBottom === 'none' ? '' : 'margin-bottom: -80px; padding-bottom: 85px;'}'` //? --- padding to offset the clip cut
 
           const containerShadow = component.options.shadow
           const containerFlex = component.options.flex
@@ -1028,10 +1032,12 @@
     REPOPULATEDOM();
   }
 
-  const scrollToComponent = (componentID) => {
-    const container = document.querySelector(`[container-id="${componentID}"]`);
+  const scrollToComponent = (componentID, nested = '') => {
+    const container = document.querySelector(`[container-id="${componentID}"] ${nested}`);
+
     if (container) {
       container.scrollIntoView({ behavior: 'smooth' });
+      $(container).toggleClass('componentExpanded');
     }
   }
 
@@ -1044,22 +1050,49 @@
     REPOPULATEDOM();
   }
 
-  const toggleExpand = (componentID) => {
+  const toggleExpand = (componentID, type, contentIndex) => {
     const components = COMPONENTS_DATA;
-    components.forEach(x => {
-      if (componentID !== x.id) x.expanded = false;
-      else x.expanded = !x.expanded;
-    });
 
-    //! ------------- find better approach to deal with repainting 
-    localStorage.setItem('StoredComponents', JSON.stringify(components));
     $('.side-panel .layout').empty();
+    $(`.componentExpanded`).removeClass('componentExpanded');
+
+    switch (type) {
+      case 'component':
+        components.forEach(x => {
+          if (componentID !== x.id) x.expanded = false;
+          else x.expanded = !x.expanded;
+        });
+
+        if (components.find(x => x.id === componentID).expanded) {
+          scrollToComponent(componentID)
+        }
+        break;
+      case 'container':
+        const selectedElement = components.find(x => x.id === componentID)
+
+        if (selectedElement.hasOwnProperty('content')) {
+          selectedElement.content.forEach((x, idx) => {
+            if (contentIndex !== idx) x.elementExpanded = false;
+            else x.elementExpanded = !x.elementExpanded;
+          })
+        }
+
+        let nestedElement = '';
+        if (selectedElement.componentType === 'HEADER')
+          nestedElement = `.text-content .text:nth-child(${contentIndex + 1})`
+        if (selectedElement.componentType === 'FIXED')
+          nestedElement = `.container .content:nth-child(${contentIndex + 1})`
+
+        if (selectedElement.content[contentIndex].elementExpanded) {
+          scrollToComponent(componentID, nestedElement)
+        }
+        break;
+      default:
+        throw new Error(`Invalid toggle type: ${type}`)
+    }
+    localStorage.setItem('StoredComponents', JSON.stringify(components));
+
     initSidePanel(components);
-
-    $(`[container-id='${componentID}']`).toggleClass('componentExpanded');
-    $(`.componentExpanded:not([container-id='${componentID}'])`).removeClass('componentExpanded');
-
-    scrollToComponent(componentID)
   }
 
   const updateColor = (data, target) => {
@@ -1194,13 +1227,21 @@
     if (component.content) {
       component.content.forEach((v, idx) => {
         content += `
-          <div class='component-content'>
-            ${extractComponentFields(component.id, 'options', v.options, idx)}
-            ${extractComponentFields(component.id, 'media', v.media, idx)}
-            ${extractComponentFields(component.id, 'text', v.text, idx)}
-          ${component.componentType !== 'PARALLAX' ? `<button style="margin-top: 5px 10px; display: block;" onclick="deleteElement(${component.id}, ${idx}, 'content')">Delete Element</button>` : ''}
-          </div>
-        `
+          <div class='component-content' > 
+            <div style='padding: 2px 4px; display: flex; justify-content: space-between;'>
+              <h4>Content ${idx + 1}</h4>
+              <div style='cursor: pointer;' onclick="toggleExpand(${component.id}, 'container', ${idx})" >S</div>
+            </div>
+            <div class='content ${v.elementExpanded ? '' : 'active'}'>
+              ${extractComponentFields(component.id, 'options', v.options, idx)}
+              ${extractComponentFields(component.id, 'media', v.media, idx)}
+              ${extractComponentFields(component.id, 'text', v.text, idx)}
+              ${component.componentType !== 'PARALLAX' ? `
+              <button style="margin-top: 5px 10px; display: block;" onclick="deleteElement(${component.id}, ${idx}, 'content')">
+                Delete Element
+              </button>` : ''}
+            </div>
+          </div>`
       })
     }
 
@@ -1209,7 +1250,7 @@
         <div class='header'>
           <h3 style='display: inline'>${component.componentType}</h3>
           <div class='delete-component' onclick="deleteComponent(${component.id})" style='cursor: pointer; display: inline-block; padding: 5px 10px; float: right;'>D</div>
-          <div class='expand-component' onclick="toggleExpand(${component.id})" style='cursor: pointer; display: inline-block; padding: 5px 10px; float: right;'>T</div>
+          <div class='expand-component' onclick="toggleExpand(${component.id}, 'component')" style='cursor: pointer; display: inline-block; padding: 5px 10px; float: right;'>T</div>
           <div class='scroll-to-component' onclick="scrollToComponent(${component.id})" style='cursor: pointer; display: inline-block; padding: 5px 10px; float: right;'>S</div>
         </div>
 
@@ -1272,6 +1313,15 @@
   document.addEventListener('DOMContentLoaded', function () {
     const components = COMPONENTS_DATA;
 
+    // components.forEach(component => {
+    //   component.expanded = false;
+    //   if (component.content) {
+    //     component.content.forEach(content => {
+    //       content.elementExpanded = false;
+    //     })
+    //   }
+    // });
+
     domInit(components)
     initSidePanel(components);
     populateStaticSidePanelControls();
@@ -1301,11 +1351,10 @@
 </script>
 
 <!-- TODO --------- dropdown with selecitons for textAnimation --- -->
-<!-- TODO --------- expand for indivudal elements --- -->
 <!-- TODO --------- skew top and bottom for fixed element --- -->
 
 <!-- TODO --------- positions for header containers, containers animated instead of text when animated selected ? ----------- -->
 <!-- TODO --------- draggable components --- -->
 
-<!-- TODO --------- update skew --- -->
 <!-- TODO --------- mobile media url --- -->
+<!-- TODO --------- clear $('.side-panel .layout').append(` --- -->

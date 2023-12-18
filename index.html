@@ -104,12 +104,13 @@
     return sample_media[Math.floor(Math.random() * sample_media.length)];
   }
 
-  const SKEW_OPTIONS = ['a', 'b', 'c', 'd', 'none'];
+  const SKEW_OPTIONS_TOP = ['a', 'b', 'none'];
+  const SKEW_OPTIONS_BOTTOM = ['a', 'b', 'none'];
   const TEXT_ANIMATIONS = ['slide', 'opacity', 'none'];
   const TEXT_CONTAINER = ['left', 'right', 'center', 'none'];
   const TEXT_ALIGNMENT = ['left', 'right', 'center'];
   const TEXT_TYPES = ['primary-header-text', 'secondary-header-text', 'primary-body-text'];
-  const COMPONENTS_TYPES = ['HEADER', 'FIXED', 'PARALLAX'];
+  const COMPONENTS_TYPES = ['PARALLAX_BLEND', 'FIXED', 'PARALLAX'];
 
   /**
    * Generates the content for different components based on the component type.
@@ -118,8 +119,9 @@
    */
   const COMPONENTS_CONTENT_GENERATOR = (componentType) => {
     switch (componentType) {
-      case 'HEADER':
+      case 'PARALLAX_BLEND':
         return {
+          elementExpanded: false,
           options: {
             blur: booleanGenerator(),
             shadow: booleanGenerator(),
@@ -132,6 +134,7 @@
         }
       case 'FIXED':
         return {
+          elementExpanded: false,
           options: {
             insetShadow: booleanGenerator(),
             textAnimation: TEXT_ANIMATIONS[Math.floor(Math.random() * TEXT_ANIMATIONS.length)],
@@ -163,12 +166,12 @@
    */
   const COMPONENTS_OBJECT_GENERATOR = (componentType) => {
     switch (componentType) {
-      case 'HEADER':
+      case 'PARALLAX_BLEND':
         return {
           id: generateUniqueId(),
           componentType: componentType,
           expanded: false,
-          content: Array.from({ length: 5 }, () => COMPONENTS_CONTENT_GENERATOR(componentType))
+          content: Array.from({ length: Math.max(2, Math.floor(Math.random() * 5)) }, () => COMPONENTS_CONTENT_GENERATOR(componentType))
         }
       case 'FIXED':
         return {
@@ -176,11 +179,12 @@
           expanded: false,
           componentType: componentType,
           options: {
-            skew: SKEW_OPTIONS[Math.floor(Math.random() * SKEW_OPTIONS.length)],
+            skewTop: SKEW_OPTIONS_TOP[Math.floor(Math.random() * SKEW_OPTIONS_TOP.length)],
+            skewBottom: SKEW_OPTIONS_BOTTOM[Math.floor(Math.random() * SKEW_OPTIONS_BOTTOM.length)],
             shadow: booleanGenerator(),
             flex: booleanGenerator(),
           },
-          content: Array.from({ length: 3 }, () => COMPONENTS_CONTENT_GENERATOR(componentType))
+          content: Array.from({ length: Math.max(2, Math.floor(Math.random() * 4)) }, () => COMPONENTS_CONTENT_GENERATOR(componentType))
         }
       case 'PARALLAX':
         return {
@@ -189,7 +193,7 @@
           expanded: false,
           ...COMPONENTS_CONTENT_GENERATOR(componentType)
         }
-      default: 
+      default:
         throw new Error('Invalid data type at COMPONENTS_OBJECT_GENERATOR');
     }
   };
@@ -301,6 +305,22 @@
     border: 2px solid #8080806b;
   }
 
+  .app .side-panel .layout .component .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .app .side-panel .layout .component .header .options {
+    display: flex;
+    float: right;
+  }
+
+  .app .side-panel .layout .component .header .options .option {
+    padding: 2px 7px;
+    cursor: pointer;
+  }
+
   .app .side-panel .layout .component .component-container {
     display: none;
   }
@@ -316,6 +336,10 @@
     background-color: #191919;
     border: 2px solid #8080806b;
     border-radius: 5px;
+  }
+
+  .app .side-panel .layout .component .component-container .component-content .content.active {
+    display: none;
   }
 
   .app .side-panel .layout .component .component-container .component-content .options {
@@ -364,7 +388,8 @@
         --secondary-background-color: #3a5a40;
 
         --background-blend-delay: .5s;
-        --text-animation-delay: 1s;
+        --text-animation-slide-delay: 1s;
+        --text-animation-opacity-delay: 1.2s;
 
         --content-max-width: 1000px;
       }
@@ -459,12 +484,12 @@
       }
 
       /* ----- text opacity animation classes ----- */
-      .opacity {
+      .text .opacity {
         opacity: 0;
-        transition: all 3s ease;
+        transition: opacity var(--text-animation-opacity-delay) ease;
       }
 
-      .opacity.animate {
+      .text .opacity.animate {
         opacity: 1;
       }
 
@@ -472,7 +497,7 @@
       .slide {
         transform: translate3d(-100%, 0, 0);
         opacity: .5;
-        transition: all var(--text-animation-delay) ease;
+        transition: all var(--text-animation-slide-delay) ease;
       }
 
       .slide.animate {
@@ -524,40 +549,51 @@
         overflow: hidden;
       }
 
+      .parallax-header .text-content .text .container:not(.active) {
+        max-width: var(--content-max-width);
+      }
 
-      .parallax-header .text-content .text.animate .container {
+      .parallax-header .text-content .text .container.active {
+        background: rgba(0, 0, 0, 0.5);
+        padding: 10px 20px;
+        min-width: 300px;
+        max-width: 600px;
         opacity: 1;
         width: 80%;
       }
 
-      /*========================================  */
-      /* !------------------------------------------------*/
-      /* !---------- Animation for the container? --------*/
-      /* .parallax-header .text-content .text.animate .container {
+      .parallax-header .text-content .text .container.active.opacity {
         opacity: 0;
-        transform: translateY(-50vw);
-        transition: all 1s ease-in;
+        transition: opacity var(--text-animation-opacity-delay) ease-in;
       }
 
-      .parallax-header .text-content .text.animate .container.active {
+      .parallax-header .text-content .text.animate .container.active.opacity {
+        transform: translateX(-9vw);
         opacity: 1;
-        transform: translateY(0);
-      } */
-
-      .parallax-header .text-content .text.animate .container.active {
-        opacity: 1;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(5px);
-        padding: 10px 20px;
-        min-width: 300px;
-        max-width: 600px;
       }
 
-      /*========================================  */
+      .parallax-header .text-content .text .container.active.slide {
+        transition: transform .3s ease-in;
+      }
 
-      .parallax-header .text-content .text.out:not(.animate) .container {
-        transform: translateY(-20vw);
-        opacity: 0;
+      .parallax-header .text-content .text .container.active.slide.left {
+        transform: translateX(-100%);
+      }
+
+      .parallax-header .text-content .text .container.active.slide.right {
+        transform: translateX(100%);
+      }
+      
+      .parallax-header .text-content .text.animate .container.active.center {
+        transform: translateX(0);
+      }
+
+      .parallax-header .text-content .text.animate .container.active.left {
+        transform: translateX(-9vw);
+      }
+      
+      .parallax-header .text-content .text.animate .container.active.right {
+        transform: translateX(9vw);
       }
 
       /* ---------------- fixed ---------------- */
@@ -590,41 +626,18 @@
         align-items: baseline;
         flex-direction: row;
         justify-content: center;
-        gap: 25px;
         max-width: var(--content-max-width);
         margin: 0 auto;
       }
 
       .fixed .container .flex .content {
         flex: 1 1 400px;
+        align-self: flex-start;
       }
 
       .fixed .container .content video,
       .fixed .container .content img {
         width: 100%;
-      }
-
-      .fixed .container.cliped {
-        padding: 90px 0;
-        /* top must match the clipped negative margin */
-        margin: -80px 0 -80px 0;
-      }
-
-      .fixed .container.cliped.clip-a {
-        clip-path: polygon(0 75px, 100% 0, 100% calc(100% - 75px), 0% 100%);
-      }
-
-      .fixed .container.cliped.clip-b {
-        clip-path: polygon(0 0, 100% 75px, 100% 100%, 0 calc(100% - 75px));
-      }
-
-      .fixed .container.cliped.clip-c {
-        clip-path: polygon(0 0, 100% 75px, 100% calc(100% - 75px), 0 100%);
-      }
-
-      .fixed .container.cliped.clip-d {
-        clip-path: polygon(0 75px, 100% 0, 100% 100%, 0 100%);
-        padding: 40px 0;
       }
 
       /* ---------------- parallax ---------------- */
@@ -840,12 +853,18 @@
       const isExpanded = component.expanded ? ' componentExpanded' : '';
 
       switch (component.componentType) {
-        case 'HEADER':
+        case 'PARALLAX_BLEND':
           let BACKGROUND = '', CONTENT = '';
 
           component.content.forEach((val, idx) => {
             const shadow = val.options?.shadow ? ' animate-bg-shadow' : '';
             const blur = val.options?.blur ? ' animate-bg-blur' : '';
+            const textContainer = val.options?.textContainer !== 'none' 
+              ? ` active ${val.options?.textContainer} ${val.options?.textAnimation !== 'none' ? val.options?.textAnimation : ''}`  
+              : ''
+            const textAnimation = textContainer ? false : val.options?.textAnimation;
+
+
             BACKGROUND += `
               <div class='background${shadow}${blur}' id='o${component.id}-${idx}'>
                 ${populateMediaContent(val.media, val.options)}
@@ -853,8 +872,8 @@
             CONTENT += `
               <div class='text observe${idx ? ' control-opacity' : ''}' id='o${component.id}-${idx}' style="text-align: ${val.options.textAlignment}">
                 ${val.text?.length ? `
-                  <div class="container ${val.options?.textContainer ? 'active' : ''}">
-                    ${extractTextContent(val.text, val.options?.textAnimation)}
+                  <div class="container${textContainer}">
+                    ${extractTextContent(val.text, textAnimation)}
                   </div>
                 `: ''}
               </div>`;
@@ -868,20 +887,35 @@
           break;
 
         case 'FIXED':
-          const skew = component.options.skew === 'none'
-            ? false
-            : component.options.skew;
-          const containerShadow = component.options.shadow
-          const containerFlex = component.options.flex
+          const containerShadow = component.options.shadow;
+          const containerFlex = component.options.flex;
+          const skewTop = component.options.skewTop;
+          const skewBottom = component.options.skewBottom;
 
-          const containerClasses = `${skew ? ` cliped clip-${skew}` : ''}`
+          const skewTopOptions = {
+            a: '0 75px, 100% 0',
+            b: '0 0, 100% 75px',
+            none: '0 0, 100% 0'
+          };
+
+          const skewBottomOptions = {
+            a: '100% calc(100% - 75px), 0 100%',
+            b: '100% 100%, 0 calc(100% - 75px)',
+            none: '100% 100%, 0 100%'
+          };
+
+          const skewStyle = (skewTop === 'none' && skewBottom === 'none')
+            ? '' : `style='clip-path: polygon(${skewTopOptions[skewTop]}, ${skewBottomOptions[skewBottom]});
+            ${skewTop === 'none' ? '' : 'margin-top: -80px; padding-top: 85px;'} 
+            ${skewBottom === 'none' ? '' : 'margin-bottom: -80px; padding-bottom: 85px;'}'` //? --- padding to offset the clip cut
+
           __DOM__ += `
             <div class='fixed${containerShadow ? ' shadow' : ''}${isExpanded}' container-id='${component.id}'>
-              <div class="container${containerClasses}" ${skew === 'd' ? 'style="margin-bottom: 0"' : ''}>
+              <div class="container" ${skewStyle}>
                 ${containerFlex
               ? `<div class='flex'>
-                      ${exctractFixedContent(component)}
-                    </div>`
+                    ${exctractFixedContent(component)}
+                  </div>`
               : exctractFixedContent(component)}
               </div>
             </div>`;
@@ -1041,10 +1075,12 @@
     REPOPULATEDOM();
   }
 
-  const scrollToComponent = (componentID) => {
-    const container = document.querySelector(`[container-id="${componentID}"]`);
+  const scrollToComponent = (componentID, nested = '') => {
+    const container = document.querySelector(`[container-id="${componentID}"] ${nested}`);
+
     if (container) {
       container.scrollIntoView({ behavior: 'smooth' });
+      $(container).toggleClass('componentExpanded');
     }
   }
 
@@ -1057,22 +1093,49 @@
     REPOPULATEDOM();
   }
 
-  const toggleExpand = (componentID) => {
+  const toggleExpand = (componentID, type, contentIndex) => {
     const components = COMPONENTS_DATA;
-    components.forEach(x => {
-      if (componentID !== x.id) x.expanded = false;
-      else x.expanded = !x.expanded;
-    });
 
-    //! ------------- find better approach to deal with repainting 
-    localStorage.setItem('StoredComponents', JSON.stringify(components));
     $('.side-panel .layout').empty();
+    $(`.componentExpanded`).removeClass('componentExpanded');
+
+    switch (type) {
+      case 'component':
+        components.forEach(x => {
+          if (componentID !== x.id) x.expanded = false;
+          else x.expanded = !x.expanded;
+        });
+
+        if (components.find(x => x.id === componentID).expanded) {
+          scrollToComponent(componentID)
+        }
+        break;
+      case 'container':
+        const selectedElement = components.find(x => x.id === componentID)
+
+        if (selectedElement.hasOwnProperty('content')) {
+          selectedElement.content.forEach((x, idx) => {
+            if (contentIndex !== idx) x.elementExpanded = false;
+            else x.elementExpanded = !x.elementExpanded;
+          })
+        }
+
+        let nestedElement = '';
+        if (selectedElement.componentType === 'PARALLAX_BLEND')
+          nestedElement = `.text-content .text:nth-child(${contentIndex + 1})`
+        if (selectedElement.componentType === 'FIXED')
+          nestedElement = `.container .content:nth-child(${contentIndex + 1})`
+
+        if (selectedElement.content[contentIndex].elementExpanded) {
+          scrollToComponent(componentID, nestedElement)
+        }
+        break;
+      default:
+        throw new Error(`Invalid toggle type: ${type}`)
+    }
+    localStorage.setItem('StoredComponents', JSON.stringify(components));
+
     initSidePanel(components);
-
-    $(`[container-id='${componentID}']`).toggleClass('componentExpanded');
-    $(`.componentExpanded:not([container-id='${componentID}'])`).removeClass('componentExpanded');
-
-    scrollToComponent(componentID)
   }
 
   const updateColor = (data, target) => {
@@ -1087,68 +1150,81 @@
 
     let content = '';
 
-    if (['media', 'container options', 'options'].includes(title)) {
+    if (!Array.isArray(data)) {
       Object.entries(data).forEach(([key, value]) => {
+
+        const booleanKeysMap = [
+          'blur', 'type', 'shadow', 'insetShadow', 'flex'
+        ].reduce((a, v) => ({ ...a, [v]: v }), {});
+
+        const dropdownKeysMap = [
+          'textAnimation', 'textAlignment', 'textContainer', 'type', 'skewTop', 'skewBottom'
+        ].reduce((a, v) => ({ ...a, [v]: v }), {});
+
+        const textFieldKeysMap = [
+          'description', 'url'
+        ].reduce((a, v) => ({ ...a, [v]: v }), {});
 
         let dataType = title;
         if (title === 'container options') dataType = 'options'; //? unique case ---
 
-        // ! ---------- boolean values
-        if (['blur', 'shadow', 'insetShadow', 'flex'].includes(key)) {
-          console.log(title)
-          content += `
-            <div class='option'>
-              ${key}: 
-              <button onclick="updateComponentValues(${componentID}, '${dataType}', '${key}', ${!value}, ${elementIndex})">
-                ${value}
-              </button>
-            </div>`;
-        }
+        switch (key) {
+          case booleanKeysMap[key]: //? ----- boolean keys -----
+            content += `
+              <div class='option'>
+                ${key}: 
+                <button onclick="updateComponentValues(${componentID}, '${dataType}', '${key}', ${!value}, ${elementIndex})">
+                  ${value}
+                </button>
+              </div>`;
 
-        //! =------------ dropdown values
-        if (['textContainer', 'textAnimation', 'textAlignment', 'type', 'skew'].includes(key)) {
-          const dropdownValuesMap = {
-            textContainer: TEXT_CONTAINER,
-            textAnimation: TEXT_ANIMATIONS,
-            textAlignment: TEXT_ALIGNMENT,
-            type: ['image', 'video/mp4'],
-            skew: SKEW_OPTIONS
-          };
+            break;
+          case dropdownKeysMap[key]: //? ----- dropdown keys -----
+            const dropdownValuesMap = {
+              textContainer: TEXT_CONTAINER,
+              textAnimation: TEXT_ANIMATIONS,
+              textAlignment: TEXT_ALIGNMENT,
+              type: ['image', 'video/mp4'],
+              skewTop: SKEW_OPTIONS_TOP,
+              skewBottom: SKEW_OPTIONS_BOTTOM,
+            };
 
-          let optionsDom = '';
-          dropdownValuesMap[key].forEach(val => {
-            optionsDom += `
-              <option value=${val} ${val === data[key] ? 'selected' : ''}>${val}</option>`
-          })
+            let optionsDom = '';
+            dropdownValuesMap[key].forEach(val => {
+              optionsDom += `
+                <option value=${val} ${val === data[key] ? 'selected' : ''}>${val}</option>`
+            })
 
-          content += `
-            <div class='option'>
-              <label for="${key}">${key}:</label>
-              <select onchange="updateComponentValues(${componentID}, '${dataType}', '${key}', this.options[this.selectedIndex].value, ${elementIndex})">
-                ${optionsDom}
-              </select>
-            </div>`
-        }
+            content += `
+              <div class='option'>
+                <label for="${key}">${key}:</label>
+                <select onchange="updateComponentValues(${componentID}, '${dataType}', '${key}', this.options[this.selectedIndex].value, ${elementIndex})">
+                  ${optionsDom}
+                </select>
+              </div>`
 
-        // ! ---------- string values 
-        if (['description', 'url'].includes(key)) {
-          content += `
+            break;
+          case textFieldKeysMap[key]: //? ----- text field keys -----
+            content += `
               <div class='option'>
                 <p style='display: inline-block'>${key}:</p>
                 <input type="text" value="${value}" onchange="updateComponentValues(${componentID}, '${dataType}', '${key}', this.value, ${elementIndex})">
               </div>`
+            break
+          default:
+            throw new Error(`Invalid form input type: ${key}`)
         }
       })
-    }
+    } else {
 
-    if (title === 'text' && Array.isArray(data)) {
+      //? ------------------ unique case for arrays ------------------ 
       data.forEach((text, idx) => {
         const [key, value] = Object.entries(text)[0];
         content += `
             <div class='option' ${idx}> 
               <label for="text">${key}:</label>
-              <input type="text" value="${value}" onchange="updateComponentValues(${componentID}, 'text', '${key}', this, ${elementIndex}, ${idx})">
-              <button style='float: right;' onclick="deleteElement(${componentID}, ${elementIndex}, 'text', ${idx})">x</button>
+              <input type="text" value="${value}" onchange="updateComponentValues(${componentID}, '${title}', '${key}', this, ${elementIndex}, ${idx})">
+              <button style='float: right;' onclick="deleteElement(${componentID}, ${elementIndex}, '${title}', ${idx})">x</button>
             </div>
           `
       })
@@ -1161,7 +1237,7 @@
 
     return `
         <div class="options ${title.toLowerCase().replace(' ', '-')}">
-          <h4>${title} ${title !== 'Container Options' ?
+          <h4>${title} ${!['options', 'container options'].includes(title) ?
         `<button style="float: right;" onClick='deleteElement(${componentID}, ${elementIndex}, "${title}")'>x</button>` : ''}</h4> 
           ${content}
           ${title === 'text'
@@ -1185,25 +1261,34 @@
     if (component.content) {
       component.content.forEach((v, idx) => {
         content += `
-          <div class='component-content'>
-            ${extractComponentFields(component.id, 'options', v.options, idx)}
-            ${extractComponentFields(component.id, 'media', v.media, idx)}
-            ${extractComponentFields(component.id, 'text', v.text, idx)}
-          ${component.componentType !== 'PARALLAX' ? `<button style="margin-top: 5px 10px; display: block;" onclick="deleteElement(${component.id}, ${idx}, 'content')">Delete Element</button>` : ''}
-          </div>
-        `
+          <div class='component-content' > 
+            <div style='padding: 2px 4px; display: flex; justify-content: space-between;'>
+              <h4>Content ${idx + 1}</h4>
+              <div style='cursor: pointer;' onclick="toggleExpand(${component.id}, 'container', ${idx})">S</div>
+            </div>
+            <div class='content ${v.elementExpanded ? '' : 'active'}'>
+              ${extractComponentFields(component.id, 'options', v.options, idx)}
+              ${extractComponentFields(component.id, 'media', v.media, idx)}
+              ${extractComponentFields(component.id, 'text', v.text, idx)}
+              ${component.componentType !== 'PARALLAX' ? `
+              <button style="margin-top: 5px 10px; display: block;" onclick="deleteElement(${component.id}, ${idx}, 'content')">
+                Delete Element
+              </button>` : ''}
+            </div>
+          </div>`
       })
     }
 
     $('.side-panel .layout').append(`
       <div class="component" component-id="${component.id}">
         <div class='header'>
-          <h3 style='display: inline'>${component.componentType}</h3>
-          <div class='delete-component' onclick="deleteComponent(${component.id})" style='cursor: pointer; display: inline-block; padding: 5px 10px; float: right;'>D</div>
-          <div class='expand-component' onclick="toggleExpand(${component.id})" style='cursor: pointer; display: inline-block; padding: 5px 10px; float: right;'>T</div>
-          <div class='scroll-to-component' onclick="scrollToComponent(${component.id})" style='cursor: pointer; display: inline-block; padding: 5px 10px; float: right;'>S</div>
+          <h3 style='display: inline'>${component.componentType.replace('_', ' ')}</h3>
+          <div class='options'>
+            <div class='option scroll-to-component' onclick="scrollToComponent(${component.id})">S</div>
+            <div class='option expand-component' onclick="toggleExpand(${component.id}, 'component')">T</div>
+            <div class='option delete-component' onclick="deleteComponent(${component.id})">D</div>
+          </div>
         </div>
-
         <div class='component-container ${component.expanded ? 'active' : ''}'> 
           ${component.options ? `
             <div class='component-content' >
@@ -1255,13 +1340,28 @@
 
     $('.side-panel .controls').append(`
       ${components}
-      <div class="button copy" onclick="copyInnerHTMLToClipboard('wrapper')">Copy to Clipboard</div>
-      ${localStorageComponents ? `<div class="button clearStoredComponents" onclick="clearFromLocalStorage('StoredComponents')">Clear Local Storage</div>` : ''}
+      <div class="button copy" onclick="copyInnerHTMLToClipboard('wrapper')">
+        Copy to Clipboard
+      </div>
+      ${localStorageComponents ? `
+        <div class="button clearStoredComponents" onclick="clearFromLocalStorage('StoredComponents')">
+          Clear Local Storage
+        </div>` : ''}
     `);
   }
 
   document.addEventListener('DOMContentLoaded', function () {
     const components = COMPONENTS_DATA;
+
+    // ? remove all expanded properties
+    // components.forEach(component => {
+    //   component.expanded = false;
+    //   if (component.content) {
+    //     component.content.forEach(content => {
+    //       content.elementExpanded = false;
+    //     })
+    //   }
+    // });
 
     domInit(components)
     initSidePanel(components);
@@ -1291,10 +1391,8 @@
   }
 </script>
 
-<!-- TODO --------- ANIMATIONS FOR textContainer --- -->
-
-<!-- TODO --------- positions for header containers, containers animated instead of text when animated selected ? ----------- -->
+<!-- TODO --------- mobile media url --- -->
+<!-- TODO --------- clear $('.side-panel .layout').append(` --- -->
 <!-- TODO --------- draggable components --- -->
-
-<!-- TODO --------- update skew --- -->
 <!-- TODO --------- cleanup --- updateComponentValues--- -->
+<!-- TODO --------- media description affected by blur/shadow  -->

@@ -426,6 +426,7 @@
         position: absolute !important;
         bottom: 20px !important;
         right: 20px;
+        z-index: 9999999;
       }
 
       .wrapper-body {
@@ -486,11 +487,15 @@
       /* ----- text opacity animation classes ----- */
       .text .opacity {
         opacity: 0;
-        transition: opacity var(--text-animation-opacity-delay) ease;
+        scale: .9;
+        transition: scale, opacity;
+        transition-duration: var(--text-animation-opacity-delay);
+        transition-timing-function: ease-in-out;
       }
 
       .text .opacity.animate {
         opacity: 1;
+        scale: 1;
       }
 
       /* ----- text slide animation classes ----- */
@@ -564,12 +569,16 @@
 
       .parallax-header .text-content .text .container.active.opacity {
         opacity: 0;
-        transition: opacity var(--text-animation-opacity-delay) ease-in;
+        scale: .9;
+        transition: scale, opacity;
+        transition-duration: var(--text-animation-opacity-delay);
+        transition-timing-function: ease-in-out;
       }
 
       .parallax-header .text-content .text.animate .container.active.opacity {
-        transform: translateX(-9vw);
+        /* transform: translateX(-9vw); */
         opacity: 1;
+        scale: 1;
       }
 
       .parallax-header .text-content .text .container.active.slide {
@@ -583,7 +592,7 @@
       .parallax-header .text-content .text .container.active.slide.right {
         transform: translateX(100%);
       }
-      
+
       .parallax-header .text-content .text.animate .container.active.center {
         transform: translateX(0);
       }
@@ -591,7 +600,7 @@
       .parallax-header .text-content .text.animate .container.active.left {
         transform: translateX(-9vw);
       }
-      
+
       .parallax-header .text-content .text.animate .container.active.right {
         transform: translateX(9vw);
       }
@@ -834,7 +843,7 @@
     let CONTENT = '';
     data.content.forEach(val => {
       CONTENT += `
-        <div class='content'>
+        <div class='content targetableElement'>
           ${populateMediaContent(val.media, val.options)}
           <div class='text' style="text-align: ${val.options.textAlignment}">
             ${extractTextContent(val.text, val.options?.textAnimation)}
@@ -859,8 +868,8 @@
           component.content.forEach((val, idx) => {
             const shadow = val.options?.shadow ? ' animate-bg-shadow' : '';
             const blur = val.options?.blur ? ' animate-bg-blur' : '';
-            const textContainer = val.options?.textContainer !== 'none' 
-              ? ` active ${val.options?.textContainer} ${val.options?.textAnimation !== 'none' ? val.options?.textAnimation : ''}`  
+            const textContainer = val.options?.textContainer !== 'none'
+              ? ` active ${val.options?.textContainer} ${val.options?.textAnimation !== 'none' ? val.options?.textAnimation : ''}`
               : ''
             const textAnimation = textContainer ? false : val.options?.textAnimation;
 
@@ -870,7 +879,7 @@
                 ${populateMediaContent(val.media, val.options)}
               </div>`;
             CONTENT += `
-              <div class='text observe${idx ? ' control-opacity' : ''}' id='o${component.id}-${idx}' style="text-align: ${val.options.textAlignment}">
+              <div class='text observe${idx ? ' control-opacity' : ''} targetableElement' id='o${component.id}-${idx}' style="text-align: ${val.options.textAlignment}">
                 ${val.text?.length ? `
                   <div class="container${textContainer}">
                     ${extractTextContent(val.text, textAnimation)}
@@ -937,6 +946,8 @@
               </div>
             </div>`;
           break;
+        default:
+          throw new Error('Invalid component type at initDOMcontentData');
       }
     }
 
@@ -975,6 +986,8 @@
       case 'ColorVariables':
 
         break;
+      default:
+        throw new Error('Invalid item at clearFromLocalStorage');
     }
   }
 
@@ -1020,6 +1033,16 @@
     REPOPULATEDOM();
   }
 
+  /**
+   * Updates the values of a component based on the provided parameters.
+   * @param {string} componentID - The ID of the component.
+   * @param {string} dataType - The type of data to be updated (options, text, media).
+   * @param {string} key - The key of the value to be updated.
+   * @param {any} newValue - The new value to be assigned.
+   * @param {number} elementIndex - The index of the element in the component's content array (optional).
+   * @param {number} textIndex - The index of the text element in the component's content array (optional).
+   * @throws {Error} If an invalid data type is provided.
+   */
   const updateComponentValues = (componentID, dataType, key, newValue, elementIndex, textIndex) => {
     const targetObject = COMPONENTS_DATA.find(x => x.id === componentID);
 
@@ -1120,11 +1143,11 @@
           })
         }
 
-        let nestedElement = '';
-        if (selectedElement.componentType === 'PARALLAX_BLEND')
-          nestedElement = `.text-content .text:nth-child(${contentIndex + 1})`
-        if (selectedElement.componentType === 'FIXED')
-          nestedElement = `.container .content:nth-child(${contentIndex + 1})`
+        let nestedElement = `.targetableElement:nth-child(${contentIndex + 1})`;
+        // if (selectedElement.componentType === 'PARALLAX_BLEND')
+        //   nestedElement = `.text-content .text:nth-child(${contentIndex + 1})`
+        // if (selectedElement.componentType === 'FIXED')
+        //   nestedElement = `.container .content:nth-child(${contentIndex + 1})`
 
         if (selectedElement.content[contentIndex].elementExpanded) {
           scrollToComponent(componentID, nestedElement)
@@ -1145,7 +1168,16 @@
     localStorage.setItem('ColorVariables', JSON.stringify(DESIGN_COLOR_VARIABLES));
   }
 
-  const extractComponentFields = (componentID, title, data, elementIndex) => {
+  /**
+   * Extracts component options based on the provided parameters.
+   *
+   * @param {string} componentID - The ID of the component.
+   * @param {string} title - The title of the component options.
+   * @param {Object|Array} data - The data object or array containing the options.
+   * @param {number} elementIndex - The index of the element.
+   * @returns {string} - The HTML code representing the component options.
+   */
+  const extractComponentOptions = (componentID, title, data, elementIndex) => {
     if (!data) return ''
 
     let content = '';
@@ -1153,15 +1185,15 @@
     if (!Array.isArray(data)) {
       Object.entries(data).forEach(([key, value]) => {
 
-        const booleanKeysMap = [
+        const BOOLEAN_KEYS_MAP = [
           'blur', 'type', 'shadow', 'insetShadow', 'flex'
         ].reduce((a, v) => ({ ...a, [v]: v }), {});
 
-        const dropdownKeysMap = [
+        const DROPDOWN_KEYS_MAP = [
           'textAnimation', 'textAlignment', 'textContainer', 'type', 'skewTop', 'skewBottom'
         ].reduce((a, v) => ({ ...a, [v]: v }), {});
 
-        const textFieldKeysMap = [
+        const TEXT_FIELD_KEYS_MAP = [
           'description', 'url'
         ].reduce((a, v) => ({ ...a, [v]: v }), {});
 
@@ -1169,7 +1201,7 @@
         if (title === 'container options') dataType = 'options'; //? unique case ---
 
         switch (key) {
-          case booleanKeysMap[key]: //? ----- boolean keys -----
+          case BOOLEAN_KEYS_MAP[key]: //? ----- boolean keys -----
             content += `
               <div class='option'>
                 ${key}: 
@@ -1179,7 +1211,7 @@
               </div>`;
 
             break;
-          case dropdownKeysMap[key]: //? ----- dropdown keys -----
+          case DROPDOWN_KEYS_MAP[key]: //? ----- dropdown keys -----
             const dropdownValuesMap = {
               textContainer: TEXT_CONTAINER,
               textAnimation: TEXT_ANIMATIONS,
@@ -1204,7 +1236,7 @@
               </div>`
 
             break;
-          case textFieldKeysMap[key]: //? ----- text field keys -----
+          case TEXT_FIELD_KEYS_MAP[key]: //? ----- text field keys -----
             content += `
               <div class='option'>
                 <p style='display: inline-block'>${key}:</p>
@@ -1215,9 +1247,7 @@
             throw new Error(`Invalid form input type: ${key}`)
         }
       })
-    } else {
-
-      //? ------------------ unique case for arrays ------------------ 
+    } else if (Array.isArray(data) && title === 'text') {
       data.forEach((text, idx) => {
         const [key, value] = Object.entries(text)[0];
         content += `
@@ -1228,6 +1258,8 @@
             </div>
           `
       })
+    } else {
+      throw new Error(`Invalid data type: ${title}`)
     }
 
     let textOptions = ''
@@ -1267,9 +1299,9 @@
               <div style='cursor: pointer;' onclick="toggleExpand(${component.id}, 'container', ${idx})">S</div>
             </div>
             <div class='content ${v.elementExpanded ? '' : 'active'}'>
-              ${extractComponentFields(component.id, 'options', v.options, idx)}
-              ${extractComponentFields(component.id, 'media', v.media, idx)}
-              ${extractComponentFields(component.id, 'text', v.text, idx)}
+              ${extractComponentOptions(component.id, 'options', v.options, idx)}
+              ${extractComponentOptions(component.id, 'media', v.media, idx)}
+              ${extractComponentOptions(component.id, 'text', v.text, idx)}
               ${component.componentType !== 'PARALLAX' ? `
               <button style="margin-top: 5px 10px; display: block;" onclick="deleteElement(${component.id}, ${idx}, 'content')">
                 Delete Element
@@ -1292,9 +1324,9 @@
         <div class='component-container ${component.expanded ? 'active' : ''}'> 
           ${component.options ? `
             <div class='component-content' >
-              ${extractComponentFields(component.id, 'container options', component.options)}
-              ${extractComponentFields(component.id, 'media', component.media)}
-              ${extractComponentFields(component.id, 'text', component.text)}
+              ${extractComponentOptions(component.id, 'container options', component.options)}
+              ${extractComponentOptions(component.id, 'media', component.media)}
+              ${extractComponentOptions(component.id, 'text', component.text)}
             </div>` : ''}
           ${content}
           ${component.componentType !== 'PARALLAX' ?
@@ -1376,6 +1408,7 @@
       const innerHTML = element.innerHTML
         .replaceAll('contenteditable="true"', '')
         .replaceAll(' componentExpanded', '')
+        .replaceAll(' targetableElement', '')
         .replace(/container-id="[^"]*"/g, '');
 
       textarea.value = innerHTML;
@@ -1392,7 +1425,4 @@
 </script>
 
 <!-- TODO --------- mobile media url --- -->
-<!-- TODO --------- clear $('.side-panel .layout').append(` --- -->
 <!-- TODO --------- draggable components --- -->
-<!-- TODO --------- cleanup --- updateComponentValues--- -->
-<!-- TODO --------- media description affected by blur/shadow  -->

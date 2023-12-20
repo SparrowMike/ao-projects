@@ -69,8 +69,7 @@
         type: 'image',
         url: 'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         description: ''
-      },
-      {
+      }, {
         type: 'image',
         url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         description: ''
@@ -217,15 +216,15 @@
     box-sizing: border-box;
   }
 
-  .app .side-panel::-webkit-scrollbar {
-    width: 8px;
+  .app .layout::-webkit-scrollbar {
+    width: 5px;
   }
 
-  .app .side-panel::-webkit-scrollbar-track {
+  .app .layout::-webkit-scrollbar-track {
     background: var(--primary-background-color);
   }
 
-  .app .side-panel::-webkit-scrollbar-thumb {
+  .app .layout::-webkit-scrollbar-thumb {
     background: var(--description-text-color);
   }
 
@@ -273,8 +272,7 @@
     flex-direction: column;
     justify-content: space-between;
     max-width: 500px;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow: hidden;
     color: white;
     padding-left: 5px;
   }
@@ -300,21 +298,28 @@
 
   .app .side-panel .layout {
     overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100%;
+    scrollbar-width: thin;
   }
+
+  .app .side-panel .layout .header {
+    cursor: grab;
+  }
+
 
   .app .side-panel .layout .component {
     margin: 10px 5px;
     background-color: rgb(43, 42, 42);
-    padding: 10px;
     border-radius: 8px;
     border: 2px solid #8080806b;
-    cursor: grab;
   }
 
   .app .side-panel .layout .component .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px 20px;
   }
 
   .app .side-panel .layout .component .header .options {
@@ -332,13 +337,13 @@
   }
 
   .app .side-panel .layout .component .component-container.active {
+    margin: 0 10px 10px;
     display: block;
-    padding: 0;
   }
 
   .app .side-panel .layout .component .component-container .component-content {
-    padding: 5px;
-    margin: 10px 0;
+    padding: 5px 10px;
+    margin-bottom: 10px;
     background-color: #191919;
     border: 2px solid #8080806b;
     border-radius: 5px;
@@ -643,6 +648,7 @@
         justify-content: center;
         max-width: var(--content-max-width);
         margin: 0 auto;
+        column-gap: 20px;
       }
 
       .fixed .container .flex .content {
@@ -980,8 +986,23 @@
   function REPOPULATEDOM() {
     const components = COMPONENTS_DATA;
     localStorage.setItem('StoredComponents', JSON.stringify(components));
+
     initSidePanel(components);
-    domInit(components)
+    domInit(components);
+    checkExpandableElement(components);
+  }
+
+  function checkExpandableElement(components) {
+    components.forEach(component => {
+      if (component.content) {
+        component.content.forEach((content, index) => {
+          if (content.elementExpanded) {
+            $(`[component-id="${component.id}"]`).removeClass('componentExpanded')
+            $(`[component-id="${component.id}"] .targetableElement:nth-child(${index + 1})`).addClass('componentExpanded')
+          }
+        })
+      }
+    });
   }
 
   function clearFromLocalStorage(item) {
@@ -1150,11 +1171,7 @@
           })
         }
 
-        let nestedElement = `.targetableElement:nth-child(${contentIndex + 1})`;
-        // if (selectedElement.componentType === 'PARALLAX_BLEND')
-        //   nestedElement = `.text-content .text:nth-child(${contentIndex + 1})`
-        // if (selectedElement.componentType === 'FIXED')
-        //   nestedElement = `.container .content:nth-child(${contentIndex + 1})`
+        const nestedElement = `.targetableElement:nth-child(${contentIndex + 1})`;
 
         if (selectedElement.content[contentIndex].elementExpanded) {
           scrollToComponent(componentID, nestedElement)
@@ -1301,18 +1318,17 @@
       component.content.forEach((v, idx) => {
         content += `
           <div class='component-content' > 
-            <div style='padding: 2px 4px; display: flex; justify-content: space-between;'>
+            <div style='display: flex; justify-content: space-between; align-items: center; padding: 4px'> 
               <h4>Content ${idx + 1}</h4>
-              <div style='cursor: pointer;' onclick="toggleExpand(${component.id}, 'container', ${idx})">S</div>
+              <div style='display: flex; float: right'>
+                <div style='cursor: pointer; padding: 3px 6px' onclick="toggleExpand(${component.id}, 'container', ${idx})">T</div>
+                <div style='cursor: pointer; padding: 3px 6px' onclick="deleteElement(${component.id}, ${idx}, 'content')">D</div>
+              </div>
             </div>
             <div class='content ${v.elementExpanded ? '' : 'active'}'>
               ${extractComponentOptions(component.id, 'options', v.options, idx)}
               ${extractComponentOptions(component.id, 'media', v.media, idx)}
               ${extractComponentOptions(component.id, 'text', v.text, idx)}
-              ${component.componentType !== 'PARALLAX' ? `
-              <button style="margin-top: 5px 10px; display: block;" onclick="deleteElement(${component.id}, ${idx}, 'content')">
-                Delete Element
-              </button>` : ''}
             </div>
           </div>`
       })
@@ -1337,7 +1353,9 @@
             </div>` : ''}
           ${content}
           ${component.componentType !== 'PARALLAX' ?
-        `<button onclick="addMoreContent(${component.id}, '${component.componentType}')">Add more content</button>` : ''}
+        ` <button style='padding: 4px 8px; cursor: pointer;' onclick="addMoreContent(${component.id}, '${component.componentType}')">
+              Add more content
+            </button>` : ''}
         </div>
       </div>`);
   }
@@ -1392,28 +1410,18 @@
   document.addEventListener('DOMContentLoaded', function () {
     const components = COMPONENTS_DATA;
 
-    // ? remove all expanded properties
-    // components.forEach(component => {
-    //   component.expanded = false;
-    //   if (component.content) {
-    //     component.content.forEach(content => {
-    //       content.elementExpanded = false;
-    //     })
-    //   }
-    // });
-
     domInit(components)
     initSidePanel(components);
     populateStaticSidePanelControls();
+    checkExpandableElement(components);
 
   });
 
   $('.layout').sortable({
-    cancel: '.layout .options',
+    cancel: '.layout .component-container',
     cursor: 'grabbing',
-    placeholder: 'grabbed',
     opacity: .8,
-    update: function(event, ui) {
+    update: function (event, ui) {
       const newLayoutOrder = $(this).sortable("toArray")
 
       COMPONENTS_DATA.sort((a, b) => {
@@ -1450,5 +1458,6 @@
   }
 </script>
 
-<!-- TODO --------- mobile media url --- -->
-<!-- TODO --------- maintain selectable element --- -->
+<!-- TODO --------- media url - should have another variation? video for desktop but image for mobile ?-->
+
+<!-- ! --------- theme palette - invidual colours per component? or double of each style for variations -->

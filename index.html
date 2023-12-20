@@ -203,7 +203,7 @@
    * @returns {array} - An array of components.
    */
   const localStorageComponents = JSON.parse(localStorage.getItem('StoredComponents'));
-  let COMPONENTS_DATA =
+  const COMPONENTS_DATA =
     localStorageComponents ||
     COMPONENTS_TYPES.map(component => COMPONENTS_OBJECT_GENERATOR(component));
 </script>
@@ -273,6 +273,7 @@
     flex-direction: column;
     justify-content: space-between;
     max-width: 500px;
+    overflow-x: hidden;
     overflow-y: scroll;
     color: white;
     padding-left: 5px;
@@ -297,12 +298,17 @@
     align-items: center;
   }
 
+  .app .side-panel .layout {
+    overflow-x: hidden;
+  }
+
   .app .side-panel .layout .component {
     margin: 10px 5px;
     background-color: rgb(43, 42, 42);
     padding: 10px;
     border-radius: 8px;
     border: 2px solid #8080806b;
+    cursor: grab;
   }
 
   .app .side-panel .layout .component .header {
@@ -889,7 +895,7 @@
           });
 
           __DOM__ += `
-            <div class='parallax-header${isExpanded}' container-id='${component.id}'>
+            <div class='parallax-header${isExpanded}' component-id='${component.id}'>
               <div class='background-content'>${BACKGROUND}</div>
               <div class='text-content'>${CONTENT}</div>
             </div>`;
@@ -919,7 +925,7 @@
             ${skewBottom === 'none' ? '' : 'margin-bottom: -80px; padding-bottom: 85px;'}'` //? --- padding to offset the clip cut
 
           __DOM__ += `
-            <div class='fixed${containerShadow ? ' shadow' : ''}${isExpanded}' container-id='${component.id}'>
+            <div class='fixed${containerShadow ? ' shadow' : ''}${isExpanded}' component-id='${component.id}'>
               <div class="container" ${skewStyle}>
                 ${containerFlex
               ? `<div class='flex'>
@@ -935,7 +941,7 @@
           const blur = component.options.blur ? ' animate-bg-blur' : '';
 
           __DOM__ += `
-            <div class="parallax${isExpanded}" container-id='${component.id}'>
+            <div class="parallax${isExpanded}" component-id='${component.id}'>
               <div class="content observe${shadow}${blur}">
                 ${populateMediaContent(component.media)}
                 ${component.text ? `
@@ -961,6 +967,7 @@
 </script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
 <!-- !----------------------------------------------------- -->
 <!-- !------------------- APP CONTROLS -------------------- -->
@@ -1091,15 +1098,15 @@
     const targetIndex = components.findIndex(x => x.id === Number(componentID));
 
     components.splice(targetIndex, 1)
+    $(`.layout #${componentID}`).remove();
     $(`[component-id="${componentID}"]`).remove();
-    $(`[container-id="${componentID}"]`).remove();
 
     EMPTYDOMCOMPONENTS();
     REPOPULATEDOM();
   }
 
   const scrollToComponent = (componentID, nested = '') => {
-    const container = document.querySelector(`[container-id="${componentID}"] ${nested}`);
+    const container = document.querySelector(`[component-id="${componentID}"] ${nested}`);
 
     if (container) {
       container.scrollIntoView({ behavior: 'smooth' });
@@ -1312,7 +1319,7 @@
     }
 
     $('.side-panel .layout').append(`
-      <div class="component" component-id="${component.id}">
+      <div class="component" id='${component.id}'>
         <div class='header'>
           <h3 style='display: inline'>${component.componentType.replace('_', ' ')}</h3>
           <div class='options'>
@@ -1398,6 +1405,25 @@
     domInit(components)
     initSidePanel(components);
     populateStaticSidePanelControls();
+
+  });
+
+  $('.layout').sortable({
+    cancel: '.layout .options',
+    cursor: 'grabbing',
+    placeholder: 'grabbed',
+    opacity: .8,
+    update: function(event, ui) {
+      const newLayoutOrder = $(this).sortable("toArray")
+
+      COMPONENTS_DATA.sort((a, b) => {
+        return newLayoutOrder.indexOf(a.id.toString()) - newLayoutOrder.indexOf(b.id.toString())
+      })
+
+      EMPTYDOMCOMPONENTS(COMPONENTS_DATA)
+      REPOPULATEDOM(COMPONENTS_DATA)
+      scrollToComponent(ui.item[0].id)
+    }
   });
 
   function copyInnerHTMLToClipboard(componentID) {
@@ -1409,7 +1435,7 @@
         .replaceAll('contenteditable="true"', '')
         .replaceAll(' componentExpanded', '')
         .replaceAll(' targetableElement', '')
-        .replace(/container-id="[^"]*"/g, '');
+        .replace(/component-id="[^"]*"/g, '');
 
       textarea.value = innerHTML;
       document.body.appendChild(textarea);
@@ -1425,4 +1451,4 @@
 </script>
 
 <!-- TODO --------- mobile media url --- -->
-<!-- TODO --------- draggable components --- -->
+<!-- TODO --------- maintain selectable element --- -->

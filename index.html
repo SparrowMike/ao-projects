@@ -437,7 +437,6 @@
         position: absolute !important;
         bottom: 20px !important;
         right: 20px;
-        z-index: 9999999;
       }
 
       .wrapper-body {
@@ -480,7 +479,7 @@
         transition: opacity var(--background-blend-delay) ease-in;
       }
 
-      .animate.animate-bg-shadow:after {
+      .animate .animate-bg-shadow:after {
         opacity: 1;
       }
 
@@ -490,7 +489,7 @@
         transition: all var(--background-blend-delay) ease-in;
       }
 
-      .animate.animate-bg-blur:after {
+      .animate .animate-bg-blur:after {
         -webkit-backdrop-filter: blur(5px);
         backdrop-filter: blur(5px);
       }
@@ -833,18 +832,21 @@
   }
 
   function populateMediaContent(data, options) {
-    const insetShadow = options?.insetShadow;
+    const insetShadow = options?.insetShadow ? ' insetShadow' : '';
+    const shadow = options?.shadow ? ' animate-bg-shadow' : '';
+    const blur = options?.blur ? ' animate-bg-blur' : '';
+
     if (!data || !data.url) return '';
     const mediaDescription = data.description ? `<p contenteditable="true" class="description">${data.description}</p>` : '';
 
     const mediaContent = data.type?.includes('video')
-      ? `<div class="media${insetShadow ? ' insetShadow' : ''}">
+      ? `<div class="media${insetShadow}${shadow}${blur}">
             <video autoplay loop muted playsinline preload="none" loading="lazy">
               <source src="${data.url}" type="${data.type}" />Your browser does not support the video tag.
             </video>
           </div>`
       : `
-          <div class="media${insetShadow ? ' insetShadow' : ''}">
+          <div class="media${insetShadow}${shadow}${blur}">
             <img alt="${data.description}" src="${data.url}" preload="none" loading="lazy" decoding="async"/>
           </div>`;
 
@@ -878,8 +880,6 @@
           let BACKGROUND = '', CONTENT = '';
 
           component.content.forEach((val, idx) => {
-            const shadow = val.options?.shadow ? ' animate-bg-shadow' : '';
-            const blur = val.options?.blur ? ' animate-bg-blur' : '';
             const textContainer = val.options?.textContainer !== 'none'
               ? ` active ${val.options?.textContainer} ${val.options?.textAnimation !== 'none' ? val.options?.textAnimation : ''}`
               : ''
@@ -887,7 +887,7 @@
 
 
             BACKGROUND += `
-              <div class='background${shadow}${blur}' id='o${component.id}-${idx}'>
+              <div class='background' id='o${component.id}-${idx}'>
                 ${populateMediaContent(val.media, val.options)}
               </div>`;
             CONTENT += `
@@ -943,13 +943,10 @@
           break;
 
         case 'PARALLAX':
-          const shadow = component.options.shadow ? ' animate-bg-shadow' : '';
-          const blur = component.options.blur ? ' animate-bg-blur' : '';
-
           __DOM__ += `
             <div class="parallax${isExpanded}" component-id='${component.id}'>
-              <div class="content observe${shadow}${blur}">
-                ${populateMediaContent(component.media)}
+              <div class="content observe">
+                ${populateMediaContent(component.media, component.options)}
                 ${component.text ? `
                   <div class="text" style="text-align: ${component.options.textAlignment}">
                     ${extractTextContent(component.text, component.options.textAnimation)}
@@ -1129,9 +1126,11 @@
   const scrollToComponent = (componentID, nested = '') => {
     const container = document.querySelector(`[component-id="${componentID}"] ${nested}`);
 
+    $(`.componentExpanded`).removeClass('componentExpanded');
+
     if (container) {
       container.scrollIntoView({ behavior: 'smooth' });
-      $(container).toggleClass('componentExpanded');
+      $(container).addClass('componentExpanded');
     }
   }
 

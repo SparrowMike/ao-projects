@@ -713,6 +713,15 @@
         height: 100vh;
       }
 
+      @media screen and (-webkit-min-device-pixel-ratio:0) { 
+        .parallax .content {
+          clip: auto;
+          clip-path: auto;
+          mask-image: -webkit-linear-gradient(top, #ffffff 0%,#ffffff 100%);
+          -webkit-mask-image: -webkit-linear-gradient(top, #ffffff 0%,#ffffff 100%);
+        }
+      }
+
       @media only screen and (min-width: 600px) {
         .primary-header-text {
           font-size: 32px;

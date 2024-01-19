@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background: lightgrey;
+            width: 100%;
+            height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+
+            .body-content {
+                height: 100%;
+
+                .content {
+                    height: 100%;
+                    display: none;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 60px;
+
+                    &.active {
+                        display: flex;
+
+                        object {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                }
+            }
+
+            .nav-open,
+            .nav-close {
+                position: absolute;
+                font-size: 32px;
+                font-weight: 700;
+                padding: 10px;
+                cursor: pointer;
+            }
+
+            .nav-close {
+                color: black;
+                right: 10px;
+            }
+
+            .nav-open {
+                left: 10px;
+                letter-spacing: 2px;
+            }
+
+            .nav-open,
+            .nav-close {
+                transition: all .3s linear;
+                transform-origin:center center;
+                
+                &:hover {
+                    transform: rotate(-90deg);
+                }
+            }
+
+            .nav {
+                height: 100vh;
+                width: 300px;
+                background: gainsboro;
+                position: absolute;
+                top: 0;
+                left: -100%;
+                box-shadow: 0 0 8px 10px gainsboro;
+                transition: left .4s linear;
+                z-index: 9;
+
+                &.active {
+                    left: 0;
+                }
+
+                .options {
+                    padding-top: 55px;
+
+                    .accordion {
+                        cursor: pointer;
+                        overflow: hidden;
+
+                        .title {
+                            padding: 10px 20px;
+                            background: #eee;
+                        }
+
+                        .list {
+                            position: relative;
+                            transition: max-height .3s ease-in-out;
+                            max-height: 0;
+                            margin: 0px 5px;
+
+                            .option {
+                                color: black;
+                                background: inherit;
+                                padding: 10px 20px;
+                                width: 100%;
+                                cursor: pointer;
+                                border: 0;
+                                border-radius: 4px;
+                                margin: 5px 0px;
+
+                                &.active,
+                                &:hover {
+                                    background: tomato;
+                                }
+                            }
+                        }
+
+                        &.active {
+                            .list {
+                                &:after,
+                                &:before {
+                                    content: '';
+                                    position: absolute;
+                                    height: 1px;
+                                    width: 100%;
+                                    background-color: black;
+                                }
+
+                                &:after {
+                                    bottom: -2px;
+                                }
+
+                                &:before {
+                                    top: -2px;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            .nav-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 100vw;
+                z-index: -1;
+                backdrop-filter: blur(0px);
+                transition: backdrop-filter .3s ease-in-out;
+            }
+
+            .nav.active+.nav-overlay {
+                z-index: 1;
+                backdrop-filter: blur(6px);
+            }
+        }
+    </style>
+    <title>MicroHost</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="nav-open">|||</div>
+        <div class="nav">
+            <div class="nav-close">&times;</div>
+            <div class="options"></div>
+        </div>
+        <div class="nav-overlay"></div>
+
+        <div class="body-content"></div>
+    </div>
+
+    <script>
+        $(document).ready(() => {
+            const data = {
+                'Branded Content': {
+                    'Microsite Generator': 'https://ao-projects.vercel.app/index.html',
+                },
+                '2023': {
+                    'Xmas Cards': 'https://media.asiaone.com/creative/greeting/a1-xmas-greeting-cards/index.html?v1',
+                },
+                '2024': {
+                    'CNY': 'https://media.asiaone.com/creative/greeting/2024/cny/index.html',
+                    'Horoscope': 'https://zodiac.asiaone.com/horoscope.php',
+                }
+            }
+
+            Object.entries(data).forEach(([key, value], index) => {
+                const parentId = `id-${index + 1}`
+                $('.options').append(`
+                    <div class="accordion" id="${parentId}">
+                        <div class="title">${key}</div>
+                        <div class='list' id='${parentId}'></div>
+                    </div>
+                `)
+
+                Object.entries(value).forEach(([k, v], idx) => {
+                    const elemId = `id-${index}${idx}`
+
+                    const firstItem = index === 0 && idx === 0 ? ' active' : '';
+
+                    $('.body-content').append(`
+                        <div class="content${firstItem}" id='${elemId}'>
+                            <object data="${v}">Your browser doesn’t support the object tag.</object>	
+                        </div>`)
+
+                    $(`.options .list#${parentId}`).append(`
+                        <div class="option${firstItem}" id="${elemId}">${k}</div> 
+                    `)
+                })
+            })
+
+            $('.option').click((e) => {
+                $('.option').removeClass('active');
+                $(e.target).addClass('active');
+
+                $(`.body-content .content`).removeClass('active');
+                $(`.body-content #${e.target.id}`).addClass('active');
+
+            })
+
+            $('.accordion .title').click(function(e) {
+                const parent = $(this).parent()[0];
+
+                $(`.accordion#${parent.id}`).toggleClass('active');
+
+                const height = $(`.list#${parent.id}`)[0].scrollHeight;
+
+                if (parent.classList.contains('active'))
+                    $(`.list#${parent.id}`).css('max-height', height);
+                else
+                    $(`.list#${parent.id}`).css('max-height', 0); 
+            });
+
+            $('.nav-open').click(() => {
+                $('.nav').addClass('active');
+            });
+
+            $('.nav-close, .nav-overlay').click(() => {
+                $('.nav').removeClass('active');
+            });
+        })
+    </script>
+</body>
+</html>
